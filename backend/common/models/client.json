@@ -11,14 +11,24 @@
       "type": "string",
       "required": true
     },
-
     "createDate": {
       "type": "date",
       "required": true
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "enterprise": {
+      "type": "belongsTo",
+      "model": "Enterprise",
+      "foreignKey": ""
+    },
+    "documents": {
+      "type": "hasMany",
+      "model": "Document",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

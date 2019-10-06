@@ -17,7 +17,13 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "clients": {
+      "type": "hasMany",
+      "model": "Client",
+      "foreignKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

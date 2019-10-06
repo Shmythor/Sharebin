@@ -42,6 +42,11 @@
       "type": "hasMany",
       "model": "Metadata",
       "foreignKey": ""
+    },
+    "client": {
+      "type": "belongsTo",
+      "model": "Client",
+      "foreignKey": ""
     }
   },
   "acls": [],
