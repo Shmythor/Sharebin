@@ -3,8 +3,8 @@
     <input class="w-100 h-100 pl2" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
     <div class="flex justify-around">
-        <button class="btn btn-outline-primary mr1" (click)="filterBy('name')">Nombre</button>
-        <button class="btn btn-outline-primary ml1 mr1" (click)="filterBy('description')">Descripción</button>
-        <button class="btn btn-outline-primary ml1" (click)="filterBy('metadata')">Metadatos</button>
+        <button [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" class="mr1" (click)="filterBy('name')">Nombre</button>
+        <button [ngClass]="{'buttonActivated': descriptionActivated, 'buttonDisabled': !descriptionActivated}" class="ml1 mr1" (click)="filterBy('description')">Descripción</button>
+        <button [ngClass]="{'buttonActivated': metadataActivated, 'buttonDisabled': !metadataActivated}" class="ml1" (click)="filterBy('metadata')">Metadatos</button>
     </div>
 </div>

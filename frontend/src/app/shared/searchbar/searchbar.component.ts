@@ -10,6 +10,10 @@ export class SearchbarComponent implements OnInit {
   @Output() searchToEmit = new EventEmitter<string>();
   @Output() filterToEmit = new EventEmitter<string>();
 
+  nameActivated = true;
+  descriptionActivated = false;
+  metadataActivated = false;
+
   constructor() { }
 
   ngOnInit() {
@@ -17,6 +21,11 @@ export class SearchbarComponent implements OnInit {
   }
 
   filterBy(filter: string) {
+    switch (filter) {
+      case 'name': this.nameActivated = !this.nameActivated; break;
+      case 'description': this.descriptionActivated = !this.descriptionActivated; break;
+      case 'metadata': this.metadataActivated = !this.metadataActivated; break;
+    }
     this.filterToEmit.emit(filter);
   }
 
