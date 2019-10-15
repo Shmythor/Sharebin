@@ -7,7 +7,8 @@
 
 module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
-    let FolderModel = app.models.Folder;
+    console.log(Object.keys(app.models));
+    
 
     // Search by ID: if exists update, else create
     let clientsArr = [
@@ -15,18 +16,24 @@ module.exports = function populateClientsModel(app) {
         {username: 'Yein', email: 'jane1@doe.com', password: 'password', name:'Jane', createDate: Date.now()},
         {username: 'Bobobo', email: 'bob1@projects.com', password: 'password', name:'Bob', createDate: Date.now()}
     ]
-
+    
     clientsArr.forEach(cli => {
-        console.log('ClientModel.upsert');
-        ClientModel.upsert(cli, (err, total) => {
-            if(err) {
-                console.log(`Client ${cli.name} is already created`);
-            } else {
-                FolderModel.createContainer({name: total.email}, (err, folder) => {});
-
-                console.log('Creating client:', total);
-            }
-        })
+        ClientModel.findOne({where: {email: cli.email}, limit: 3})
+            .then((err, clienteEncontrado) => {
+                if (clienteEncontrado)
+                    return ClientModel.destroyById(clienteEncontrado.id)
+            })
+            .then(() => ClientModel.create(cli))
+            .then((err, total) => {
+                    if(err) {
+                        console.log(err);
+                    } else {
+                        let FolderModel = app.models.Folder;
+                        FolderModel.createContainer({name: total.email}, (err, folder) => {});
+        
+                        console.log('Creating client:', total);
+                    }
+            });
     })
 
 };
