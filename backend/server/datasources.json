@@ -20,7 +20,6 @@
     "connector": "loopback-component-storage",
     "provider": "filesystem",
     "root": "./server/storage",
-    "maxFileSize": "5242880",
-    "allowedContentTypes":["image/gif", "image/png", "image/tiff", "image/webp", "image/x-icon", "image/jpeg", "image/svg+xml", "image/x-icon"]
+    "maxFileSize": "5242880"
   }
 }
