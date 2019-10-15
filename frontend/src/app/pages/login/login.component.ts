@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+//import { lbServices } from '../../services/lb-services';
 
 @Component({
   selector: 'app-login',
@@ -37,6 +38,15 @@ export class LoginComponent implements OnInit {
   }
 
   credentialsFound() {
+    /*this.lbservices.Users.login(
+      {
+        username:this.registerForm.controls.email.value,
+        password:this.registerForm.controls.password.value
+      },
+      function(respuesta){
+        console.log(respuesta);
+      }
+    );*/
     let found = false;
     for(let i = 0; i < this.clients.length && !found; i++){
       if(this.clients[i].username == this.registerForm.controls.email.value 
