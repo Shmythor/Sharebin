@@ -7,9 +7,12 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var bodyParser = require('body-parser');
+var multer = require('multer');
 
 
 var app = module.exports = loopback();
+
 
 app.start = function() {
   // start the web server

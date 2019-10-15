@@ -74,4 +74,8 @@ export class HomeComponent implements OnInit {
       // metadata
     }
   }
+  
+  upload() {
+    
+  }
 }

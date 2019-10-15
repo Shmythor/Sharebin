@@ -27,6 +27,11 @@
       "type": "hasMany",
       "model": "Document",
       "foreignKey": ""
+    },
+    "folder": {
+      "type": "hasOne",
+      "model": "Folder",
+      "foreignKey": ""
     }
   },
   "acls": [],
