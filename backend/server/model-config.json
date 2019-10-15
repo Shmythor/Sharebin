@@ -46,5 +46,9 @@
   "Enterprise": {
     "dataSource": "sharebin",
     "public": true
+  },
+  "Folder": {
+    "dataSource": "localfiles",
+    "public": true
   }
 }
