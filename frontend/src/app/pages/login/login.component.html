@@ -1,12 +1,29 @@
 <div class="container d-flex flex-column items-center vh-100 align-items-center justify-content-center">
-    <img class="sharebinLogo" [src]="sharebinLogo" />
-    <form class="col-4" action="">
+    <div id="incorrectDataAlert" class="alert alert-danger" role="alert" style="display:none;">
+        Email/Password incorrecto!
+    </div>
+    <img title="ShareBin" class="sharebinLogo" [src]="sharebinLogo" />
+
+    <!-- main app container -->
+    <form class="col-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+            <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
+                <div *ngIf="f.email.errors.required">Email is required</div>
+                <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+            </div>
         </div>
-        <div class="form-group">
-            <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+        <div class="form-row">
+            <div class="form-group col">
+                <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                    <div *ngIf="f.password.errors.required">Password is required</div>
+                    <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn" (click)="goHome()">Login</button>
+        <div class="text-center">
+            <button class="btn btn-primary mr-1">Enter</button>
+        </div>
     </form>
 </div>
