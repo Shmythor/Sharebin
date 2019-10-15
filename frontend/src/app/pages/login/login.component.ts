@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { lbServices } from '../../services/lb-services.js';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent implements OnInit {
             {username:"johans@j",password:"johans"}
           ];
 
-  constructor(private route: Router, private formBuilder: FormBuilder) {
+  constructor(private route: Router, private formBuilder: FormBuilder, private lbservices: lbServices) {
 
   }
 
