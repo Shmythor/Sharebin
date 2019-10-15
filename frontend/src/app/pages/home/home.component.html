@@ -4,7 +4,7 @@
     <!-- Barra de búsqueda y subida de archivos -->
     <div class="flex justify-between mt4">
         <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
-        <button class="w-25 btn btn-primary navbar-bg">Subir archivo</button>
+        <button class="w-25 btn btn-primary navbar-bg" (click)="upload">Subir archivo</button>
     </div>
 
     <!-- Listado de archivos e información -->

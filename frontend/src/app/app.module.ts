@@ -14,6 +14,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './shared/searchbar/searchbar.component';
+import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { SearchbarComponent } from './shared/searchbar/searchbar.component';
     NavbarComponent,
     MaincontainerComponent,
     MetadataComponent,
-    SearchbarComponent
+    SearchbarComponent,
+    UploadFilesComponent
   ],
   imports: [
     BrowserModule,
