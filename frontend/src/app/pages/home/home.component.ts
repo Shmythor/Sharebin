@@ -23,12 +23,14 @@ export class HomeComponent implements OnInit {
   public dataFiltered = [];
   public itemSelected: any;
   public textAreaText: string;
+  metadataKeys: any;
 
 
   constructor() {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
+    this.metadataKeys = {};
 
     this.textAreaText = this.itemSelected.description;
   }
@@ -60,7 +62,10 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
     this.itemSelected = data;
+    this.metadataKeys = Object.keys(this.itemSelected.metadata);
+    
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+
   }
 
   saveChanges() {
@@ -74,8 +79,8 @@ export class HomeComponent implements OnInit {
       // metadata
     }
   }
-  
+
   upload() {
-    
+
   }
 }
