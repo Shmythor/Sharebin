@@ -7,6 +7,7 @@
 
 module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
+    let FolderModel = app.models.Folder;
 
     // Search by ID: if exists update, else create
     let clientsArr = [
@@ -21,6 +22,8 @@ module.exports = function populateClientsModel(app) {
             if(err) {
                 console.log(`Client ${cli.name} is already created`);
             } else {
+                FolderModel.createContainer({name: total.email}, (err, folder) => {});
+
                 console.log('Creating client:', total);
             }
         })

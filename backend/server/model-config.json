@@ -48,6 +48,10 @@
     "dataSource": "sharebin",
     "public": true
   },
+  "Folder": {
+    "dataSource": "localfiles",
+    "public": true
+  },
   "Client": {
     "dataSource": "sharebin",
     "public": true
