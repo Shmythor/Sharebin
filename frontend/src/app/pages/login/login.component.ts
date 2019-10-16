@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ClientApi } from '../../services/lb-api/services/index';
+import { Client } from '../../services/lb-api/models/Client';
+
 
 
 //var a = angular.module('app', [lbServices]);
@@ -13,17 +16,16 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export class LoginComponent implements OnInit {
 
-  sharebinLogo = "../../../assets/ShareBin_Logo.png";
+  sharebinLogo = '../../../assets/ShareBin_Logo.png';
   registerForm: FormGroup;
   submitted = false;
   clients = [
-            {username:"shaheer@s",password:"shaheer"},
-            {username:"sergio@s",password:"sergio"},
-            {username:"johans@j",password:"johans"}
+            {username:'shaheer@s',password:'shaheer'},
+            {username:'sergio@s',password:'sergio'},
+            {username:'johans@j',password:'johans'}
           ];
 
-  constructor(private route: Router, private formBuilder: FormBuilder) {
-
+  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi) {
   }
 
   ngOnInit() {
@@ -36,6 +38,16 @@ export class LoginComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   goHome() {
+    // Comento esto porque era parte de una prueba que no llegamos a hacer
+    // pero lo dejo para que lo tengais de referencia 
+    // (Para descomentar facilmente, seleccionad el texto a descomentar y ctl + shift + 7)
+    // try {
+    //   this.clientapi.login(this.clients[0], () => {
+    //     console.log('Todo esta correcto!!! uwu');
+    //   });
+    // } catch (err) {
+    //   console.log('Efectivamente, error en el clientapi: ', err);
+    // }
     this.route.navigateByUrl('/home');
   }
 
@@ -51,8 +63,8 @@ export class LoginComponent implements OnInit {
     );*/
     let found = false;
     for(let i = 0; i < this.clients.length && !found; i++){
-      if(this.clients[i].username == this.registerForm.controls.email.value 
-        && this.clients[i].password == this.registerForm.controls.password.value){
+      if (this.clients[i].username === this.registerForm.controls.email.value
+        && this.clients[i].password === this.registerForm.controls.password.value) {
           found = true;
       }
     }
@@ -65,14 +77,14 @@ export class LoginComponent implements OnInit {
     // stop here if form is invalid
     if (this.registerForm.invalid) {
         return;
-    }else{
-      if(this.credentialsFound()){
+    } else {
+      if (this.credentialsFound()){
         this.goHome();
-      }else{
-        document.getElementById("incorrectDataAlert").style.display = "block";
+      } else {
+        document.getElementById('incorrectDataAlert').style.display = 'block';
 
         setTimeout(function(){
-          document.getElementById("incorrectDataAlert").style.display = "none";
+          document.getElementById('incorrectDataAlert').style.display = 'none';
         }, 3000);
       }
     }
