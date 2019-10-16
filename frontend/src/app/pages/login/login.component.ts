@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ClientApi } from '../../services/lb-api/services/index';
+import { Client } from '../../services/lb-api/models/Client';
+
 
 @Component({
   selector: 'app-login',
@@ -19,7 +22,7 @@ export class LoginComponent implements OnInit {
             {username:"johans@j",password:"johans"}
           ];
 
-  constructor(private route: Router, private formBuilder: FormBuilder) {
+  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi) {
 
   }
 
@@ -33,6 +36,16 @@ export class LoginComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   goHome() {
+    // Comento esto porque era parte de una prueba que no llegamos a hacer
+    // pero lo dejo para que lo tengais de referencia 
+    // (Para descomentar facilmente, seleccionad el texto a descomentar y ctl + shift + 7)
+    // try {
+    //   this.clientapi.login(this.clients[0], () => {
+    //     console.log('Todo esta correcto!!! uwu');
+    //   });
+    // } catch (err) {
+    //   console.log('Efectivamente, error en el clientapi: ', err);
+    // }
     this.route.navigateByUrl('/home');
   }
 
