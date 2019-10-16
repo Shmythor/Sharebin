@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-//import { lbServices } from '../../services/lb-services';
+
+
+//var a = angular.module('app', [lbServices]);
 
 @Component({
   selector: 'app-login',
