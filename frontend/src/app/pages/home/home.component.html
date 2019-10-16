@@ -4,7 +4,7 @@
     <!-- Barra de búsqueda y subida de archivos -->
     <div class="flex justify-between mt4">
         <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
-        <button class="w-25 btn btn-primary navbar-bg">Subir archivo</button>
+        <button class="w-25 btn btn-primary navbar-bg" (click)="upload">Subir archivo</button>
     </div>
 
     <!-- Listado de archivos e información -->
@@ -18,7 +18,7 @@
         </div>
         <div class="w-25 flex flex-column justify-between">
             <div>
-                <h5>Archivo seleccionado</h5>
+                <div>Archivo seleccionado</div>
                 <hr />
                 <div class="w-100 mb3">
                     <label for="itemName" class="w-100">Nombre</label>
@@ -30,6 +30,8 @@
                 </div>
                 <div class="w-100 mb2">
                     <div>Metadatos</div>
+                    <div *ngFor="let key of metadata">Hola</div>
+                    <!-- <app-metadata-item *ngFor="let key of metadata" [clave]="key" [valor]="itemSelected[key]"></app-metadata-item> -->
                 </div>
             </div>
             <div>

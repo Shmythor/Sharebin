@@ -9,10 +9,13 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { MaincontainerComponent } from './pages/maincontainer/maincontainer.component';
 import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './shared/searchbar/searchbar.component';
+import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
+import { MetadataItemComponent } from './pages/home/components/metadata-item/metadata-item.component';
 
 @NgModule({
   declarations: [
@@ -22,13 +25,16 @@ import { SearchbarComponent } from './shared/searchbar/searchbar.component';
     NavbarComponent,
     MaincontainerComponent,
     MetadataComponent,
-    SearchbarComponent
+    SearchbarComponent,
+    UploadFilesComponent,
+    MetadataItemComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    ScrollingModule
+    ScrollingModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

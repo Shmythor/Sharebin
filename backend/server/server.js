@@ -7,8 +7,12 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+var bodyParser = require('body-parser');
+var multer = require('multer');
+
 
 var app = module.exports = loopback();
+
 
 app.start = function() {
   // start the web server
@@ -20,6 +24,9 @@ app.start = function() {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
+
+
+
   });
 };
 

@@ -14,7 +14,8 @@
     ]
   },
   "User": {
-    "dataSource": "sharebin"
+    "dataSource": "sharebin",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "sharebin",
@@ -44,6 +45,14 @@
     "public": true
   },
   "Enterprise": {
+    "dataSource": "sharebin",
+    "public": true
+  },
+  "Folder": {
+    "dataSource": "localfiles",
+    "public": true
+  },
+  "Client": {
     "dataSource": "sharebin",
     "public": true
   }
