@@ -38,22 +38,93 @@
   },
   "Document": {
     "dataSource": "sharebin",
-    "public": true
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "create": true,
+          "exists": true,
+          "findById": true,
+          "find": true,
+          "updateAll": true,
+          "deleteById": true,
+          "count": true
+        }
+      }
+    }
   },
   "Metadata": {
     "dataSource": "sharebin",
-    "public": true
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "create": true,
+          "exists": true,
+          "findById": true,
+          "find": true,
+          "updateAll": true,
+          "deleteById": true,
+          "count": true
+        }
+      }
+    }
   },
   "Enterprise": {
     "dataSource": "sharebin",
-    "public": true
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "create": true,
+          "exists": true,
+          "findById": true,
+          "find": true,
+          "updateAll": true,
+          "deleteById": true,
+          "count": true
+        }
+      }
+    }
   },
   "Folder": {
     "dataSource": "localfiles",
-    "public": true
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "create": true,
+          "exists": true,
+          "findById": true,
+          "find": true,
+          "updateAll": true,
+          "deleteById": true,
+          "count": true
+        }
+      }
+    }
   },
   "Client": {
     "dataSource": "sharebin",
-    "public": true
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "login": true,
+          "logout": true,
+          "create": true,
+          "exists": true,
+          "find": true,
+          "findById": true,
+          "deleteById": true,
+          "count": true
+        }
+      }
+    }
   }
 }
