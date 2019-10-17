@@ -1,8 +1,6 @@
 'use strict';
 
 const app = require('../../server/server');
-const frontEndUrl = 'http://localhost:4200';
-const backEndUrl = 'http://localhost:3000';
 
 module.exports = function (Metadata) {
 
