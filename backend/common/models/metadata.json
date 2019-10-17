@@ -18,12 +18,12 @@
     "createDate": {
       "type": "date",
       "required": true,
-      "default": "$NOW"
+      "default": "$now"
     },
     "updateDate": {
       "type": "date",
       "required": true,
-      "default": "$NOW"
+      "default": "$now"
     }
   },
   "validations": [],
