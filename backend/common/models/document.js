@@ -3,39 +3,48 @@
 let App = require('../../server/server');
 module.exports = function(Document) {
 
-    Document.upload = function(req, res, cb) {
-        let Folder = App.models.Folder;
+    // clientId mantatory
+    Document.validatesPresenceOf('clientId');
 
-        Folder.upload(req, res, {container: 'bob1@projects.com'})
-            .then((fileObj) => {
-                let documentData = fileObj.fields;
-                console.log(documentData);
-                console.log(fileObj.fields);
-                let fileData = fileObj.files.file[0];
-                let documentObject = {
-                    name: fileData.originalFilename,
-                    size: fileData.size,
-                    description: documentData.description,
-                    path: fileData.name,
-                    type: fileData.type
-                }
-                return Document.create(documentObject);
+    Document.download = function(req, res, documentId, cb) {
+        let Folder = App.models.Folder;
+        let Client = App.models.Client;
+        let documentObject;
+        
+        Document.findById(documentId)
+            .then((data) => {
+                if (!data)
+                    throw new Error(`Document with id ${documentId} not found`);
+                
+                console.log(data);
+                documentObject = data;
+                return Client.findById(documentObject.clientId);
             })
-            .then((docObj) => {
-                cb(docObj)
+            .then((clientObject) => {
+                if (!clientObject)
+                    throw new Error(`The user associated with the document with id ${documentId} doesn't exist`);
+                
+                return Folder.download(clientObject.email, documentObject.path, req, res);
             })
-            .catch(err => cb(err));
+            .then((file) => cb(null, file))
+            .catch(err => cb(err));      
     }
 
-    Document.remoteMethod('upload', {
-        description: "Upload a new document. Arguments: \n" + 
-        "file: File to upload\n" + 
-        "documentObject: Data for the document",
+    Document.remoteMethod('download', {
+        description: "Downloads the document with the specified Id",
         accepts: [
             {arg: 'req', type: 'object', http: {source: 'req'}},
             {arg: 'res', type: 'object', http: {source: 'res'}},
+            {arg: 'documentId', type: 'string'}
         ],
-        returns: {arg: 'documentData', type: 'object', root: true},
-        http: {verb: 'post'}
+        returns: [
+            { arg: 'body', type: 'file', root: true },
+            { arg: 'Content-Type', type: 'string', http: { target: 'header' } }
+        ],
+        http: {verb: 'GET', path: '/:documentId/download'}
     });
+
+
+
+
 };
