@@ -7,12 +7,16 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MetadataItemComponent implements OnInit {
 
-  @Input() clave: any;
-  @Input() valor: any;
+  @Input() item: any;
+
+  public clave: any;
+  public valor: any;
 
   constructor() { }
 
   ngOnInit() {
+    this.clave = this.item[0];
+    this.valor = this.item[1];
   }
 
 }
