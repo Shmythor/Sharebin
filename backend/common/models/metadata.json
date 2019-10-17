@@ -17,13 +17,11 @@
     },
     "createDate": {
       "type": "date",
-      "required": true,
-      "default": "$NOW"
+      "required": true
     },
     "updateDate": {
       "type": "date",
-      "required": true,
-      "default": "$NOW"
+      "required": true
     }
   },
   "validations": [],
