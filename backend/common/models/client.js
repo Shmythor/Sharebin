@@ -2,6 +2,15 @@
 
 let App = require('../../server/server');
 module.exports = function(Client) {
+
+    Client.observe('before save', function createClientStorage(user, next) {
+        let FolderModel = app.models.Folder;
+        if (user.isNewInstance)
+            FolderModel.createContainer({name: user.email, path: user.email}, (err, folder) => {});
+        
+        next();
+    });
+
     Client.uploadDocument = function(req, res, clientId, cb) {
         let Folder = App.models.Folder;
         let Client = App.models.Client;
@@ -49,4 +58,5 @@ module.exports = function(Client) {
         returns: {arg: 'documentData', type: 'object', root: true},
         http: {verb: 'post', path: '/:clientId/uploadDocument'}
     });
+    
 };

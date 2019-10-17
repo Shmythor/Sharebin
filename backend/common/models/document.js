@@ -2,7 +2,10 @@
 
 let App = require('../../server/server');
 module.exports = function(Document) {
-
+    /*Document.sharedClass.methods().forEach(function(method) {
+        console.log(method.name);
+    });*/
+    
     // clientId mantatory
     Document.validatesPresenceOf('clientId');
 
@@ -43,8 +46,5 @@ module.exports = function(Document) {
         ],
         http: {verb: 'GET', path: '/:documentId/download'}
     });
-
-
-
 
 };
