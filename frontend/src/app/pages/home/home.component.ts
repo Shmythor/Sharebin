@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { dataToTest } from './data.js';
 
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',

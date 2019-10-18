@@ -3,10 +3,9 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientApi } from '../../services/lb-api/services/index';
 import { Client } from '../../services/lb-api/models/Client';
+import { LoginService } from '../../services/login.service';
+//import { ClientApi } from '../../services/lb-api/services/custom/Client';
 
-
-
-//var a = angular.module('app', [lbServices]);
 
 @Component({
   selector: 'app-login',
@@ -19,13 +18,14 @@ export class LoginComponent implements OnInit {
   sharebinLogo = '../../../assets/ShareBin_Logo.png';
   registerForm: FormGroup;
   submitted = false;
-  clients = [
+  /*clients = [
             {username:'shaheer@s',password:'shaheer'},
             {username:'sergio@s',password:'sergio'},
             {username:'johans@j',password:'johans'}
-          ];
+          ];*/
 
-  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi) {
+  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi
+    , private loginService: LoginService) {
   }
 
   ngOnInit() {
@@ -33,6 +33,10 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
+
+    if (this.loginService.getUserLoggedIn != null) {
+      this.goHome();
+   }
   }
 
   get f() { return this.registerForm.controls; }
@@ -51,47 +55,41 @@ export class LoginComponent implements OnInit {
     this.route.navigateByUrl('/home');
   }
 
-  credentialsFound() {
-    /*this.lbservices.Users.login(
-      {
-        username:this.registerForm.controls.email.value,
-        password:this.registerForm.controls.password.value
-      },
-      function(respuesta){
-        console.log(respuesta);
-      }
-    );*/
-    let found = false;
-    for(let i = 0; i < this.clients.length && !found; i++){
-      if (this.clients[i].username === this.registerForm.controls.email.value
-        && this.clients[i].password === this.registerForm.controls.password.value) {
-          found = true;
-      }
+  loginClient() {
+    
+    let formInfo = {
+      email: this.registerForm.controls.email.value,
+      password: this.registerForm.controls.password.value
     }
-    return found;
+    
+    this.clientapi.login(formInfo).subscribe((accessToken) => {
+      this.loginService.saveLoginAuth(accessToken.user.username);
+      this.goHome();
+    }, (err) => {
+      this.showLoginError();
+    });
   }
 
   onSubmit() {
     this.submitted = true;
 
-    // stop here if form is invalid
+    //Detener si datos son incorrectos
     if (this.registerForm.invalid) {
         return;
     } else {
-      if (this.credentialsFound()){
-        this.goHome();
-      } else {
-        document.getElementById('incorrectDataAlert').style.display = 'block';
-
-        setTimeout(function(){
-          document.getElementById('incorrectDataAlert').style.display = 'none';
-        }, 3000);
-      }
+      this.loginClient();
     }
   }
 
   onReset() {
       this.submitted = false;
       this.registerForm.reset();
+  }
+
+  showLoginError(){
+    document.getElementById('incorrectDataAlert').style.display = 'block';
+    setTimeout(function(){
+      document.getElementById('incorrectDataAlert').style.display = 'none';
+    }, 3000);
   }
 }
