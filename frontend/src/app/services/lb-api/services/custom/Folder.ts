@@ -9,15 +9,15 @@ import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Enterprise } from '../../models/Enterprise';
+import { Folder } from '../../models/Folder';
 import { SocketConnection } from '../../sockets/socket.connections';
 
 
 /**
- * Api services for the `Enterprise` model.
+ * Api services for the `Folder` model.
  */
 @Injectable()
-export class EnterpriseApi extends BaseLoopBackApi {
+export class FolderApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
@@ -31,9 +31,9 @@ export class EnterpriseApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `Enterprise`.
+   * i.e. `Folder`.
    */
   public getModelName() {
-    return "Enterprise";
+    return "Folder";
   }
 }

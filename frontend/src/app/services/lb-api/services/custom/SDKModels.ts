@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Document } from '../../models/Document';
 import { Metadata } from '../../models/Metadata';
 import { Enterprise } from '../../models/Enterprise';
+import { Folder } from '../../models/Folder';
 import { Client } from '../../models/Client';
 
 export interface Models { [name: string]: any }
@@ -14,6 +15,7 @@ export class SDKModels {
     Document: Document,
     Metadata: Metadata,
     Enterprise: Enterprise,
+    Folder: Folder,
     Client: Client,
     
   };
