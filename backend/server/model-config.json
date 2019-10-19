@@ -124,7 +124,8 @@
           "findById": true,
           "deleteById": true,
           "count": true,
-          "uploadDocument": true
+          "uploadDocument": true,
+          "getDocument": true
         }
       }
     }
