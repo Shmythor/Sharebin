@@ -10,6 +10,7 @@ import { MaincontainerComponent } from './pages/maincontainer/maincontainer.comp
 import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+//import { lbServices } from './services/lb-services';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './shared/searchbar/searchbar.component';
