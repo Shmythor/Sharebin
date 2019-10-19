@@ -1,21 +1,18 @@
 /* tslint:disable */
-import {
-  Client
-} from '../index';
 
 declare var Object: any;
 export interface EnterpriseInterface {
   "name": string;
   "createDate": Date;
   "id"?: any;
-  clients?: Client[];
+  clients?: any[];
 }
 
 export class Enterprise implements EnterpriseInterface {
   "name": string;
   "createDate": Date;
   "id": any;
-  clients: Client[];
+  clients: any[];
   constructor(data?: EnterpriseInterface) {
     Object.assign(this, data);
   }
@@ -65,8 +62,8 @@ export class Enterprise implements EnterpriseInterface {
       relations: {
         clients: {
           name: 'clients',
-          type: 'Client[]',
-          model: 'Client',
+          type: 'any[]',
+          model: '',
           relationType: 'hasMany',
                   keyFrom: 'id',
           keyTo: 'enterpriseId'

@@ -8,8 +8,6 @@
 module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
     let FolderModel = app.models.Folder;
-    console.log(Object.keys(app.models));
-
 
     // Search by ID: if exists update, else create
     let clientsArr = [
@@ -27,9 +25,9 @@ module.exports = function populateClientsModel(app) {
         });
         FolderModel.createContainer({ name: cli.email }, (err, folder) => {
             if (err) {
-                console.log("Error al crear contenedor: ");
+                console.log(`Carpeta creada para ${cli.name}: `);
             } else {
-                console.log("Contenedor creado");
+                console.log("Created new container correctly");
             }
         });
 
