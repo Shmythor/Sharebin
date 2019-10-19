@@ -10,6 +10,7 @@ export class SearchbarComponent implements OnInit {
   @Output() searchToEmit = new EventEmitter<string>();
   @Output() filterToEmit = new EventEmitter<string>();
 
+
   nameActivated = true;
   descriptionActivated = false;
   metadataActivated = false;

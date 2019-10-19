@@ -18,5 +18,5 @@ export const dataToTest = [
     { id: 17, name: 'Dynama', description: 'la mujer de dynamó', metadata: { clave: 'valor', clave2: 'valor2' } },
     { id: 18, name: 'Dr IQ', description: 'omg puede reirse viendo rick y morty', metadata: { clave: 'valor', clave2: 'valor2' } },
     { id: 19, name: 'Magma', description: 'magmatron colega', metadata: { clave: 'valor', clave2: 'valor2' } },
-    { id: 20, name: 'Tornado', description: 'el hermano pequeño de huracán', metadata: { clave: 'valor', clave2: 'valor2' } },
+    { id: 20, name: 'Tornado', description: 'el hermano pequeño de huracán', metadata: { clave: 'valor', clave2: 'valor2', pipo: 'El perro' } },
 ];
