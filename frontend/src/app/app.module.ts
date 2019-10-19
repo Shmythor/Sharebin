@@ -15,7 +15,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
 import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
-import { MetadataItemComponent } from './pages/home/components/metadata-item/metadata-item.component';
 
 // Providers to use LoopBack Services
 import { ClientApi } from './services/lb-api/services/index';
@@ -40,8 +39,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     MaincontainerComponent,
     MetadataComponent,
     SearchbarComponent,
-    UploadFilesComponent,
-    MetadataItemComponent
+    UploadFilesComponent
   ],
   imports: [
     BrowserModule,
