@@ -1,8 +1,4 @@
 /* tslint:disable */
-import {
-  Metadata,
-  Client
-} from '../index';
 
 declare var Object: any;
 export interface DocumentInterface {
@@ -15,8 +11,8 @@ export interface DocumentInterface {
   "size": number;
   "id"?: any;
   "clientId"?: any;
-  metadatas?: Metadata[];
-  client?: Client;
+  metadatas?: any[];
+  client?: any;
 }
 
 export class Document implements DocumentInterface {
@@ -29,8 +25,8 @@ export class Document implements DocumentInterface {
   "size": number;
   "id": any;
   "clientId": any;
-  metadatas: Metadata[];
-  client: Client;
+  metadatas: any[];
+  client: any;
   constructor(data?: DocumentInterface) {
     Object.assign(this, data);
   }
@@ -106,16 +102,16 @@ export class Document implements DocumentInterface {
       relations: {
         metadatas: {
           name: 'metadatas',
-          type: 'Metadata[]',
-          model: 'Metadata',
+          type: 'any[]',
+          model: '',
           relationType: 'hasMany',
                   keyFrom: 'id',
           keyTo: 'documentId'
         },
         client: {
           name: 'client',
-          type: 'Client',
-          model: 'Client',
+          type: 'any',
+          model: '',
           relationType: 'belongsTo',
                   keyFrom: 'clientId',
           keyTo: 'id'
