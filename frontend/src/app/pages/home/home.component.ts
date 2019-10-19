@@ -42,12 +42,19 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem('currentUser');
+
+    this.clientapi.uploadDocument({file:"C:\Users\Shaheer\Desktop\UPV\ETSINF4\Cuatrimestre 1\PIN\Sharebin Project\Sharebin\frontend\src\assets\prueba.txt"},
+    {description:"Fichero de prueba"}, localStorage.getItem("currentUser")).subscribe((accessToken) => {
+      console.log("Fichero subido");
+    }, (err) => {
+      console.log("Error al subir el fichero");
+    });
+    /*let userId = localStorage.getItem('currentUser');
     this.clientapi.getDocuments(userId).subscribe((accessToken) => {
       console.log(accessToken);
     }, (err) => {
       console.log('Error documentos');
-    });
+    });*/
   }
 
   getFilter(filter: string) {
