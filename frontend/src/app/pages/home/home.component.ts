@@ -1,5 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
+import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { from } from 'rxjs';
 
 
 @Component({
@@ -26,7 +29,7 @@ export class HomeComponent implements OnInit {
   metadata: any;
 
 
-  constructor() {
+  constructor( public dialog: MatDialog ) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -89,6 +92,16 @@ export class HomeComponent implements OnInit {
     console.log('pulsado');
     this.metadata.push({'': ''});
     console.log(this.metadata);
+  }
+
+  onCreate(){
+
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '50%';
+
+    this.dialog.open(VentanaemergComponent, dialogConfig);
   }
 
   upload() {
