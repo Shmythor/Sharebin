@@ -104,6 +104,42 @@ export class ClientApi extends BaseLoopBackApi {
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
+
+
+  /**
+   * Upload a new document. Arguments: 
+         * file: File to upload
+         * *: Params for the document
+   *
+   * @param {object} data Request data.
+   *
+   *  - `req` – `{object}` - 
+   *
+   *  - `res` – `{object}` - 
+   *
+   *  - `clientId` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Client` object.)
+   * </em>
+   */
+  public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Clients/:clientId/uploadDocument";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
   /**
    * @ngdoc method
    * @name sdk.Client#getCurrent

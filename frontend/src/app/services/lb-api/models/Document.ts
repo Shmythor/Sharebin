@@ -9,6 +9,7 @@ export interface DocumentInterface {
   "updateDate": Date;
   "url"?: string;
   "size": number;
+  "type": string;
   "id"?: any;
   "clientId"?: any;
   metadatas?: any[];
@@ -23,6 +24,7 @@ export class Document implements DocumentInterface {
   "updateDate": Date;
   "url": string;
   "size": number;
+  "type": string;
   "id": any;
   "clientId": any;
   metadatas: any[];
@@ -89,6 +91,10 @@ export class Document implements DocumentInterface {
         "size": {
           name: 'size',
           type: 'number'
+        },
+        "type": {
+          name: 'type',
+          type: 'string'
         },
         "id": {
           name: 'id',
