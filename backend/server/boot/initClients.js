@@ -7,6 +7,7 @@
 
 module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
+    let FolderModel = app.models.Folder;
     console.log(Object.keys(app.models));
     
 
