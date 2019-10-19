@@ -63,7 +63,7 @@ export class LoginComponent implements OnInit {
     }
     
     this.clientapi.login(formInfo).subscribe((accessToken) => {
-      this.loginService.saveLoginAuth(accessToken.user.username);
+      this.loginService.saveLoginAuth(accessToken.userId);
       this.goHome();
     }, (err) => {
       this.showLoginError();

@@ -9,8 +9,8 @@ export class LoginService implements CanActivate {
 
   constructor(private clientapi: ClientApi, private _router:Router) { }
 
-  saveLoginAuth(user: string) {
-    localStorage.setItem('currentUser', user);
+  saveLoginAuth(userID: string) {
+    localStorage.setItem('currentUser', userID);
   }
 
   getUserLoggedIn() {
