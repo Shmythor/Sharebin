@@ -15,7 +15,7 @@ module.exports = function populateClientsModel(app) {
         { username: 'Yein', email: 'jane1@doe.com', password: 'password', name: 'Jane', createDate: Date.now() },
         { username: 'Bobobo', email: 'bob1@projects.com', password: 'password', name: 'Bob', createDate: Date.now() }
     ]
-    
+
     clientsArr.forEach(cli => {
         console.log('ClientModel.upsert');
         ClientModel.upsert(cli, (err, total) => {

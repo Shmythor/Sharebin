@@ -42,11 +42,11 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem("currentUser");
+    let userId = localStorage.getItem('currentUser');
     this.clientapi.getDocuments(userId).subscribe((accessToken) => {
       console.log(accessToken);
     }, (err) => {
-      console.log("Error documentos");
+      console.log('Error documentos');
     });
   }
 
@@ -119,7 +119,7 @@ export class HomeComponent implements OnInit {
 
   convertArrayToObj(array: any) {
     const newObject = {};
-    
+
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
@@ -127,19 +127,19 @@ export class HomeComponent implements OnInit {
   }
 
   upload() {
-    
+
   }
 
   downloadFile(url: string){
-    console.log("Descargar " + url);
-    window.open("../../../assets/favicon-32x32.png");
+    console.log('Descargar ' + url);
+    window.open('../../../assets/favicon-32x32.png');
   }
 
   showDownloadButton(buttonId: any) {
-    document.getElementById("downloadButton"+buttonId).style.display = "block";
+    document.getElementById('downloadButton' + buttonId).style.display = 'block';
   }
 
   hideDownloadButton(buttonId: any) {
-    document.getElementById("downloadButton"+buttonId).style.display = "none";
+    document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
 }
