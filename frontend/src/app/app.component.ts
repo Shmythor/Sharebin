@@ -9,7 +9,7 @@ import { LoopBackConfig } from './services/lb-api/index';
 export class AppComponent {
   title = 'Sharebin';
   constructor() {
-    LoopBackConfig.setBaseURL('http://127.0.0.1:3000');
+    LoopBackConfig.setBaseURL('http://localhost:3000');
     LoopBackConfig.setApiVersion('api');
   }
 }

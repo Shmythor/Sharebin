@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { dataToTest } from './data.js';
-
+import { ClientApi } from '../../services/lb-api/services/index';
 
 @Component({
   selector: 'app-home',
@@ -26,9 +26,12 @@ export class HomeComponent implements OnInit {
   metadata: any;
   tempMetadata: any;
   searchValue: string;
+  metadataKeys: any;
+  hoverIndex:number = -1;
 
 
-  constructor() {
+
+  constructor(private clientapi: ClientApi) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -39,7 +42,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    let userId = localStorage.getItem("currentUser");
+    this.clientapi.getDocuments(userId).subscribe((accessToken) => {
+      console.log(accessToken);
+    }, (err) => {
+      console.log("Error documentos");
+    });
   }
 
   getFilter(filter: string) {
@@ -79,6 +87,7 @@ export class HomeComponent implements OnInit {
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
   }
 
+
   saveChanges() {
     const lastItemSelected = this.itemSelected;
 
@@ -110,11 +119,27 @@ export class HomeComponent implements OnInit {
 
   convertArrayToObj(array: any) {
     const newObject = {};
-
-    console.log('omg', array);
+    
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
     return newObject;
+  }
+
+  upload() {
+    
+  }
+
+  downloadFile(url: string){
+    console.log("Descargar " + url);
+    window.open("../../../assets/favicon-32x32.png");
+  }
+
+  showDownloadButton(buttonId: any) {
+    document.getElementById("downloadButton"+buttonId).style.display = "block";
+  }
+
+  hideDownloadButton(buttonId: any) {
+    document.getElementById("downloadButton"+buttonId).style.display = "none";
   }
 }
