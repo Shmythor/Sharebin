@@ -7,14 +7,14 @@ import { Router, CanActivate } from '@angular/router';
 })
 export class LoginService implements CanActivate {
 
-  constructor(private clientapi: ClientApi, private _router:Router) { }
+  constructor(private clientapi: ClientApi, private router: Router) { }
 
   saveLoginAuth(userID: string) {
     localStorage.setItem('currentUser', userID);
   }
 
   getUserLoggedIn() {
-  	return localStorage.getItem('currentUser');
+    return localStorage.getItem('currentUser');
   }
 
   checkUserLogged() {
@@ -26,8 +26,8 @@ export class LoginService implements CanActivate {
   }
 
   canActivate(): boolean {
-    if(this.getUserLoggedIn() == null){
-      this._router.navigate(['login']);
+    if (this.getUserLoggedIn() == null) {
+      this.router.navigate(['login']);
       return false;
     }
     return true;
