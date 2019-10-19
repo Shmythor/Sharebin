@@ -21,18 +21,22 @@
     "createDate": {
       "type": "date",
       "required": true,
-      "default": "$NOW"
+      "default": "$now"
     },
     "updateDate": {
       "type": "date",
       "required": true,
-      "default": "$NOW"
+      "default": "$now"
     },
     "url": {
       "type": "string"
     },
     "size": {
       "type": "number",
+      "required": true
+    },
+    "type": {
+      "type": "string",
       "required": true
     }
   },
