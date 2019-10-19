@@ -105,6 +105,7 @@ export class ClientApi extends BaseLoopBackApi {
     return result;
   }
 
+
   /**
    * Upload a new document. Arguments: 
          * file: File to upload
@@ -138,6 +139,7 @@ export class ClientApi extends BaseLoopBackApi {
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
+
   /**
    * @ngdoc method
    * @name sdk.Client#getCurrent

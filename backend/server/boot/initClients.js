@@ -29,7 +29,7 @@ module.exports = function populateClientsModel(app) {
             if (err) {
                 console.log(`Carpeta creada para ${cli.name}: `);
             } else {
-                console.log("Contenedor creado");
+                console.log("Created new container correctly");
             }
         });
 

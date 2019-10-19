@@ -62,13 +62,11 @@ export class Metadata implements MetadataInterface {
         },
         "createDate": {
           name: 'createDate',
-          type: 'Date',
-          default: new Date(0)
+          type: 'Date'
         },
         "updateDate": {
           name: 'updateDate',
-          type: 'Date',
-          default: new Date(0)
+          type: 'Date'
         },
         "id": {
           name: 'id',
