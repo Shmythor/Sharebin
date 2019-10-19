@@ -27,9 +27,9 @@ module.exports = function populateClientsModel(app) {
         });
         FolderModel.createContainer({ name: cli.email }, (err, folder) => {
             if (err) {
-                console.log("Error al crear contenedor: ");
+                console.log("Container already created");
             } else {
-                console.log("Contenedor creado");
+                console.log("Created new container correctly");
             }
         });
 
