@@ -1,4 +1,8 @@
 module.exports = function(Folder) {
+    /*Folder.sharedClass.methods().forEach(function(method) {
+        console.log(method.name);
+    });*/
+
     /*
     Folder.findOne = function(filter, data, cb)
     {

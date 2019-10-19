@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { dataToTest } from './data.js';
 import { ClientApi } from '../../services/lb-api/services/index';
 
@@ -23,15 +23,17 @@ export class HomeComponent implements OnInit {
   public dataFiltered = [];
   public itemSelected: any;
   public textAreaText: string;
+
   metadataKeys: any;
   hoverIndex:number = -1;
+
 
 
   constructor(private clientapi: ClientApi) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
-    this.metadataKeys = {};
+    this.metadata = {};
 
     this.textAreaText = this.itemSelected.description;
   }
@@ -68,10 +70,15 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
     this.itemSelected = data;
-    this.metadataKeys = Object.keys(this.itemSelected.metadata);
-    
-    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+    this.metadata = this.convertObjToArray( this.itemSelected.metadata);
 
+    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+  }
+
+  convertObjToArray(obj: any) {
+    return Object.keys(obj).map((key) => {
+      return [key, obj[key]];
+    });
   }
 
   saveChanges() {
@@ -84,6 +91,12 @@ export class HomeComponent implements OnInit {
       this.data[index].description = this.textarea.nativeElement.value;
       // metadata
     }
+  }
+
+  newMetadata() {
+    console.log('pulsado');
+    this.metadata.push({'': ''});
+    console.log(this.metadata);
   }
 
   upload() {
