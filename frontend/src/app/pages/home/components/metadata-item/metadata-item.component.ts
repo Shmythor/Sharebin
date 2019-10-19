@@ -15,8 +15,14 @@ export class MetadataItemComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.clave = this.item[0];
-    this.valor = this.item[1];
+    let clave = this.item[0];
+    let valor = this.item[1];
+
+    if (clave === '') { clave = 'clave'; }
+    if (valor === '') { valor = 'valor'; }
+
+    this.clave = clave;
+    this.valor = valor;
   }
 
 }
