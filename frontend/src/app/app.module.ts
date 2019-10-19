@@ -13,7 +13,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 //import { lbServices } from './services/lb-services';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { SearchbarComponent } from './shared/searchbar/searchbar.component';
+import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
 import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
 import { MetadataItemComponent } from './pages/home/components/metadata-item/metadata-item.component';
 
@@ -27,7 +27,7 @@ import { LoopBackAuth } from './services/lb-api/services/core/auth.service';
 import { InternalStorage } from './services/lb-api/storage/storage.swaps'
 
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SocketConnection } from './services/lb-api/sockets/socket.connections';
 import { SocketDriver } from './services/lb-api/sockets/socket.driver';
 
@@ -51,9 +51,9 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     ScrollingModule,
     ReactiveFormsModule
   ],
-  providers: [ 
-    ClientApi, 
-    SocketConnection, 
+  providers: [
+    ClientApi,
+    SocketConnection,
     SocketDriver,
     DocumentApi,
     EnterpriseApi,

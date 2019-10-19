@@ -23,7 +23,9 @@ export class HomeComponent implements OnInit {
   public dataFiltered = [];
   public itemSelected: any;
   public textAreaText: string;
-
+  metadata: any;
+  tempMetadata: any;
+  searchValue: string;
   metadataKeys: any;
   hoverIndex:number = -1;
 
@@ -34,6 +36,7 @@ export class HomeComponent implements OnInit {
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
     this.metadata = {};
+    this.tempMetadata = {};
 
     this.textAreaText = this.itemSelected.description;
   }
@@ -53,9 +56,12 @@ export class HomeComponent implements OnInit {
       case 'description': this.filters[1] = !this.filters[1]; break;
       case 'metadata': this.filters[2] = !this.filters[2]; break;
     }
+
+    this.getSearch(this.searchValue);
   }
 
   getSearch(search: string) {
+    this.searchValue = search;
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
@@ -63,7 +69,12 @@ export class HomeComponent implements OnInit {
       /* Filtrando por Descripción */
       if (this.filters[1]) { res = res || elem.description.toLowerCase().includes(search.toLowerCase()); }
       /* Filtrando por metadata */
-        // if (this.filters[2]) { res = res || elem.metadata.getValue(search.toLowerCase()); }
+      if (this.filters[2]) {
+      Object.keys(elem.metadata).forEach(element => {
+       // res = res || element.toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
+          res = res || elem.metadata[element].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
+      });
+      }
       return res;
     });
   }
@@ -71,15 +82,11 @@ export class HomeComponent implements OnInit {
   itemPressed(data: any) {
     this.itemSelected = data;
     this.metadata = this.convertObjToArray( this.itemSelected.metadata);
+    this.tempMetadata = this.metadata;
 
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
   }
 
-  convertObjToArray(obj: any) {
-    return Object.keys(obj).map((key) => {
-      return [key, obj[key]];
-    });
-  }
 
   saveChanges() {
     const lastItemSelected = this.itemSelected;
@@ -89,18 +96,38 @@ export class HomeComponent implements OnInit {
 
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      // metadata
+      this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
     }
   }
 
   newMetadata() {
-    console.log('pulsado');
-    this.metadata.push({'': ''});
-    console.log(this.metadata);
+    this.tempMetadata.push(['', '']);
+  }
+
+  updateMetadataKey(event: any, id: any) {
+    this.tempMetadata[id][0] = event.target.value;
+  }
+  updateMetadataValue(event: any, id: any) {
+    this.tempMetadata[id][1] = event.target.value;
+  }
+
+  convertObjToArray(obj: any) {
+    return Object.keys(obj).map((key) => {
+      return [key, obj[key]];
+    });
+  }
+
+  convertArrayToObj(array: any) {
+    const newObject = {};
+    
+    array.forEach(elem => {
+      newObject[elem[0]] = elem[1];
+    });
+    return newObject;
   }
 
   upload() {
-
+    
   }
 
   downloadFile(url: string){

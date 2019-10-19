@@ -38,13 +38,15 @@
                 <div class="w-100 mb2">
                     <div>Metadatos</div>
                     <div class="flex flex-wrap">
-                        <app-metadata-item *ngFor="let item of metadata" [item]="item"></app-metadata-item>
-                        <div *ngIf="itemSelected.length != 0" class="badge badge-info mr1 ml1 pointer" (click)="newMetadata()">+</div>
+                        <div *ngFor="let item of metadata; let id = index" class="badge badge-info mr1 ml1">
+                            <input [value]="metadata[id][0]" (keyup)="updateMetadataKey($event, id)"> | <input [value]="metadata[id][1]" (keyup)="updateMetadataValue($event, id)">
+                        </div>
+                        <div *ngIf=" itemSelected.id !='' " class="badge badge-info ml1 pointer " (click)="newMetadata() ">+</div>
                     </div>
                 </div>
             </div>
             <div>
-                <button class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+                <button class="btn btn-success " (click)="saveChanges() ">Guardar cambios</button>
             </div>
         </div>
     </div>
