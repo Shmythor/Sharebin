@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { dataToTest } from './data.js';
-
+import { ClientApi } from '../../services/lb-api/services/index';
 
 @Component({
   selector: 'app-home',
@@ -23,20 +23,28 @@ export class HomeComponent implements OnInit {
   public dataFiltered = [];
   public itemSelected: any;
   public textAreaText: string;
+
   metadataKeys: any;
+  hoverIndex:number = -1;
 
 
-  constructor() {
+
+  constructor(private clientapi: ClientApi) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
-    this.metadataKeys = {};
+    this.metadata = {};
 
     this.textAreaText = this.itemSelected.description;
   }
 
   ngOnInit() {
-
+    let userId = localStorage.getItem("currentUser");
+    this.clientapi.getDocuments(userId).subscribe((accessToken) => {
+      console.log(accessToken);
+    }, (err) => {
+      console.log("Error documentos");
+    });
   }
 
   getFilter(filter: string) {
@@ -62,10 +70,15 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
     this.itemSelected = data;
-    this.metadataKeys = Object.keys(this.itemSelected.metadata);
-    
-    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+    this.metadata = this.convertObjToArray( this.itemSelected.metadata);
 
+    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+  }
+
+  convertObjToArray(obj: any) {
+    return Object.keys(obj).map((key) => {
+      return [key, obj[key]];
+    });
   }
 
   saveChanges() {
@@ -80,7 +93,26 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  newMetadata() {
+    console.log('pulsado');
+    this.metadata.push({'': ''});
+    console.log(this.metadata);
+  }
+
   upload() {
 
+  }
+
+  downloadFile(url: string){
+    console.log("Descargar " + url);
+    window.open("../../../assets/favicon-32x32.png");
+  }
+
+  showDownloadButton(buttonId: any) {
+    document.getElementById("downloadButton"+buttonId).style.display = "block";
+  }
+
+  hideDownloadButton(buttonId: any) {
+    document.getElementById("downloadButton"+buttonId).style.display = "none";
   }
 }
