@@ -8,8 +8,6 @@
 module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
     let FolderModel = app.models.Folder;
-    console.log(Object.keys(app.models));
-    
 
     // Search by ID: if exists update, else create
     let clientsArr = [
