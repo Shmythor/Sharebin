@@ -1,13 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
-<<<<<<< HEAD
+import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-
-
-=======
-import { ClientApi } from '../../services/lb-api/services/index';
->>>>>>> origin/development
 
 @Component({
   selector: 'app-home',
@@ -36,13 +31,7 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
-
-
-<<<<<<< HEAD
-  constructor( public dialog: MatDialog ) {
-=======
-  constructor(private clientapi: ClientApi) {
->>>>>>> origin/development
+ constructor(private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -53,11 +42,13 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem('currentUser');
-    this.clientapi.getDocuments(userId).subscribe((accessToken) => {
-      console.log(accessToken);
-    }, (err) => {
-      console.log('Error documentos');
+    let userId = localStorage.getItem("currentUser");
+    let filter = {
+      where: { clientId: userId},
+      includes: "documents"
+    }
+    this.docapi.find(filter).subscribe((docList) => {
+      console.log('ngOnInit findById data: ', docList);
     });
   }
 
