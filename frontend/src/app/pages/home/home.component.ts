@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
-import { ClientApi } from '../../services/lb-api/services/index';
+import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 
 @Component({
   selector: 'app-home',
@@ -29,9 +31,7 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
-
-
-  constructor(private clientapi: ClientApi) {
+ constructor(private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -42,19 +42,14 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.clientapi.uploadDocument({file:"C:\Users\Shaheer\Desktop\UPV\ETSINF4\Cuatrimestre 1\PIN\Sharebin Project\Sharebin\frontend\src\assets\prueba.txt"},
-    {description:"Fichero de prueba"}, localStorage.getItem("currentUser")).subscribe((accessToken) => {
-      console.log("Fichero subido");
-    }, (err) => {
-      console.log("Error al subir el fichero");
+    let userId = localStorage.getItem("currentUser");
+    let filter = {
+      where: { clientId: userId},
+      includes: "documents"
+    }
+    this.docapi.find(filter).subscribe((docList) => {
+      console.log('ngOnInit findById data: ', docList);
     });
-    /*let userId = localStorage.getItem('currentUser');
-    this.clientapi.getDocuments(userId).subscribe((accessToken) => {
-      console.log(accessToken);
-    }, (err) => {
-      console.log('Error documentos');
-    });*/
   }
 
   getFilter(filter: string) {
@@ -131,6 +126,16 @@ export class HomeComponent implements OnInit {
       newObject[elem[0]] = elem[1];
     });
     return newObject;
+  }
+
+  onCreate(){
+
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '50%';
+
+    this.dialog.open(VentanaemergComponent, dialogConfig);
   }
 
   upload() {

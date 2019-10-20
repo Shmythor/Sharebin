@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { MaterialModule } from './material/material.module'
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,7 +11,11 @@ import { MaincontainerComponent } from './pages/maincontainer/maincontainer.comp
 import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+<<<<<<< HEAD
+import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
+=======
 //import { lbServices } from './services/lb-services';
+>>>>>>> origin/development
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
@@ -23,12 +28,15 @@ import { EnterpriseApi } from './services/lb-api/services/index';
 import { MetadataApi } from './services/lb-api/services/index';
 import { SDKModels } from './services/lb-api/services/index';
 import { LoopBackAuth } from './services/lb-api/services/core/auth.service';
-import { InternalStorage } from './services/lb-api/storage/storage.swaps'
+import { InternalStorage } from './services/lb-api/storage/storage.swaps';
+
 
 
 import { HttpClientModule } from '@angular/common/http';
 import { SocketConnection } from './services/lb-api/sockets/socket.connections';
 import { SocketDriver } from './services/lb-api/sockets/socket.driver';
+
+
 
 @NgModule({
   declarations: [
@@ -39,15 +47,24 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     MaincontainerComponent,
     MetadataComponent,
     SearchbarComponent,
+<<<<<<< HEAD
+    UploadFilesComponent,
+    MetadataItemComponent,
+    VentanaemergComponent,
+    
+=======
     UploadFilesComponent
+>>>>>>> origin/development
   ],
+  entryComponents: [ VentanaemergComponent ],
   imports: [
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     ScrollingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaterialModule,    
   ],
   providers: [
     ClientApi,
@@ -60,6 +77,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     LoopBackAuth,
     InternalStorage
    ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],  
+  
 })
 export class AppModule { }
