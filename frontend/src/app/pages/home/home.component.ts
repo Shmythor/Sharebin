@@ -1,6 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
+<<<<<<< HEAD
+import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+
+
+=======
 import { ClientApi } from '../../services/lb-api/services/index';
+>>>>>>> origin/development
 
 @Component({
   selector: 'app-home',
@@ -31,7 +38,11 @@ export class HomeComponent implements OnInit {
 
 
 
+<<<<<<< HEAD
+  constructor( public dialog: MatDialog ) {
+=======
   constructor(private clientapi: ClientApi) {
+>>>>>>> origin/development
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -124,6 +135,16 @@ export class HomeComponent implements OnInit {
       newObject[elem[0]] = elem[1];
     });
     return newObject;
+  }
+
+  onCreate(){
+
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '50%';
+
+    this.dialog.open(VentanaemergComponent, dialogConfig);
   }
 
   upload() {
