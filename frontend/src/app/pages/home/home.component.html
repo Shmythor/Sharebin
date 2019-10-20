@@ -4,7 +4,7 @@
     <!-- Barra de búsqueda y subida de archivos -->
     <div class="flex justify-between mt4">
         <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
-        <button class="w-25 btn btn-primary navbar-bg" (click)="upload">Subir archivo</button>
+        <button class="w-25 btn btn-primary navbar-bg" (click)="onCreate()" >Subir archivo</button>
     </div>
 
     <!-- Listado de archivos e información -->
@@ -12,7 +12,14 @@
         <div class="w-70 bg-light align-content-center">
             <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
                 <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div class="pl2">{{dat.id}} | {{dat.name}}</div>
+                    <div id="file{{dat.id}}" class="pl2" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
+                        <p style="display: inline-block;">
+                            {{dat.id}} | {{dat.name}}
+                        </p>
+                        <button id="downloadButton{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="downloadFile(dat.name)"><!--<a style="text-decoration: none;" target="_blank" href="../../../assets/ShareBin_Logo.png">Download</a>-->
+                            Download
+                        </button>
+                    </div>
                 </div>
             </cdk-virtual-scroll-viewport>
         </div>
@@ -31,13 +38,15 @@
                 <div class="w-100 mb2">
                     <div>Metadatos</div>
                     <div class="flex flex-wrap">
-                        <app-metadata-item *ngFor="let item of metadata" [item]="item"></app-metadata-item>
-                        <div *ngIf="itemSelected.length != 0" class="badge badge-info mr1 ml1 pointer" (click)="newMetadata()">+</div>
+                        <div *ngFor="let item of metadata; let id = index" class="badge badge-info mr1 ml1">
+                            <input [value]="metadata[id][0]" (keyup)="updateMetadataKey($event, id)"> | <input [value]="metadata[id][1]" (keyup)="updateMetadataValue($event, id)">
+                        </div>
+                        <div *ngIf=" itemSelected.id !='' " class="badge badge-info ml1 pointer " (click)="newMetadata() ">+</div>
                     </div>
                 </div>
             </div>
             <div>
-                <button class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+                <button class="btn btn-success " (click)="saveChanges() ">Guardar cambios</button>
             </div>
         </div>
     </div>
