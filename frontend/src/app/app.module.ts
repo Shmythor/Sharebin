@@ -11,12 +11,15 @@ import { MaincontainerComponent } from './pages/maincontainer/maincontainer.comp
 import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
+<<<<<<< HEAD
 import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
+=======
+//import { lbServices } from './services/lb-services';
+>>>>>>> origin/development
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { SearchbarComponent } from './shared/searchbar/searchbar.component';
+import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
 import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
-import { MetadataItemComponent } from './pages/home/components/metadata-item/metadata-item.component';
 
 // Providers to use LoopBack Services
 import { ClientApi } from './services/lb-api/services/index';
@@ -29,7 +32,7 @@ import { InternalStorage } from './services/lb-api/storage/storage.swaps';
 
 
 
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { SocketConnection } from './services/lb-api/sockets/socket.connections';
 import { SocketDriver } from './services/lb-api/sockets/socket.driver';
 
@@ -44,10 +47,14 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     MaincontainerComponent,
     MetadataComponent,
     SearchbarComponent,
+<<<<<<< HEAD
     UploadFilesComponent,
     MetadataItemComponent,
     VentanaemergComponent,
     
+=======
+    UploadFilesComponent
+>>>>>>> origin/development
   ],
   entryComponents: [ VentanaemergComponent ],
   imports: [
@@ -59,9 +66,9 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     ReactiveFormsModule,
     MaterialModule,    
   ],
-  providers: [ 
-    ClientApi, 
-    SocketConnection, 
+  providers: [
+    ClientApi,
+    SocketConnection,
     SocketDriver,
     DocumentApi,
     EnterpriseApi,

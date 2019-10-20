@@ -1,8 +1,4 @@
 /* tslint:disable */
-import {
-  Enterprise,
-  Document
-} from '../index';
 
 declare var Object: any;
 export interface ClientInterface {
@@ -16,8 +12,9 @@ export interface ClientInterface {
   "enterpriseId"?: any;
   "password"?: string;
   accessTokens?: any[];
-  enterprise?: Enterprise;
-  documents?: Document[];
+  enterprise?: any;
+  documents?: any[];
+  folder?: any;
 }
 
 export class Client implements ClientInterface {
@@ -31,8 +28,9 @@ export class Client implements ClientInterface {
   "enterpriseId": any;
   "password": string;
   accessTokens: any[];
-  enterprise: Enterprise;
-  documents: Document[];
+  enterprise: any;
+  documents: any[];
+  folder: any;
   constructor(data?: ClientInterface) {
     Object.assign(this, data);
   }
@@ -114,17 +112,25 @@ export class Client implements ClientInterface {
         },
         enterprise: {
           name: 'enterprise',
-          type: 'Enterprise',
-          model: 'Enterprise',
+          type: 'any',
+          model: '',
           relationType: 'belongsTo',
                   keyFrom: 'enterpriseId',
           keyTo: 'id'
         },
         documents: {
           name: 'documents',
-          type: 'Document[]',
-          model: 'Document',
+          type: 'any[]',
+          model: '',
           relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'clientId'
+        },
+        folder: {
+          name: 'folder',
+          type: 'any',
+          model: '',
+          relationType: 'hasOne',
                   keyFrom: 'id',
           keyTo: 'clientId'
         },

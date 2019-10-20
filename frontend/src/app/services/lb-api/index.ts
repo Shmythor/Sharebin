@@ -51,6 +51,7 @@ import { RealTime } from './services/core/real.time';
 import { DocumentApi } from './services/custom/Document';
 import { MetadataApi } from './services/custom/Metadata';
 import { EnterpriseApi } from './services/custom/Enterprise';
+import { FolderApi } from './services/custom/Folder';
 import { ClientApi } from './services/custom/Client';
 /**
 * @module SDKBrowserModule
@@ -85,6 +86,7 @@ export class SDKBrowserModule {
         DocumentApi,
         MetadataApi,
         EnterpriseApi,
+        FolderApi,
         ClientApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },

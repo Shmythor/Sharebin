@@ -7,7 +7,7 @@
     <!-- main app container -->
     <form class="col-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />{{"john1@doe.com"}}
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors.required">Email is required</div>
                 <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
@@ -15,7 +15,7 @@
         </div>
         <div class="form-row">
             <div class="form-group col">
-                <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />
+                <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />{{"password"}}
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                     <div *ngIf="f.password.errors.required">Password is required</div>
                     <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>

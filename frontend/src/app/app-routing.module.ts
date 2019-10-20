@@ -2,14 +2,15 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { MaincontainerComponent } from './pages/maincontainer/maincontainer.component';
+import { LoginService } from './services/login.service';
 
 
 const routes: Routes = [
-  { path: 'home', component: MaincontainerComponent, data: {load: 'home'} },
-  { path: 'metadata', component: MaincontainerComponent, data: {load: 'metadata'} },
-  { path: 'themes', component: MaincontainerComponent, data: {load: 'themes'} },
-  { path: 'audit', component: MaincontainerComponent, data: {load: 'audit'} },
-  { path: 'bin', component: MaincontainerComponent, data: {load: 'bin'}, },
+  { path: 'home', component: MaincontainerComponent, data: {load: 'home'}, canActivate : [LoginService]},
+  { path: 'metadata', component: MaincontainerComponent, data: {load: 'metadata'}, canActivate : [LoginService]},
+  { path: 'themes', component: MaincontainerComponent, data: {load: 'themes'}, canActivate : [LoginService]},
+  { path: 'audit', component: MaincontainerComponent, data: {load: 'audit'}, canActivate : [LoginService]},
+  { path: 'bin', component: MaincontainerComponent, data: {load: 'bin'}, canActivate : [LoginService]},
   { path: 'login', component: LoginComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
