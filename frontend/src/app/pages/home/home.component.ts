@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
-import { ClientApi } from '../../services/lb-api/services/index';
+import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 
 @Component({
   selector: 'app-home',
@@ -29,9 +31,7 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
-
-
-  constructor(private clientapi: ClientApi) {
+ constructor(private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -43,10 +43,12 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     let userId = localStorage.getItem("currentUser");
-    this.clientapi.getDocuments(userId).subscribe((accessToken) => {
-      console.log(accessToken);
-    }, (err) => {
-      console.log("Error documentos");
+    let filter = {
+      where: { clientId: userId},
+      includes: "documents"
+    }
+    this.docapi.find(filter).subscribe((docList) => {
+      console.log('ngOnInit findById data: ', docList);
     });
   }
 
@@ -119,27 +121,37 @@ export class HomeComponent implements OnInit {
 
   convertArrayToObj(array: any) {
     const newObject = {};
-    
+
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
     return newObject;
   }
 
+  onCreate(){
+
+    const dialogConfig = new MatDialogConfig();
+    //dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '50%';
+
+    this.dialog.open(VentanaemergComponent, dialogConfig);
+  }
+
   upload() {
-    
+
   }
 
   downloadFile(url: string){
-    console.log("Descargar " + url);
-    window.open("../../../assets/favicon-32x32.png");
+    console.log('Descargar ' + url);
+    window.open('../../../assets/favicon-32x32.png');
   }
 
   showDownloadButton(buttonId: any) {
-    document.getElementById("downloadButton"+buttonId).style.display = "block";
+    document.getElementById('downloadButton' + buttonId).style.display = 'block';
   }
 
   hideDownloadButton(buttonId: any) {
-    document.getElementById("downloadButton"+buttonId).style.display = "none";
+    document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
 }

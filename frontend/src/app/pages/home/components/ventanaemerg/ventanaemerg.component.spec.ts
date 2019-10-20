@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MetadataItemComponent } from './metadata-item.component';
+import { VentanaemergComponent } from './ventanaemerg.component';
 
-describe('MetadataItemComponent', () => {
-  let component: MetadataItemComponent;
-  let fixture: ComponentFixture<MetadataItemComponent>;
+describe('VentanaemergComponent', () => {
+  let component: VentanaemergComponent;
+  let fixture: ComponentFixture<VentanaemergComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ MetadataItemComponent ]
+      declarations: [ VentanaemergComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MetadataItemComponent);
+    fixture = TestBed.createComponent(VentanaemergComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
