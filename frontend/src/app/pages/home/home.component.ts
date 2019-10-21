@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
 import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
@@ -28,8 +28,7 @@ export class HomeComponent implements OnInit {
   metadata: any;
   tempMetadata: any;
   searchValue: string;
-  metadataKeys: any;
-  hoverIndex:number = -1;
+  hoverIndex: number;
 
  constructor(private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
@@ -37,16 +36,18 @@ export class HomeComponent implements OnInit {
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
     this.metadata = {};
     this.tempMetadata = {};
+    this.hoverIndex = -1;
 
     this.textAreaText = this.itemSelected.description;
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem("currentUser");
-    let filter = {
+    const userId = localStorage.getItem('currentUser');
+    const filter = {
       where: { clientId: userId},
-      includes: "documents"
-    }
+      includes: 'documents'
+    };
+
     this.docapi.find(filter).subscribe((docList) => {
       console.log('ngOnInit findById data: ', docList);
     });
@@ -96,9 +97,13 @@ export class HomeComponent implements OnInit {
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
 
+      /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
+
+      /* update database */
+
     }
   }
 
@@ -128,10 +133,10 @@ export class HomeComponent implements OnInit {
     return newObject;
   }
 
-  onCreate(){
+  onCreate() {
 
     const dialogConfig = new MatDialogConfig();
-    //dialogConfig.disableClose = true;
+ // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '50%';
 

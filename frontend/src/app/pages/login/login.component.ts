@@ -24,8 +24,8 @@ export class LoginComponent implements OnInit {
             {username:'johans@j',password:'johans'}
           ];*/
 
-  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi
-    , private loginService: LoginService) {
+  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi,
+              private loginService: LoginService) {
   }
 
   ngOnInit() {
@@ -56,12 +56,11 @@ export class LoginComponent implements OnInit {
   }
 
   loginClient() {
-    
-    let formInfo = {
+    const formInfo = {
       email: this.registerForm.controls.email.value,
-      password: this.registerForm.controls.password.value
-    }
-    
+      password: this.registerForm.controls.password.value,
+    };
+
     this.clientapi.login(formInfo).subscribe((accessToken) => {
       this.loginService.saveLoginAuth(accessToken.userId);
       this.goHome();
