@@ -10,18 +10,21 @@
 
 <div class="col-md-9" style="margin-bottom: 40px">
 
-    <h3>Subir Archivos</h3>
-    <input style="display:none"
-         type="file"
-          (change)="onFileSelected($event)"
-          #fileInput>
-
-    <button type="button" class="btn btn-success" (click)="fileInput.click()" style="margin-bottom: 2%;">        
+    <!--<h3>Subir Archivos</h3>-->
+    <input type="file" (change)="fileProgress($event)" #fileInput style="margin: 1em 0">
+    <!--(click)="fileInput.click()"-->
+    <button type="button" class="btn btn-success" style="margin-bottom: 2%;" (click)="onUpload('')">        
         <span class="glyphicon glyphicon-upload"></span> Sube tus archivos
     </button>
     <button type="button" class="btn btn-danger" (click)="clearFiles()" style="margin-left: 2%; margin-bottom: 2%;">
         <span class="glyphicon glyphicon-trash"></span> Elimina tus archivos
     </button>
+
+    <jw-modal id="fileDescription">
+        <!--<p>Nombre del fichero: <span id="fileName"></span></p>-->
+        <p>Descripción: <input type="text" id="fileDescriptionContent"/></p>
+        <button (click)="closeModal('fileDescription')">Aceptar</button>
+    </jw-modal>
 
     <table class="table"> <!--*ngIf="files.length > 0"-->
         <thead>
