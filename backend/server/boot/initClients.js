@@ -32,16 +32,9 @@ module.exports = function populateClientsModel(app) {
     clientsArr.forEach(cli => {
         ClientModel.upsert(cli, (err, total) => {
             if (err) {
-                console.log(`Client ${cli.name} is already created`);
+                console.log(err);
             } else {
                 console.log("Client created correctly: ", total);
-            }
-        });
-        FolderModel.createContainer({ name: cli.email }, (err, folder) => {
-            if (err) {
-                console.log(`Carpeta creada para ${cli.name}: `);
-            } else {
-                console.log("Created new container correctly");
             }
         });
     });
