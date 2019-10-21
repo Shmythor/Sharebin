@@ -140,14 +140,11 @@ export class HomeComponent implements OnInit {
     this.dialog.open(VentanaemergComponent, dialogConfig);
   }
 
-<<<<<<< HEAD
-=======
   upload() {
     console.log("postFile");
     
   }
 
->>>>>>> origin/development
   downloadFile(url: string){
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
@@ -160,8 +157,6 @@ export class HomeComponent implements OnInit {
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
-<<<<<<< HEAD
-=======
 
 fileData: File = null;
 previewUrl:any = null;
@@ -221,5 +216,4 @@ onUpload() {
     /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
   });
 }
->>>>>>> origin/development
 }
