@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
- constructor(private docapi: DocumentApi, public dialog: MatDialog) {
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -154,4 +154,41 @@ export class HomeComponent implements OnInit {
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
+
+fileData: File = null;
+previewUrl:any = null;
+fileUploadProgress: string = null;
+uploadedFilePath: string = null;
+ 
+fileProgress(fileInput: any) {
+      this.fileData = <File>fileInput.target.files[0];
+      this.preview();
+}
+ 
+preview() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+ 
+    var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl = reader.result; 
+    }
+}
+ 
+onUpload() {
+    const formData = new FormData();
+      formData.append('file', this.fileData);
+      this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
+        .subscribe(res => {
+          console.log(res);
+          //this.uploadedFilePath = res.data.filePath;
+          alert('SUCCESS !!');
+        }, (err) => {
+          console.log("Error");
+        })
+}
 }
