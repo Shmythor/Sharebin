@@ -12,6 +12,7 @@ import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
+import { ModalModule } from '../app/shared/_modal';
 //import { lbServices } from './services/lb-services';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -56,7 +57,8 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     BrowserAnimationsModule,
     ScrollingModule,
     ReactiveFormsModule,
-    MaterialModule,    
+    MaterialModule,
+    ModalModule    
   ],
   providers: [
     ClientApi,

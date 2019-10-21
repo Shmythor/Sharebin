@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 //import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ClientApi, DocumentApi } from '../../../../services/lb-api/services/index';
+import { ModalService } from '../../../../shared/_modal';
 
 @Component({
   selector: 'app-ventanaemerg',
@@ -14,36 +15,53 @@ export class VentanaemergComponent implements OnInit {
   previewUrl:any = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
+  bodyText: string;
 
-  constructor( private clientapi: ClientApi){}
+  constructor(private clientapi: ClientApi, private modalService: ModalService){}
 
-  onFileSelected (event){
+  openModal(id: string) {
+    this.modalService.open(id);
+  }
+
+  closeModal(id: string) {
+
+    if(this.bodyText == ""){
+      this.bodyText = this.fileData.name;
+    }
+
+    this.onUpload(this.bodyText);
+    console.log("Upload ejecutado");
+    console.log("Cerrando modal...");
+    this.modalService.close(id);
+  }
+
+  /*onFileSelected (event){
 
     this.selectedFile = event.target.files[0];
 
     console.log(event);
+  }*/
+ 
+  fileProgress(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.preview();
   }
  
-fileProgress(fileInput: any) {
-  this.fileData = <File>fileInput.target.files[0];
-  this.preview();
-}
- 
-preview() {
+  preview() {
     // Show preview 
     var mimeType = this.fileData.type;
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
- 
+
     var reader = new FileReader();      
     reader.readAsDataURL(this.fileData); 
     reader.onload = (_event) => { 
       this.previewUrl = reader.result; 
     }
-}
+  }
 
-  onUpload(){
+  onUpload(fileDescription: string){
     //console.log('Subida de archivo con exito al mundo cuántico');
     
     //const fd = new FormData();
@@ -62,11 +80,19 @@ preview() {
       }
      
     })*/
+
+    console.log("Entramos en upload");
+    this.clientapi.uploadDocument(this.fileData, {description:fileDescription}, localStorage.getItem("currentUser"))
+      .subscribe((res) => {
+        console.log(res);
+        //this.uploadedFilePath = res.data.filePath;
+        alert('SUBIDO!!');
+      }, (err) => {
+        console.log("Error");
+    })
   }  
 
   ngOnInit() {
+
   }
-
-  
-
 }
