@@ -30,6 +30,11 @@ export class HomeComponent implements OnInit {
   searchValue: string;
   metadataKeys: any;
   hoverIndex:number = -1;
+  selectedFile = null;
+  fileData: File = null;
+  previewUrl:any = null;
+  fileUploadProgress: string = null;
+  uploadedFilePath: string = null;
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
@@ -155,40 +160,38 @@ export class HomeComponent implements OnInit {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
 
-fileData: File = null;
-previewUrl:any = null;
-fileUploadProgress: string = null;
-uploadedFilePath: string = null;
- 
-fileProgress(fileInput: any) {
-      this.fileData = <File>fileInput.target.files[0];
-      this.preview();
-}
- 
-preview() {
-    // Show preview 
-    var mimeType = this.fileData.type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
- 
-    var reader = new FileReader();      
-    reader.readAsDataURL(this.fileData); 
-    reader.onload = (_event) => { 
-      this.previewUrl = reader.result; 
-    }
-}
- 
-onUpload() {
-    const formData = new FormData();
-      formData.append('file', this.fileData);
-      this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
-        .subscribe(res => {
-          console.log(res);
-          //this.uploadedFilePath = res.data.filePath;
-          alert('SUCCESS !!');
-        }, (err) => {
-          console.log("Error");
-        })
-}
+  fileProgress(fileInput: any) {
+    this.fileData = <File>fileInput.target.files[0];
+    this.preview();
+  }
+   
+  preview() {
+      // Show preview 
+      var mimeType = this.fileData.type;
+      if (mimeType.match(/image\/*/) == null) {
+        return;
+      }
+   
+      var reader = new FileReader();      
+      reader.readAsDataURL(this.fileData); 
+      reader.onload = (_event) => { 
+        this.previewUrl = reader.result; 
+      }
+  }
+
+  onUpload(){
+  const formData = new FormData();
+    formData.append('file', this.fileData);
+    //console.log(formData);
+    console.log(formData.get('file'));
+    //console.log(this.fileData);
+    this.clientapi.uploadDocument(formData.get('file'), {description:"Fichero de prueba"}, localStorage.getItem("currentUser"))
+      .subscribe((res) => {
+        console.log(res);
+        //this.uploadedFilePath = res.data.filePath;
+        alert('SUBIDO!!');
+      }, (err) => {
+        
+    })
+  }
 }
