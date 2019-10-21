@@ -135,8 +135,11 @@ export class ClientApi extends BaseLoopBackApi {
     let _routeParams: any = {};
     let _postBody: any = documentData;
     let _urlParams: any = {};
+    
+    _postBody["file"] = file;
+    
     if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
-    if (typeof file !== null) _postBody.file = file;
+    
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }

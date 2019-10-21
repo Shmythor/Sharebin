@@ -3,6 +3,8 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
 import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { Observable } from 'rxjs';
+import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +33,8 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
+
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -137,6 +140,14 @@ export class HomeComponent implements OnInit {
     this.dialog.open(VentanaemergComponent, dialogConfig);
   }
 
+<<<<<<< HEAD
+=======
+  upload() {
+    console.log("postFile");
+    
+  }
+
+>>>>>>> origin/development
   downloadFile(url: string){
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
@@ -149,4 +160,66 @@ export class HomeComponent implements OnInit {
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
+<<<<<<< HEAD
+=======
+
+fileData: File = null;
+previewUrl:any = null;
+fileUploadProgress: string = null;
+uploadedFilePath: string = null;
+ 
+fileProgress(fileInput: any) {
+      this.fileData = <File>fileInput.target.files[0];
+      this.preview();
+}
+ 
+preview() {
+    // Show preview 
+    var mimeType = this.fileData.type;
+    if (mimeType.match(/image\/*/) == null) {
+      return;
+    }
+ 
+    var reader = new FileReader();      
+    reader.readAsDataURL(this.fileData); 
+    reader.onload = (_event) => { 
+      this.previewUrl = reader.result; 
+    }
+}
+ 
+
+postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
+
+  console.log("postFile");
+
+  const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
+  const formData: FormData = new FormData();
+  formData.append('file', fileToUpload, fileToUpload.name);
+  formData.append('description', description);
+
+
+  let params = new HttpParams();
+  let headers = new HttpHeaders();
+
+  headers.append("Content-Type", "application/json");
+  headers.append("Content-Type", "multipart/form-data");
+
+  const options = {
+    params: params,
+    reportProgress: true,
+    headers: headers
+  };
+
+  const req = new HttpRequest('POST', endpoint, formData, options);
+
+  return this.http.request(req);
+  }
+
+onUpload() {
+  console.log("onUpload");
+  this.postFile(this.fileData, localStorage.getItem('currentUser'), "descripcion aqui ").subscribe((document) => {
+    /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
+  });
+}
+>>>>>>> origin/development
 }
