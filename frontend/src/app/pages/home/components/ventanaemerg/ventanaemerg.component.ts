@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 //import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ClientApi, DocumentApi } from '../../../../services/lb-api/services/index';
 import { ModalService } from '../../../../shared/_modal';
+import { Observable } from 'rxjs';
+import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-ventanaemerg',
@@ -17,7 +19,7 @@ export class VentanaemergComponent implements OnInit {
   uploadedFilePath: string = null;
   bodyText: string;
 
-  constructor(private clientapi: ClientApi, private modalService: ModalService){}
+  constructor(private clientapi: ClientApi, private modalService: ModalService, private http: HttpClient){}
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -25,23 +27,16 @@ export class VentanaemergComponent implements OnInit {
 
   closeModal(id: string) {
 
-    if(this.bodyText == ""){
-      this.bodyText = this.fileData.name;
-    }
+    this.bodyText = this.fileData.name
 
     this.onUpload(this.bodyText);
-    console.log("Upload ejecutado");
-    console.log("Cerrando modal...");
     this.modalService.close(id);
   }
 
-  /*onFileSelected (event){
+  ngOnInit() {
 
-    this.selectedFile = event.target.files[0];
+  }
 
-    console.log(event);
-  }*/
- 
   fileProgress(fileInput: any) {
     this.fileData = <File>fileInput.target.files[0];
     this.preview();
@@ -61,38 +56,40 @@ export class VentanaemergComponent implements OnInit {
     }
   }
 
-  onUpload(fileDescription: string){
-    //console.log('Subida de archivo con exito al mundo cuántico');
-    
-    //const fd = new FormData();
-    //fd.append('image', this.selectedFile, this.selectedFile.name)
-    /*this.http.post('http://localhost:4200/',fd, {
+  postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
+  
+    const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
+    const formData: FormData = new FormData();
+    formData.append('file', fileToUpload, fileToUpload.name);
+    formData.append('description', description);
+  
+  
+    let params = new HttpParams();
+    let headers = new HttpHeaders();
+  
+    headers.append("Content-Type", "application/json");
+    headers.append("Content-Type", "multipart/form-data");
+  
+    const options = {
+      params: params,
       reportProgress: true,
-      observe: 'events'}).subscribe(event => {
-
-      if(event.type === HttpEventType.UploadProgress){
-
-        console.log('Progreso de Subida: ' + Math.round( event.loaded / event.total) * 100 + '%');
-        
-      }
-      else if (event.type === HttpEventType.Response){
-        console.log(event);
-      }
-     
-    })*/
-
-    console.log("Entramos en upload");
-    this.clientapi.uploadDocument(this.fileData, {description:fileDescription}, localStorage.getItem("currentUser"))
-      .subscribe((res) => {
-        console.log(res);
-        //this.uploadedFilePath = res.data.filePath;
-        alert('SUBIDO!!');
-      }, (err) => {
-        console.log("Error");
-    })
-  }  
-
-  ngOnInit() {
-
+      headers: headers
+    };
+  
+    const req = new HttpRequest('POST', endpoint, formData, options);
+  
+    return this.http.request(req);
+  }
+  
+  onUpload(fileDescription: string) {
+    fileDescription = this.fileData.name;
+    this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
+    .subscribe((document) => {
+      /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
+      
+      location.reload();
+    }, (err) => {
+      console.log("Error al subir documento: " +err);
+    });
   }
 }
