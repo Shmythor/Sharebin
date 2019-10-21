@@ -7,6 +7,24 @@
         <button class="w-25 btn btn-primary navbar-bg" (click)="onCreate()" >Subir archivo</button>
     </div>
 
+    <div class="form-group">
+        <input type="file" name="image" (change)="fileProgress($event)" />
+    </div>
+    <div *ngIf="fileUploadProgress">
+        Upload progress: {{ fileUploadProgress }}
+    </div>
+    <div class="image-preview mb-3" *ngIf="previewUrl">
+        <img [src]="previewUrl" height="300" />                 
+    </div>
+
+    <div class="mb-3" *ngIf="uploadedFilePath">
+        {{uploadedFilePath}}
+    </div>
+     
+    <div class="form-group">
+        <button class="btn btn-primary"  (click)="onUpload()">Submit</button>
+    </div>
+
     <!-- Listado de archivos e información -->
     <div class="flex justify-between mt4 h-75">
         <div class="w-70 bg-light align-content-center">
