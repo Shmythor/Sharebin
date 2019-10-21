@@ -62,19 +62,6 @@ preview() {
       }
      
     })*/
-    const formData = new FormData();
-    formData.append('file', this.fileData);
-    //console.log(formData);
-    console.log(formData.get('file'));
-    //console.log(this.fileData);
-    this.clientapi.uploadDocument(formData.get('file'), "Fichero de prueba", localStorage.getItem("currentUser"))
-      .subscribe((res) => {
-        console.log(res);
-        //this.uploadedFilePath = res.data.filePath;
-        alert('SUBIDO!!');
-      }, (err) => {
-        
-    })
   }  
 
   ngOnInit() {

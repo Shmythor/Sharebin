@@ -179,19 +179,15 @@ export class HomeComponent implements OnInit {
       }
   }
 
-  onUpload(){
-  const formData = new FormData();
-    formData.append('file', this.fileData);
-    //console.log(formData);
-    console.log(formData.get('file'));
-    //console.log(this.fileData);
-    this.clientapi.uploadDocument(formData.get('file'), {description:"Fichero de prueba"}, localStorage.getItem("currentUser"))
+  onUpload(){  
+    console.log("Entramos en upload");
+    this.clientapi.uploadDocument(this.fileData, {description:"Fichero de prueba"}, localStorage.getItem("currentUser"))
       .subscribe((res) => {
         console.log(res);
         //this.uploadedFilePath = res.data.filePath;
         alert('SUBIDO!!');
       }, (err) => {
-        
+        console.log("Error");
     })
   }
 }

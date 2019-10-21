@@ -14,6 +14,9 @@ module.exports = function(Client) {
     Client.uploadDocument = function(req, res, clientId, cb) {
         let Folder = App.models.Folder;
         let Client = App.models.Client;
+
+
+        console.log(clientId);
         
         Client.findById(clientId)
             .then((userObject) => {
