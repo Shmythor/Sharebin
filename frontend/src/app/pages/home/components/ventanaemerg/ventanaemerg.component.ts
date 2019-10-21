@@ -86,8 +86,8 @@ export class VentanaemergComponent implements OnInit {
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
     .subscribe((document) => {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
-      
-      location.reload();
+      //console.log("Subida hecha");
+      //location.reload();
     }, (err) => {
       console.log("Error al subir documento: " +err);
     });

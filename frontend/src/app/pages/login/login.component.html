@@ -7,7 +7,10 @@
     <!-- main app container -->
     <form class="col-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />{{"john1@doe.com"}}
+            <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
+            {{"john1@doe.com"}}
+            {{"bob1@projects.com"}}
+            {{"jane1@doe.com"}}
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors.required">Email is required</div>
                 <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
