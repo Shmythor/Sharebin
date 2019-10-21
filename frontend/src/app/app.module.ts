@@ -45,7 +45,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     SearchbarComponent,
     UploadFilesComponent,
     VentanaemergComponent,
-    
+    UploadFilesComponent
   ],
   entryComponents: [ VentanaemergComponent ],
   imports: [
@@ -55,7 +55,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     BrowserAnimationsModule,
     ScrollingModule,
     ReactiveFormsModule,
-    MaterialModule,    
+    MaterialModule,
   ],
   providers: [
     ClientApi,
@@ -68,7 +68,6 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     LoopBackAuth,
     InternalStorage
    ],
-  bootstrap: [AppComponent],  
-  
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
