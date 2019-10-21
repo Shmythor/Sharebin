@@ -128,14 +128,15 @@ export class ClientApi extends BaseLoopBackApi {
    * This usually means the response is a `Client` object.)
    * </em>
    */
-  public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
+  public uploadDocument(file: File, documentData: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     `/Clients/${clientId}/uploadDocument`;
     let _routeParams: any = {};
-    let _postBody: any = {};
+    let _postBody: any = documentData;
     let _urlParams: any = {};
     if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    if (typeof file !== null) _postBody.file = file;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
