@@ -10,7 +10,7 @@ module.exports = function(Client) {
         console.log(user);
         if (ctx.isNewInstance)
             FolderModel.createContainer({name: user.email, path: user.email}, (err, folder) => {
-                console.log(err);
+                //console.log(err);
             });
         
         next();
@@ -20,10 +20,19 @@ module.exports = function(Client) {
         let Folder = App.models.Folder;
         let Client = App.models.Client;
         
+        console.log("uploadDocument");
+
         Client.findById(clientId)
             .then((userObject) => {
                 if (!userObject)
                     throw new Error(`User with id ${clientId} not found`);
+                
+                console.log(req);
+                console.log(res);
+                console.log(userObject);
+                
+
+                console.log("\n\n\n");
 
                 return Folder.upload(req, res, {container: userObject.email})
             })
@@ -32,6 +41,7 @@ module.exports = function(Client) {
                 let documentData = fileObj.fields;
                 let fileData = fileObj.files.file[0];
 
+                console.log(fileData);
                 //Parche por si llega como un array por alguna razon.
                 if (typeof(documentData.description) == "array")
                     documentData.description = documentData.description[0]

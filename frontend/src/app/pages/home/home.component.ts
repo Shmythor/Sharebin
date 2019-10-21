@@ -3,6 +3,8 @@ import { MatDialog, MatDialogConfig } from "@angular/material";
 import { dataToTest } from './data.js';
 import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { Observable } from 'rxjs';
+import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +33,8 @@ export class HomeComponent implements OnInit {
   metadataKeys: any;
   hoverIndex:number = -1;
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
+
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadata: {}};
@@ -139,7 +142,8 @@ export class HomeComponent implements OnInit {
   }
 
   upload() {
-
+    console.log("postFile");
+    
   }
 
   downloadFile(url: string){
@@ -179,16 +183,38 @@ preview() {
     }
 }
  
+
+postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
+
+  console.log("postFile");
+
+  const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
+  const formData: FormData = new FormData();
+  formData.append('file', fileToUpload, fileToUpload.name);
+  formData.append('description', description);
+
+
+  let params = new HttpParams();
+  let headers = new HttpHeaders();
+
+  headers.append("Content-Type", "application/json");
+  headers.append("Content-Type", "multipart/form-data");
+
+  const options = {
+    params: params,
+    reportProgress: true,
+    headers: headers
+  };
+
+  const req = new HttpRequest('POST', endpoint, formData, options);
+
+  return this.http.request(req);
+  }
+
 onUpload() {
-    const formData = new FormData();
-      formData.append('file', this.fileData);
-      this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
-        .subscribe(res => {
-          console.log(res);
-          //this.uploadedFilePath = res.data.filePath;
-          alert('SUCCESS !!');
-        }, (err) => {
-          console.log("Error");
-        })
+  console.log("onUpload");
+  this.postFile(this.fileData, localStorage.getItem('currentUser'), "descripcion aqui ").subscribe((document) => {
+    /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
+  });
 }
 }
