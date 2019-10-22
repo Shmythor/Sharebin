@@ -1,11 +1,20 @@
-.list-container {
-    height: 100%;
-}
-
-.dataItem {
-    background-color: white;
-}
-
-.dataItem:hover {
-    background-color: #E0EAFC;
-}
+        .list-container {
+            height: 100%;
+        }
+        
+        .dataItem {
+            background-color: white;
+        }
+        
+        .dataItem:hover {
+            background-color: #E0EAFC;
+        }
+        
+        .metadataInput {
+            outline: none;
+            width: 50%;
+            background: transparent;
+            border: transparent;
+            box-shadow: none;
+            color: white;
+        }
