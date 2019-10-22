@@ -1,10 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { dataToTest } from './data.js';
-import { DocumentApi, ClientApi } from '../../services/lb-api/services/index';
+import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +32,8 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
 
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
+             public dialog: MatDialog, private http: HttpClient) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -45,7 +45,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('')
     this.getUserItemList();
   }
 
@@ -53,7 +52,7 @@ export class HomeComponent implements OnInit {
     const userId = localStorage.getItem('currentUser');
     const filter = {
       where: { clientId: userId },
-      include: 'metadatas', 
+      include: 'metadatas',
     };
 
     this.docapi.find(filter).subscribe((docList) => {
@@ -98,7 +97,7 @@ export class HomeComponent implements OnInit {
   itemPressed(data: any) {
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
-    this.tempMetadata = this.metadata;
+    this.tempMetadata = this.itemSelected.metadatas;
 
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
   }
@@ -107,20 +106,48 @@ export class HomeComponent implements OnInit {
   saveChanges() {
     const lastItemSelected = this.itemSelected;
 
-    if (this.itemSelected.clientId !== '') {
-      const index = this.data.findIndex((x) => x.clientId === lastItemSelected.clientId);
+    if (this.itemSelected.id !== '') {
+      const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
 
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      // this.data[index].metadatas = this.convertArrayToObj(this.tempMetadata);
+      this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
+      /* aqui quiero hacer el post */
+      this.tempMetadata.forEach((elem) => {
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
+          (no)=>{},
+          (err)=>{console.log('me cago en', err)}
+        );
+      })
     }
   }
 
+  postMetadata(metadata: any): Observable<HttpEvent<any>> {
+
+    const endpoint = 'http://localhost:3000/api/metadata';
+
+    let params = new HttpParams();
+    let headers = new HttpHeaders();
+
+    headers.append("Content-Type", "application/json");
+
+    const options = {
+      params: params,
+      reportProgress: true,
+      headers: headers
+    };
+
+    const req = new HttpRequest('POST', endpoint, metadata, options);
+
+    return this.http.request(req);
+  }
+
   newMetadata() {
-    this.tempMetadata.push({key: '', value: ''});
+    this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
+    console.log(this.tempMetadata);
   }
 
   updateMetadataKey(event: any, id: any) {
@@ -129,22 +156,6 @@ export class HomeComponent implements OnInit {
   updateMetadataValue(event: any, id: any) {
     this.tempMetadata[id][1] = event.target.value;
   }
-
-/*   convertObjToArray(obj: any) {
-    return Object.keys(obj).map((key) => {
-      return [key, obj[key]];
-    });
-  }
-
-  convertArrayToObj(array: any) {
-    const newObject = {};
-
-    array.forEach(elem => {
-      newObject[elem[0]] = elem[1];
-    });
-
-    return newObject;
-  } */
 
   loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
