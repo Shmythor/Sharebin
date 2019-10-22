@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
@@ -119,8 +118,9 @@ export class HomeComponent implements OnInit {
       /* update database */
       /* aqui quiero hacer el post */
       this.tempMetadata.forEach((elem) => {
+        console.log(elem);
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
-          (no)=>{},
+          (no)=>{console.log("mismuertos")},
           (err)=>{console.log('me cago en', err)}
         );
       })
@@ -153,10 +153,10 @@ export class HomeComponent implements OnInit {
   }
 
   updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id][0] = event.target.value;
+    this.tempMetadata[id].key = event.target.value;
   }
   updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id][1] = event.target.value;
+    this.tempMetadata[id].value = event.target.value;
   }
 
   loadUploadModal() {
@@ -175,16 +175,17 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(documentId: string) {
+  downloadFile(document) {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
-    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
+    console.log(document);
+    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`, 
       {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
-        var blob = new Blob([data]);
+        var blob = new Blob([data], {type: document.type});
         var url = window.URL.createObjectURL(blob);
 
-        saveAs(blob,"ostiaputa");
+        saveAs(blob, document.name);
         window.open(url);
       });
   }
