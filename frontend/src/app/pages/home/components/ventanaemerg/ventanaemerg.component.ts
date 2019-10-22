@@ -57,39 +57,38 @@ export class VentanaemergComponent implements OnInit {
   }
 
   postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
-  
+
     const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
     formData.append('description', description);
-  
-  
+
+
     let params = new HttpParams();
     let headers = new HttpHeaders();
-  
-    headers.append("Content-Type", "application/json");
-    headers.append("Content-Type", "multipart/form-data");
-  
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'multipart/form-data');
+
     const options = {
       params: params,
       reportProgress: true,
       headers: headers
     };
-  
+
     const req = new HttpRequest('POST', endpoint, formData, options);
-  
+
     return this.http.request(req);
   }
-  
+
   onUpload(fileDescription: string) {
     fileDescription = this.fileData.name;
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
     .subscribe((document) => {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
-      //console.log("Subida hecha");
-      //location.reload();
+      
     }, (err) => {
-      console.log("Error al subir documento: " +err);
+      console.log('Error al subir documento: ' + err);
     });
   }
 }
