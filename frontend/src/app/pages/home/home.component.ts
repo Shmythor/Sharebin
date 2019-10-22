@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { dataToTest } from './data.js';
-import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -21,34 +22,45 @@ export class HomeComponent implements OnInit {
   filters = [true, false, false];
 
 
-  public data = [];
-  public dataFiltered = [];
-  public itemSelected: any;
-  public textAreaText: string;
+  data: any;
+  dataFiltered: any;
+  itemSelected: any;
+  textAreaText: string;
   metadata: any;
   tempMetadata: any;
   searchValue: string;
-  metadataKeys: any;
-  hoverIndex = -1;
+  hoverIndex: number;
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
-    this.data = dataToTest;
-    this.dataFiltered = this.data;
-    this.itemSelected = {id: '', name: '', description: '', metadata: {}};
-    this.metadata = {};
-    this.tempMetadata = {};
 
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
+             public dialog: MatDialog, private http: HttpClient) {
+    this.data = [];
+    this.dataFiltered = [];
+    this.metadata = [];
+    this.tempMetadata = [];
+    this.hoverIndex = -1;
+
+    this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
   }
 
   ngOnInit() {
+    this.getUserItemList();
+  }
+
+  getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId},
-      includes: 'documents'
-    }
+      where: { clientId: userId },
+      include: 'metadatas',
+    };
+
     this.docapi.find(filter).subscribe((docList) => {
+      this.data = docList;
+      this.dataFiltered = this.data;
       console.log('ngOnInit findById data: ', docList);
+    }, (error) => {
+      console.log('Wtf dude', error);
     });
   }
 
@@ -64,6 +76,7 @@ export class HomeComponent implements OnInit {
 
   getSearch(search: string) {
     this.searchValue = search;
+
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
@@ -83,8 +96,8 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
     this.itemSelected = data;
-    this.metadata = this.convertObjToArray( this.itemSelected.metadata);
-    this.tempMetadata = this.metadata;
+    this.metadata = this.itemSelected.metadatas;
+    this.tempMetadata = this.itemSelected.metadatas;
 
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
   }
@@ -96,14 +109,45 @@ export class HomeComponent implements OnInit {
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
 
+      /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
+      this.data[index].metadatas = this.tempMetadata;
+
+      /* update database */
+      /* aqui quiero hacer el post */
+      this.tempMetadata.forEach((elem) => {
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
+          (no)=>{},
+          (err)=>{console.log('me cago en', err)}
+        );
+      })
     }
   }
 
+  postMetadata(metadata: any): Observable<HttpEvent<any>> {
+
+    const endpoint = 'http://localhost:3000/api/metadata';
+
+    let params = new HttpParams();
+    let headers = new HttpHeaders();
+
+    headers.append("Content-Type", "application/json");
+
+    const options = {
+      params: params,
+      reportProgress: true,
+      headers: headers
+    };
+
+    const req = new HttpRequest('POST', endpoint, metadata, options);
+
+    return this.http.request(req);
+  }
+
   newMetadata() {
-    this.tempMetadata.push(['', '']);
+    this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
+    console.log(this.tempMetadata);
   }
 
   updateMetadataKey(event: any, id: any) {
@@ -113,36 +157,23 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id][1] = event.target.value;
   }
 
-  convertObjToArray(obj: any) {
-    return Object.keys(obj).map((key) => {
-      return [key, obj[key]];
-    });
-  }
-
-  convertArrayToObj(array: any) {
-    const newObject = {};
-
-    array.forEach(elem => {
-      newObject[elem[0]] = elem[1];
-    });
-    return newObject;
-  }
-
-  onCreate(){
-
+  loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
-    //dialogConfig.disableClose = true;
+ // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '50%';
 
     this.dialog.open(VentanaemergComponent, dialogConfig);
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.getUserItemList();
+    });
   }
 
   upload() {
-
+    console.log('postFile');
   }
 
-  downloadFile(url: string){
+  downloadFile(url: string) {
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
   }
@@ -154,41 +185,4 @@ export class HomeComponent implements OnInit {
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
-
-fileData: File = null;
-previewUrl:any = null;
-fileUploadProgress: string = null;
-uploadedFilePath: string = null;
- 
-fileProgress(fileInput: any) {
-      this.fileData = <File>fileInput.target.files[0];
-      this.preview();
-}
- 
-preview() {
-    // Show preview 
-    var mimeType = this.fileData.type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
- 
-    var reader = new FileReader();      
-    reader.readAsDataURL(this.fileData); 
-    reader.onload = (_event) => { 
-      this.previewUrl = reader.result; 
-    }
-}
- 
-onUpload() {
-    const formData = new FormData();
-      formData.append('file', this.fileData);
-      this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
-        .subscribe(res => {
-          console.log(res);
-          //this.uploadedFilePath = res.data.filePath;
-          alert('SUCCESS !!');
-        }, (err) => {
-          console.log("Error");
-        })
-}
 }

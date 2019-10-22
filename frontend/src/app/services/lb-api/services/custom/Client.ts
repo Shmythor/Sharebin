@@ -130,12 +130,15 @@ export class ClientApi extends BaseLoopBackApi {
   public uploadDocument(file: FormData, documentData: any = {}, clientId: any = {}, customHeaders?: Function): <any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Clients/:clientId/uploadDocument";
+    `/Clients/${clientId}/uploadDocument`;
     let _routeParams: any = {};
     let _postBody: any = documentData;
     let _urlParams: any = {};
+    
+    _postBody["file"] = file;
+    
     if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
-    if (typeof file !== null) _postBody.file = file;
+    
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }

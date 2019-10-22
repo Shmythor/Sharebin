@@ -31,7 +31,7 @@ module.exports = function populateClientsModel(app) {
 
     clientsArr.forEach(cli => {
         ClientModel.upsert(cli, (err, total) => {
-            if (err) {
+            if (err && err.statusCode != 422) { // Evitar mostrar error de usuario ya existente.
                 console.log(err);
             } else {
                 console.log("Client created correctly: ", total);
