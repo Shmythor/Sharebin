@@ -2,10 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
-import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
+//import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
   selector: 'app-home',
@@ -119,11 +118,9 @@ export class HomeComponent implements OnInit {
       /* update database */
       /* aqui quiero hacer el post */
       this.tempMetadata.forEach((elem) => {
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
-          (no)=>{},
-          (err)=>{console.log('me cago en', err)}
-        );
-      })
+        console.log(elem);
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe();
+      });
     }
   }
 
@@ -153,10 +150,10 @@ export class HomeComponent implements OnInit {
   }
 
   updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id][0] = event.target.value;
+    this.tempMetadata[id].key = event.target.value;
   }
   updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id][1] = event.target.value;
+    this.tempMetadata[id].value = event.target.value;
   }
 
   loadUploadModal() {
