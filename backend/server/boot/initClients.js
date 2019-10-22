@@ -32,7 +32,11 @@ module.exports = function populateClientsModel(app) {
     clientsArr.forEach(cli => {
         ClientModel.upsert(cli, (err, total) => {
             if (err) {
-                console.log(err);
+                if (err.status == 422) {
+                    console.log(`Existing client ${cli.name}`);
+                } else {
+                    console.log('Error during client creation: ', err);
+                }
             } else {
                 console.log("Client created correctly: ", total);
             }
