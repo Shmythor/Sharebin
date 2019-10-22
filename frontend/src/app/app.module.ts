@@ -12,7 +12,7 @@ import { MetadataComponent } from './pages/metadata/metadata.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
-
+import { ModalModule } from '../app/shared/_modal';
 
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
@@ -57,6 +57,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     ScrollingModule,
     ReactiveFormsModule,
     MaterialModule,
+    ModalModule
   ],
   providers: [
     ClientApi,
@@ -69,7 +70,6 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     LoopBackAuth,
     InternalStorage
    ],
-  bootstrap: [AppComponent],  
-  
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
