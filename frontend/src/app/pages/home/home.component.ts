@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
-import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { Observable } from 'rxjs';
 import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
@@ -23,33 +23,34 @@ export class HomeComponent implements OnInit {
   filters = [true, false, false];
 
 
-  public data = [];
-  public dataFiltered = [];
-  public itemSelected: any;
-  public textAreaText: string;
+  data = [];
+  dataFiltered = [];
+  itemSelected: any;
+  textAreaText: string;
   metadata: any;
   tempMetadata: any;
   searchValue: string;
-  metadataKeys: any;
-  hoverIndex:number = -1;
+  hoverIndex: number;
 
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
+ constructor(private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
-    this.itemSelected = {id: '', name: '', description: '', metadata: {}};
+    this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.metadata = {};
     this.tempMetadata = {};
+    this.hoverIndex = -1;
 
     this.textAreaText = this.itemSelected.description;
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem("currentUser");
-    let filter = {
-      where: { clientId: userId},
-      includes: "documents"
-    }
+    const userId = localStorage.getItem('currentUser');
+    const filter = {
+      where: { clientId: userId },
+      include: 'metadatas',
+    };
+
     this.docapi.find(filter).subscribe((docList) => {
       console.log('ngOnInit findById data: ', docList);
     });
@@ -67,6 +68,7 @@ export class HomeComponent implements OnInit {
 
   getSearch(search: string) {
     this.searchValue = search;
+
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
@@ -99,9 +101,12 @@ export class HomeComponent implements OnInit {
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
 
+      /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
+
+      /* update database */
     }
   }
 
@@ -128,12 +133,13 @@ export class HomeComponent implements OnInit {
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
+
     return newObject;
   }
 
   onCreate(){
     const dialogConfig = new MatDialogConfig();
-    //dialogConfig.disableClose = true;
+ // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '50%';
 
@@ -142,10 +148,9 @@ export class HomeComponent implements OnInit {
 
   upload() {
     console.log("postFile");
-    
   }
 
-  downloadFile(url: string){
+  downloadFile(url: string) {
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
   }
@@ -156,5 +161,43 @@ export class HomeComponent implements OnInit {
 
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
+  }
+
+  fileData: File = null;
+  previewUrl: any = null;
+  fileUploadProgress: string = null;
+  uploadedFilePath: string = null;
+
+  fileProgress(fileInput: any) {
+        this.fileData = fileInput.target.files[0] as File;
+        this.preview();
+  }
+
+  preview() {
+      // Show preview
+      const mimeType = this.fileData.type;
+      const reader = new FileReader();
+
+      if (mimeType.match(/image\/*/) == null) {
+        return;
+      }
+
+      reader.readAsDataURL(this.fileData);
+      reader.onload = (_event) => {
+        this.previewUrl = reader.result;
+      }
+  }
+
+  onUpload() {
+    /*   const formData = new FormData();
+        formData.append('file', this.fileData);
+        this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
+          .subscribe(res => {
+            console.log(res);
+            //this.uploadedFilePath = res.data.filePath;
+            alert('SUCCESS !!');
+          }, (err) => {
+            console.log("Error");
+          }) */
   }
 }
