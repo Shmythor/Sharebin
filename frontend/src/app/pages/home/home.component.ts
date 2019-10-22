@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
-import { DocumentApi } from '../../services/lb-api/services/index';
+import { DocumentApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { Observable } from 'rxjs';
 import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
@@ -33,7 +33,7 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
 
 
- constructor(private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
+ constructor(private metadataapi : MetadataApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
@@ -56,6 +56,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  
+
   getFilter(filter: string) {
     switch (filter) {
       case 'name': this.filters[0] = !this.filters[0]; break;
@@ -64,6 +66,18 @@ export class HomeComponent implements OnInit {
     }
 
     this.getSearch(this.searchValue);
+  }
+
+  getDocIDbyName(name: string) {
+    this.docapi.find().subscribe(docArray => {
+      docArray.forEach(doc => {
+        let docname = doc[0].name;
+        console.log(docname);
+        if(docname == name) {
+          return doc[0].id;
+        }
+      })
+    }, err => { console.log('getDocIDbyName ERROR: ', err); })
   }
 
   getSearch(search: string) {
@@ -150,9 +164,10 @@ export class HomeComponent implements OnInit {
     console.log("postFile");
   }
 
-  downloadFile(url: string) {
-    console.log('Descargar ' + url);
-    window.open('../../../assets/favicon-32x32.png');
+  downloadFile(fName: string) {
+    console.log('Descargar ' + fName);
+    this.getDocIDbyName(fName);
+    // window.open('../../../assets/favicon-32x32.png');
   }
 
   showDownloadButton(buttonId: any) {
