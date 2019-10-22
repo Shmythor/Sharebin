@@ -14,7 +14,7 @@ module.exports = function(Metadata) {
                     console.log('Metadata was created ' + ctx.instance.value);
                     next();
                 } else {
-                    next(new Error('Cant find the doucment with id: ' + ctx.instance.documentId));
+                    next(new Error('Cant find the document with id: ' + ctx.instance.documentId));
                 }
             });
         }
