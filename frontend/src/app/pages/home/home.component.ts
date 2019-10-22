@@ -21,19 +21,19 @@ export class HomeComponent implements OnInit {
   filters = [true, false, false];
 
 
-  public data = [];
-  public dataFiltered = [];
-  public itemSelected: any;
-  public textAreaText: string;
+  data = [];
+  dataFiltered = [];
+  itemSelected: any;
+  textAreaText: string;
   metadata: any;
   tempMetadata: any;
   searchValue: string;
   hoverIndex: number;
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
+  constructor(private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
-    this.itemSelected = {id: '', name: '', description: '', metadata: {}};
+    this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.metadata = {};
     this.tempMetadata = {};
     this.hoverIndex = -1;
@@ -44,8 +44,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId},
-      includes: 'documents'
+      where: { clientId: userId },
+      include: 'metadatas',
     };
 
     this.docapi.find(filter).subscribe((docList) => {
@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit {
 
   getSearch(search: string) {
     this.searchValue = search;
+
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
@@ -103,7 +104,7 @@ export class HomeComponent implements OnInit {
       this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
 
       /* update database */
-
+      
     }
   }
 
@@ -130,11 +131,11 @@ export class HomeComponent implements OnInit {
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
+
     return newObject;
   }
 
   onCreate() {
-
     const dialogConfig = new MatDialogConfig();
  // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -147,7 +148,7 @@ export class HomeComponent implements OnInit {
 
   }
 
-  downloadFile(url: string){
+  downloadFile(url: string) {
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
   }
@@ -161,31 +162,32 @@ export class HomeComponent implements OnInit {
   }
 
 fileData: File = null;
-previewUrl:any = null;
+previewUrl: any = null;
 fileUploadProgress: string = null;
 uploadedFilePath: string = null;
- 
+
 fileProgress(fileInput: any) {
-      this.fileData = <File>fileInput.target.files[0];
+      this.fileData = fileInput.target.files[0] as File;
       this.preview();
 }
  
 preview() {
     // Show preview 
-    var mimeType = this.fileData.type;
+    const mimeType = this.fileData.type;
+    const reader = new FileReader();
+
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
- 
-    var reader = new FileReader();      
-    reader.readAsDataURL(this.fileData); 
-    reader.onload = (_event) => { 
-      this.previewUrl = reader.result; 
+
+    reader.readAsDataURL(this.fileData);
+    reader.onload = (_event) => {
+      this.previewUrl = reader.result;
     }
 }
- 
+
 onUpload() {
-    const formData = new FormData();
+  /*   const formData = new FormData();
       formData.append('file', this.fileData);
       this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
         .subscribe(res => {
@@ -194,6 +196,6 @@ onUpload() {
           alert('SUCCESS !!');
         }, (err) => {
           console.log("Error");
-        })
+        }) */
 }
 }

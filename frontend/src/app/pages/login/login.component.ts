@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientApi } from '../../services/lb-api/services/index';
 import { Client } from '../../services/lb-api/models/Client';
 import { LoginService } from '../../services/login.service';
-//import { ClientApi } from '../../services/lb-api/services/custom/Client';
 
 
 @Component({
@@ -72,7 +71,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    //Detener si datos son incorrectos
+    // Detener si datos son incorrectos
     if (this.registerForm.invalid) {
         return;
     } else {
@@ -87,7 +86,7 @@ export class LoginComponent implements OnInit {
 
   showLoginError(){
     document.getElementById('incorrectDataAlert').style.display = 'block';
-    setTimeout(function(){
+    setTimeout(() => {
       document.getElementById('incorrectDataAlert').style.display = 'none';
     }, 3000);
   }
