@@ -120,7 +120,7 @@ export class HomeComponent implements OnInit {
       this.tempMetadata.forEach((elem) => {
         console.log(elem);
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe();
-      };
+      });
     }
   }
 
