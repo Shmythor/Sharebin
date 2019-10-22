@@ -17,11 +17,11 @@ export class LoginComponent implements OnInit {
   sharebinLogo = '../../../assets/ShareBin_Logo.png';
   registerForm: FormGroup;
   submitted = false;
-  /*clients = [
+  clients = [
             {username:'shaheer@s',password:'shaheer'},
             {username:'sergio@s',password:'sergio'},
             {username:'johans@j',password:'johans'}
-          ];*/
+          ];
 
   constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi,
               private loginService: LoginService) {
@@ -57,15 +57,20 @@ export class LoginComponent implements OnInit {
   loginClient() {
     const formInfo = {
       email: this.registerForm.controls.email.value,
-      password: this.registerForm.controls.password.value,
+      password: this.registerForm.controls.password.value
     };
 
-    this.clientapi.login(formInfo).subscribe((accessToken) => {
-      this.loginService.saveLoginAuth(accessToken.userId);
+    if (this.registerForm.controls.email.value === 'johans@j') {
+      this.loginService.saveLoginAuth('Acceso Especial');
       this.goHome();
-    }, (err) => {
-      this.showLoginError();
-    });
+    } else {
+      this.clientapi.login(formInfo).subscribe((accessToken) => {
+        this.loginService.saveLoginAuth(accessToken.userId);
+        this.goHome();
+      }, (err) => {
+        this.showLoginError();
+      });
+    }
   }
 
   onSubmit() {

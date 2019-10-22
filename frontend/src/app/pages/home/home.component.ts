@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
-import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { Observable } from 'rxjs';
+import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
@@ -30,7 +32,8 @@ export class HomeComponent implements OnInit {
   searchValue: string;
   hoverIndex: number;
 
-  constructor(private docapi: DocumentApi, public dialog: MatDialog) {
+
+ constructor(private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
     this.data = dataToTest;
     this.dataFiltered = this.data;
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
@@ -104,7 +107,6 @@ export class HomeComponent implements OnInit {
       this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
 
       /* update database */
-      
     }
   }
 
@@ -135,7 +137,7 @@ export class HomeComponent implements OnInit {
     return newObject;
   }
 
-  onCreate() {
+  onCreate(){
     const dialogConfig = new MatDialogConfig();
  // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -145,7 +147,7 @@ export class HomeComponent implements OnInit {
   }
 
   upload() {
-
+    console.log("postFile");
   }
 
   downloadFile(url: string) {
@@ -161,41 +163,41 @@ export class HomeComponent implements OnInit {
     document.getElementById('downloadButton' + buttonId).style.display = 'none';
   }
 
-fileData: File = null;
-previewUrl: any = null;
-fileUploadProgress: string = null;
-uploadedFilePath: string = null;
+  fileData: File = null;
+  previewUrl: any = null;
+  fileUploadProgress: string = null;
+  uploadedFilePath: string = null;
 
-fileProgress(fileInput: any) {
-      this.fileData = fileInput.target.files[0] as File;
-      this.preview();
-}
- 
-preview() {
-    // Show preview 
-    const mimeType = this.fileData.type;
-    const reader = new FileReader();
+  fileProgress(fileInput: any) {
+        this.fileData = fileInput.target.files[0] as File;
+        this.preview();
+  }
 
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
+  preview() {
+      // Show preview
+      const mimeType = this.fileData.type;
+      const reader = new FileReader();
 
-    reader.readAsDataURL(this.fileData);
-    reader.onload = (_event) => {
-      this.previewUrl = reader.result;
-    }
-}
+      if (mimeType.match(/image\/*/) == null) {
+        return;
+      }
 
-onUpload() {
-  /*   const formData = new FormData();
-      formData.append('file', this.fileData);
-      this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
-        .subscribe(res => {
-          console.log(res);
-          //this.uploadedFilePath = res.data.filePath;
-          alert('SUCCESS !!');
-        }, (err) => {
-          console.log("Error");
-        }) */
-}
+      reader.readAsDataURL(this.fileData);
+      reader.onload = (_event) => {
+        this.previewUrl = reader.result;
+      }
+  }
+
+  onUpload() {
+    /*   const formData = new FormData();
+        formData.append('file', this.fileData);
+        this.clientapi.uploadDocument(formData, localStorage.getItem("currentUser"))
+          .subscribe(res => {
+            console.log(res);
+            //this.uploadedFilePath = res.data.filePath;
+            alert('SUCCESS !!');
+          }, (err) => {
+            console.log("Error");
+          }) */
+  }
 }
