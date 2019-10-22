@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
 
+
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
 import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
@@ -45,6 +46,7 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     SearchbarComponent,
     UploadFilesComponent,
     VentanaemergComponent,
+    UploadFilesComponent
   ],
   entryComponents: [ VentanaemergComponent ],
   imports: [
