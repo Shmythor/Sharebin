@@ -175,16 +175,17 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(documentId: string) {
+  downloadFile(document) {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
-    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
+    console.log(document);
+    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`, 
       {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
-        var blob = new Blob([data]);
+        var blob = new Blob([data], {type: document.type});
         var url = window.URL.createObjectURL(blob);
 
-        saveAs(blob,"ostiaputa");
+        saveAs(blob, document.name);
         window.open(url);
       });
   }
