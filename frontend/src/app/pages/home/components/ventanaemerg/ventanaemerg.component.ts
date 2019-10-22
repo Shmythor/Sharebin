@@ -86,9 +86,27 @@ export class VentanaemergComponent implements OnInit {
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
     .subscribe((document) => {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
-      
+      //console.log("Subida hecha");
+      //location.reload();
+      if(this.fileData.size > 0){
+        this.showSuccessUploadMessage();
+        this.addDataTable(this.fileData);
+      }
     }, (err) => {
-      console.log('Error al subir documento: ' + err);
+      this.showErrorUploadMessage();
+      console.log("Error al subir documento: " +err);
     });
+  }
+  addDataTable(data: File){
+    document.getElementById('fileNameTable').innerHTML = "<strong>"+data.name+"</strong>";
+    document.getElementById('fileSizeTable').innerHTML = ""+data.size+" Bytes";
+  }
+
+  showSuccessUploadMessage(){
+    document.getElementById('fileUploadSuccess').style.display = 'block';
+  }
+
+  showErrorUploadMessage(){
+    document.getElementById('fileUploadError').style.display = 'block';
   }
 }
