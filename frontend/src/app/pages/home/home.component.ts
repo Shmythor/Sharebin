@@ -2,8 +2,9 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
   selector: 'app-home',
@@ -131,11 +132,9 @@ export class HomeComponent implements OnInit {
       /* update database */
       /* aqui quiero hacer el post */
       this.tempMetadata.forEach((elem) => {
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
-          (no)=>{},
-          (err)=>{console.log('me cago en', err)}
-        );
-      })
+        console.log(elem);
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe();
+      });
     }
   }
 
@@ -165,10 +164,10 @@ export class HomeComponent implements OnInit {
   }
 
   updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id][0] = event.target.value;
+    this.tempMetadata[id].key = event.target.value;
   }
   updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id][1] = event.target.value;
+    this.tempMetadata[id].value = event.target.value;
   }
 
   loadUploadModal() {
@@ -187,17 +186,48 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(fName: string) {
-    console.log('Descargar ' + fName);
-    this.getDocIDbyName(fName);
-    // window.open('../../../assets/favicon-32x32.png');
+  downloadFile(documentId: string) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+
+    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
+      {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
+        var blob = new Blob([data]);
+        var url = window.URL.createObjectURL(blob);
+
+        saveAs(blob,"ostiaputa");
+        window.open(url);
+      });
   }
+/*
+  downloadFromServer(documentId: string) {
+
+    const endpoint = ;
+    const formData: FormData = new FormData();
+
+    let params = new HttpParams();
+    let headers = new HttpHeaders();
+
+    headers.append('Content-Type', 'application/json');
+   // headers.append('Content-Type', 'multipart/form-data');
+
+    const options = {
+      params: params,
+      reportProgress: true,
+      headers: headers
+    };
+
+    const req = new HttpRequest('GET', endpoint, formData, options);
+
+    return this.http.request(req);
+  }
+*/
 
   showDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton' + buttonId).style.display = 'block';
+    document.getElementById('downloadButton-' + buttonId).style.display = 'block';
   }
 
   hideDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton' + buttonId).style.display = 'none';
+    document.getElementById('downloadButton-' + buttonId).style.display = 'none';
   }
 }
