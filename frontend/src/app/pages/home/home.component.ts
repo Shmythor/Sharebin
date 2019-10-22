@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
 import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
   tempMetadata: any;
   searchValue: string;
   metadataKeys: any;
-  hoverIndex:number = -1;
+  hoverIndex = -1;
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog) {
     this.data = dataToTest;
@@ -42,10 +42,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem("currentUser");
-    let filter = {
+    const userId = localStorage.getItem('currentUser');
+    const filter = {
       where: { clientId: userId},
-      includes: "documents"
+      includes: 'documents'
     }
     this.docapi.find(filter).subscribe((docList) => {
       console.log('ngOnInit findById data: ', docList);
