@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { MatDialog, MatDialogConfig } from "@angular/material";
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { dataToTest } from './data.js';
-import { ClientApi, DocumentApi } from '../../services/lb-api/services/index';
+import { DocumentApi, ClientApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { Observable } from 'rxjs';
 import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
@@ -23,35 +23,45 @@ export class HomeComponent implements OnInit {
   filters = [true, false, false];
 
 
-  public data = [];
-  public dataFiltered = [];
-  public itemSelected: any;
-  public textAreaText: string;
+  data: any;
+  dataFiltered: any;
+  itemSelected: any;
+  textAreaText: string;
   metadata: any;
   tempMetadata: any;
   searchValue: string;
-  metadataKeys: any;
-  hoverIndex:number = -1;
+  hoverIndex: number;
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, public dialog: MatDialog, private http: HttpClient) {
-    this.data = dataToTest;
-    this.dataFiltered = this.data;
-    this.itemSelected = {id: '', name: '', description: '', metadata: {}};
-    this.metadata = {};
-    this.tempMetadata = {};
+    this.data = [];
+    this.dataFiltered = [];
+    this.metadata = [];
+    this.tempMetadata = [];
+    this.hoverIndex = -1;
 
+    this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
   }
 
   ngOnInit() {
-    let userId = localStorage.getItem("currentUser");
-    let filter = {
-      where: { clientId: userId},
-      includes: "documents"
-    }
+    console.log('')
+    this.getUserItemList();
+  }
+
+  getUserItemList() {
+    const userId = localStorage.getItem('currentUser');
+    const filter = {
+      where: { clientId: userId },
+      include: 'metadatas', 
+    };
+
     this.docapi.find(filter).subscribe((docList) => {
+      this.data = docList;
+      this.dataFiltered = this.data;
       console.log('ngOnInit findById data: ', docList);
+    }, (error) => {
+      console.log('Wtf dude', error);
     });
   }
 
@@ -67,6 +77,7 @@ export class HomeComponent implements OnInit {
 
   getSearch(search: string) {
     this.searchValue = search;
+
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
@@ -86,7 +97,7 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
     this.itemSelected = data;
-    this.metadata = this.convertObjToArray( this.itemSelected.metadata);
+    this.metadata = this.itemSelected.metadatas;
     this.tempMetadata = this.metadata;
 
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
@@ -96,17 +107,20 @@ export class HomeComponent implements OnInit {
   saveChanges() {
     const lastItemSelected = this.itemSelected;
 
-    if (this.itemSelected.id !== '') {
-      const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
+    if (this.itemSelected.clientId !== '') {
+      const index = this.data.findIndex((x) => x.clientId === lastItemSelected.clientId);
 
+      /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadata = this.convertArrayToObj(this.tempMetadata);
+      // this.data[index].metadatas = this.convertArrayToObj(this.tempMetadata);
+
+      /* update database */
     }
   }
 
   newMetadata() {
-    this.tempMetadata.push(['', '']);
+    this.tempMetadata.push({key: '', value: ''});
   }
 
   updateMetadataKey(event: any, id: any) {
@@ -116,7 +130,7 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id][1] = event.target.value;
   }
 
-  convertObjToArray(obj: any) {
+/*   convertObjToArray(obj: any) {
     return Object.keys(obj).map((key) => {
       return [key, obj[key]];
     });
@@ -128,24 +142,27 @@ export class HomeComponent implements OnInit {
     array.forEach(elem => {
       newObject[elem[0]] = elem[1];
     });
-    return newObject;
-  }
 
-  onCreate(){
+    return newObject;
+  } */
+
+  loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
-    //dialogConfig.disableClose = true;
+ // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '50%';
 
     this.dialog.open(VentanaemergComponent, dialogConfig);
+    this.dialog.afterAllClosed.subscribe(() => {
+      this.getUserItemList();
+    });
   }
 
   upload() {
-    console.log("postFile");
-    
+    console.log('postFile');
   }
 
-  downloadFile(url: string){
+  downloadFile(url: string) {
     console.log('Descargar ' + url);
     window.open('../../../assets/favicon-32x32.png');
   }

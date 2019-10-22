@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientApi } from '../../services/lb-api/services/index';
 import { Client } from '../../services/lb-api/models/Client';
 import { LoginService } from '../../services/login.service';
-//import { ClientApi } from '../../services/lb-api/services/custom/Client';
 
 
 @Component({
@@ -24,8 +23,8 @@ export class LoginComponent implements OnInit {
             {username:'johans@j',password:'johans'}
           ];
 
-  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi
-    , private loginService: LoginService) {
+  constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi,
+              private loginService: LoginService) {
   }
 
   ngOnInit() {
@@ -56,16 +55,15 @@ export class LoginComponent implements OnInit {
   }
 
   loginClient() {
-    
-    let formInfo = {
+    const formInfo = {
       email: this.registerForm.controls.email.value,
       password: this.registerForm.controls.password.value
-    }
+    };
 
-    if(this.registerForm.controls.email.value == "johans@j"){
-      this.loginService.saveLoginAuth("Acceso Especial");
+    if (this.registerForm.controls.email.value === 'johans@j') {
+      this.loginService.saveLoginAuth('Acceso Especial');
       this.goHome();
-    }else{
+    } else {
       this.clientapi.login(formInfo).subscribe((accessToken) => {
         this.loginService.saveLoginAuth(accessToken.userId);
         this.goHome();
@@ -78,7 +76,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
 
-    //Detener si datos son incorrectos
+    // Detener si datos son incorrectos
     if (this.registerForm.invalid) {
         return;
     } else {
@@ -93,7 +91,7 @@ export class LoginComponent implements OnInit {
 
   showLoginError(){
     document.getElementById('incorrectDataAlert').style.display = 'block';
-    setTimeout(function(){
+    setTimeout(() => {
       document.getElementById('incorrectDataAlert').style.display = 'none';
     }, 3000);
   }
