@@ -14,7 +14,7 @@ export class VentanaemergComponent implements OnInit {
 
   selectedFile = null;
   fileData: File = null;
-  previewUrl:any = null;
+  previewUrl: any = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
   bodyText: string;
@@ -27,7 +27,7 @@ export class VentanaemergComponent implements OnInit {
 
   closeModal(id: string) {
 
-    this.bodyText = this.fileData.name
+    this.bodyText = this.fileData.name;
 
     this.onUpload(this.bodyText);
     this.modalService.close(id);
@@ -38,49 +38,49 @@ export class VentanaemergComponent implements OnInit {
   }
 
   fileProgress(fileInput: any) {
-    this.fileData = <File>fileInput.target.files[0];
+    this.fileData = fileInput.target.files[0] as File;
     this.preview();
   }
  
   preview() {
     // Show preview 
-    var mimeType = this.fileData.type;
+    const mimeType = this.fileData.type;
     if (mimeType.match(/image\/*/) == null) {
       return;
     }
 
-    var reader = new FileReader();      
-    reader.readAsDataURL(this.fileData); 
-    reader.onload = (_event) => { 
-      this.previewUrl = reader.result; 
-    }
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileData);
+    reader.onload = (_event) => {
+      this.previewUrl = reader.result;
+    };
   }
 
   postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
-  
+
     const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
     formData.append('description', description);
-  
-  
-    let params = new HttpParams();
-    let headers = new HttpHeaders();
-  
-    headers.append("Content-Type", "application/json");
-    headers.append("Content-Type", "multipart/form-data");
-  
+
+
+    const params = new HttpParams();
+    const headers = new HttpHeaders();
+
+    headers.append('Content-Type', 'application/json');
+    headers.append('Content-Type', 'multipart/form-data');
+
     const options = {
       params: params,
       reportProgress: true,
       headers: headers
     };
-  
+
     const req = new HttpRequest('POST', endpoint, formData, options);
-  
+
     return this.http.request(req);
   }
-  
+
   onUpload(fileDescription: string) {
     fileDescription = this.fileData.name;
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
@@ -88,8 +88,25 @@ export class VentanaemergComponent implements OnInit {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
       console.log("Subida hecha");
       //location.reload();
+      if(this.fileData.size > 0){
+        this.showSuccessUploadMessage();
+        this.addDataTable(this.fileData);
+      }
     }, (err) => {
+      this.showErrorUploadMessage();
       console.log("Error al subir documento: " +err);
     });
+  }
+  addDataTable(data: File){
+    document.getElementById('fileNameTable').innerHTML = "<strong>"+data.name+"</strong>";
+    document.getElementById('fileSizeTable').innerHTML = ""+data.size+" Bytes";
+  }
+
+  showSuccessUploadMessage(){
+    document.getElementById('fileUploadSuccess').style.display = 'block';
+  }
+
+  showErrorUploadMessage(){
+    document.getElementById('fileUploadError').style.display = 'block';
   }
 }
