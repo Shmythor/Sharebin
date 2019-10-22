@@ -4,7 +4,7 @@ import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/servi
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, filter, map } from 'rxjs/operators';
+//import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
   selector: 'app-home',
@@ -172,16 +172,48 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(url: string) {
-    console.log('Descargar ' + url);
-    window.open('../../../assets/favicon-32x32.png');
+  downloadFile(documentId: string) {
+    let headers = new HttpHeaders();
+    headers.append('Content-Type', 'application/json');
+
+    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
+      {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
+        var blob = new Blob([data]);
+        var url = window.URL.createObjectURL(blob);
+
+        saveAs(blob,"ostiaputa");
+        window.open(url);
+      });
   }
+/*
+  downloadFromServer(documentId: string) {
+
+    const endpoint = ;
+    const formData: FormData = new FormData();
+
+    let params = new HttpParams();
+    let headers = new HttpHeaders();
+
+    headers.append('Content-Type', 'application/json');
+   // headers.append('Content-Type', 'multipart/form-data');
+
+    const options = {
+      params: params,
+      reportProgress: true,
+      headers: headers
+    };
+
+    const req = new HttpRequest('GET', endpoint, formData, options);
+
+    return this.http.request(req);
+  }
+*/
 
   showDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton' + buttonId).style.display = 'block';
+    document.getElementById('downloadButton-' + buttonId).style.display = 'block';
   }
 
   hideDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton' + buttonId).style.display = 'none';
+    document.getElementById('downloadButton-' + buttonId).style.display = 'none';
   }
 }
