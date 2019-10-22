@@ -39,7 +39,7 @@
                     <div>Metadatos</div>
                     <div class="flex flex-wrap">
                         <div *ngFor="let item of tempMetadata; let id = index" class="badge badge-info mr1 ml1">
-                            <input [value]="item.key" (keyup)="updateMetadataKey($event, id)"> | <input [value]="item.value" (keyup)="updateMetadataValue($event, id)">
+                            <input [value]="item.key" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> | <input [value]="item.value" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
                         </div>
                         <div *ngIf="itemSelected.clientId !=''" class="badge badge-info ml1 pointer" (click)="newMetadata() ">+</div>
                     </div>
