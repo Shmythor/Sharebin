@@ -4,7 +4,7 @@ import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/servi
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-//import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
+import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
   selector: 'app-home',
@@ -119,8 +119,11 @@ export class HomeComponent implements OnInit {
       /* aqui quiero hacer el post */
       this.tempMetadata.forEach((elem) => {
         console.log(elem);
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe();
-      });
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
+          (no)=>{console.log("mismuertos")},
+          (err)=>{console.log('me cago en', err)}
+        );
+      })
     }
   }
 
@@ -172,16 +175,17 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(documentId: string) {
+  downloadFile(document) {
     let headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
-    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
+    console.log(document);
+    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`, 
       {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
-        var blob = new Blob([data]);
+        var blob = new Blob([data], {type: document.type});
         var url = window.URL.createObjectURL(blob);
 
-        saveAs(blob,"ostiaputa");
+        saveAs(blob, document.name);
         window.open(url);
       });
   }
