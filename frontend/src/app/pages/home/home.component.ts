@@ -109,17 +109,21 @@ export class HomeComponent implements OnInit {
 
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
-
+      const dataIdx = this.data[index];
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      /* aqui quiero hacer el post */
+      this.docapi.updateAttributes(this.data[index].id, {name: dataIdx.name, description: dataIdx.description, path: dataIdx.path, clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size } ).subscribe(
+        (no)=>{console.log("mismuertos")},
+        (err)=>{console.log('me cago en', err)}
+      );
+
       this.tempMetadata.forEach((elem) => {
         console.log(elem);
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
           (no)=>{console.log("mismuertos")},
           (err)=>{console.log('me cago en', err)}
         );
@@ -149,7 +153,7 @@ export class HomeComponent implements OnInit {
 
   newMetadata() {
     this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
-    console.log(this.tempMetadata);
+   // console.log(this.tempMetadata);
   }
 
   updateMetadataKey(event: any, id: any) {
