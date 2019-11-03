@@ -1,15 +1,22 @@
 <div class="navbar-bg vh-100">
     <div class="d-flex flex-column pa5">
-        <!--<h3 class="text-white">Sharebin</h3>-->
-        <img src="../../../assets/ShareBin_Logo.png" title="ShareBin" style="width: 100px;margin: 0 auto 1em;">
-        <button class="row navbar-element" (click)="select('home')">
-            <!-- <img src="./icons/home.svg" alt="home icon" > -->
-            <div>Inicio</div>
+        <img src="../../../assets/ShareBin_Logo.png" title="ShareBin" style="width: 128px;margin: 0 auto 1em;">
+
+        <button class="row navbar-element flex items-center" (click)="select('home')">
+            <img src="../../../assets/icons/home.svg" width="32" alt="home icon" >
+            <div class="ml2">Inicio</div>
         </button>
-        <button class="row navbar-element" (click)="select('metadata')">
-            <!-- <img src="./icons/metadata.svg" alt="metadata icon" > -->
-            <div>Metadata</div>
+
+        <button class="row navbar-element flex items-center" (click)="select('metadata')">
+            <img src="../../../assets/icons/metadata.svg" width="32" alt="metadata icon" >
+            <div class="ml2">Metadata</div>
         </button>
+
+        <button class="row navbar-element flex items-center" (click)="select('themes')">
+            <img src="../../../assets/icons/themes.svg" width="32" alt="themes icon" >
+            <div class="ml2">Temas</div>
+        </button>
+
         <button class="btn btn-danger btn-sm" (click)="logOut()" style="margin-top: 1em;">Cerrar Sesión</button>
     </div>
 </div>

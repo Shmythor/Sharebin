@@ -116,18 +116,20 @@ export class HomeComponent implements OnInit {
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.updateAttributes(this.data[index].id, {name: dataIdx.name, description: dataIdx.description, path: dataIdx.path, clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size } ).subscribe(
-        (no)=>{console.log("mismuertos")},
-        (err)=>{console.log('me cago en', err)}
+      this.docapi.updateAttributes(this.data[index].id, {
+        name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
+        clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
+          (no) => { console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
       );
 
       this.tempMetadata.forEach((elem) => {
         console.log(elem);
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no)=>{console.log("mismuertos")},
-          (err)=>{console.log('me cago en', err)}
+          (no) => {console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
         );
-      })
+      });
     }
   }
 
@@ -135,15 +137,15 @@ export class HomeComponent implements OnInit {
 
     const endpoint = 'http://localhost:3000/api/metadata';
 
-    let params = new HttpParams();
-    let headers = new HttpHeaders();
+    const params = new HttpParams();
+    const headers = new HttpHeaders();
 
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
 
     const options = {
-      params: params,
+      params,
       reportProgress: true,
-      headers: headers
+      headers
     };
 
     const req = new HttpRequest('POST', endpoint, metadata, options);
@@ -180,14 +182,14 @@ export class HomeComponent implements OnInit {
   }
 
   downloadFile(document) {
-    let headers = new HttpHeaders();
+    const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
     console.log(document);
-    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`, 
-      {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
-        var blob = new Blob([data], {type: document.type});
-        var url = window.URL.createObjectURL(blob);
+    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`,
+      {responseType: 'arraybuffer', headers}).subscribe((data: any) => {
+        const blob = new Blob([data], {type: document.type});
+        const url = window.URL.createObjectURL(blob);
 
         saveAs(blob, document.name);
         window.open(url);
