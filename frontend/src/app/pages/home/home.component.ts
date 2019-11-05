@@ -65,6 +65,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  
+
   getFilter(filter: string) {
     switch (filter) {
       case 'name': this.filters[0] = !this.filters[0]; break;
@@ -73,6 +75,18 @@ export class HomeComponent implements OnInit {
     }
 
     this.getSearch(this.searchValue);
+  }
+
+  getDocIDbyName(name: string) {
+    this.docapi.find().subscribe(docArray => {
+      docArray.forEach(doc => {
+        let docname = doc[0].name;
+        console.log(docname);
+        if(docname == name) {
+          return doc[0].id;
+        }
+      })
+    }, err => { console.log('getDocIDbyName ERROR: ', err); })
   }
 
   getSearch(search: string) {

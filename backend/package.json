@@ -9,7 +9,8 @@
         "lint": "eslint .",
         "start": "node .",
         "posttest": "npm run lint && npm audit",
-        "build:sdk": "./node_modules/.bin/lb-sdk server/server.js ./frontend/src/app/shared/sdk"
+        "build:sdk": "./node_modules/.bin/lb-sdk server/server.js ./frontend/src/app/shared/sdk",
+        "regenmethods": "./node_modules/.bin/lb-sdk ./server/server.js ../frontend/src/app/services/lb-api"
     },
     "dependencies": {
         "@types/socket.io-client": "^1.4.32",
