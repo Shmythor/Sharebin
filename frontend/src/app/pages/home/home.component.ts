@@ -219,6 +219,15 @@ export class HomeComponent implements OnInit {
   }
 */
 
+  //Resalta la fila del documento pulsado
+  //El diseño de la clase selectedFile está en el css
+  fileSelected(file: string){
+    if(document.getElementsByClassName("selectedFile")[0] != null){
+      document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
+    }
+    document.getElementById(file).parentNode.className += ' selectedFile';
+  }
+
   showDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'block';
   }

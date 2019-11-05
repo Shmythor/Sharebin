@@ -24,3 +24,10 @@
     box-sizing: border-box;
     border-radius: 2px;
 }
+
+.pb2 {
+    padding-bottom: 0;
+}
+.selectedFile {
+    background-color: #D9DDF3;
+}
