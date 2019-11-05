@@ -7,10 +7,16 @@
             <div class="ml2">Inicio</div>
         </button>
 
+        <button class="row navbar-element flex items-center" (click)="select('bin')">
+            <img src="../../../assets/icons/bin.svg" width="32" alt="bin icon" >
+            <div class="ml2">Papelera</div>
+        </button>
+
         <button class="row navbar-element flex items-center" (click)="select('themes')">
             <img src="../../../assets/icons/themes.svg" width="32" alt="themes icon" >
             <div class="ml2">Temas</div>
         </button>
+
 
         <button class="btn btn-danger btn-sm" (click)="logOut()" style="margin-top: 1em;">Cerrar Sesión</button>
     </div>
