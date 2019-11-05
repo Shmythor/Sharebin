@@ -51,7 +51,8 @@
           "deleteById": true,
           "count": true,
           "download": true,
-          "createURL" : true
+          "createURL" : true,
+          "downloadByLink": true
         }
       }
     }

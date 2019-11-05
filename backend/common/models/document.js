@@ -35,7 +35,7 @@ module.exports = function (Document) {
       .catch(err => cb(err));
   }
 
-  Document.createURL = function (req, res, documentId, cb) {
+  Document.createURL = function (documentId, cb) {
     Document.findById(documentId).then((data) => {
       if (!data.urlToShare || data.urlToShare.length === 0 || data.urlToShare === "string") {
         let url = crypto.randomBytes(20).toString('hex');
@@ -47,6 +47,12 @@ module.exports = function (Document) {
       }
     }).then((url) => cb(null, url))
       .catch(err => cb(err));
+  }
+
+  Document.downloadByLink = function(req, res, url, cb){
+    Document.findOne({where :{urlToShare: url}}).then((document)=>{
+      return Document.download(req,res,document.id, cb);
+    }).catch(err => cb(err))
   }
 
   Document.remoteMethod('download', {
@@ -66,14 +72,26 @@ module.exports = function (Document) {
   Document.remoteMethod('createURL', {
     description: "Create a random url to share",
     accepts: [
-      {arg: 'req', type: 'object', http: {source: 'req'}},
-      {arg: 'res', type: 'object', http: {source: 'res'}},
       {arg: 'documentId', type: 'string'}
     ],
     returns: [
       {arg: 'url', type: 'string', root: true}
     ],
     http: {verb: 'GET', path: '/createURL'}
+  });
+
+  Document.remoteMethod('downloadByLink',{
+    description: "Download the file by the shared url",
+    accepts: [
+      {arg: 'req', type: 'object', http: {source: 'req'}},
+      {arg: 'res', type: 'object', http: {source: 'res'}},
+      {arg: 'url', type: 'string'}
+    ],
+    returns: [
+      {arg: 'body', type: 'file', root: true},
+      {arg: 'Content-Type', type: 'string', http: {target: 'header'}}
+    ],
+    http: {verb: 'GET', path: '/downloadByLink/:url'}
   });
 
 };
