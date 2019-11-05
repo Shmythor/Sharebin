@@ -2,9 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-//import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
@@ -110,20 +109,27 @@ export class HomeComponent implements OnInit {
 
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
-
+      const dataIdx = this.data[index];
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      /* aqui quiero hacer el post */
+      this.docapi.updateAttributes(this.data[index].id, {
+        name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
+        clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
+          (no) => { console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
+      );
+
       this.tempMetadata.forEach((elem) => {
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId}).subscribe(
-          (no)=>{},
-          (err)=>{console.log('me cago en', err)}
+        console.log(elem);
+        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
+          (no) => {console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
         );
-      })
+      });
     }
   }
 
@@ -131,15 +137,15 @@ export class HomeComponent implements OnInit {
 
     const endpoint = 'http://localhost:3000/api/metadata';
 
-    let params = new HttpParams();
-    let headers = new HttpHeaders();
+    const params = new HttpParams();
+    const headers = new HttpHeaders();
 
-    headers.append("Content-Type", "application/json");
+    headers.append('Content-Type', 'application/json');
 
     const options = {
-      params: params,
+      params,
       reportProgress: true,
-      headers: headers
+      headers
     };
 
     const req = new HttpRequest('POST', endpoint, metadata, options);
@@ -149,14 +155,14 @@ export class HomeComponent implements OnInit {
 
   newMetadata() {
     this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
-    console.log(this.tempMetadata);
+   // console.log(this.tempMetadata);
   }
 
   updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id][0] = event.target.value;
+    this.tempMetadata[id].key = event.target.value;
   }
   updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id][1] = event.target.value;
+    this.tempMetadata[id].value = event.target.value;
   }
 
   loadUploadModal() {
@@ -175,16 +181,17 @@ export class HomeComponent implements OnInit {
     console.log('postFile');
   }
 
-  downloadFile(documentId: string) {
-    let headers = new HttpHeaders();
+  downloadFile(document) {
+    const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
 
-    this.http.get(`http://localhost:3000/api/Documents/${documentId}/download`, 
-      {responseType: 'arraybuffer',headers:headers}).subscribe((data: any) => {
-        var blob = new Blob([data]);
-        var url = window.URL.createObjectURL(blob);
+    console.log(document);
+    this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`,
+      {responseType: 'arraybuffer', headers}).subscribe((data: any) => {
+        const blob = new Blob([data], {type: document.type});
+        const url = window.URL.createObjectURL(blob);
 
-        saveAs(blob,"ostiaputa");
+        saveAs(blob, document.name);
         window.open(url);
       });
   }
