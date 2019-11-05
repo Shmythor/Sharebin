@@ -6,6 +6,7 @@ module.exports = function (Metadata) {
       console.log(method.name);
   });*/
 
+
   Metadata.observe('before save', function checkDocumentExists(ctx, next) {
     const Document = app.models.Document;
     if (ctx.instance) {
