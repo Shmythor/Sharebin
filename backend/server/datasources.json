@@ -19,7 +19,7 @@
     "nameConflict": "makeUnique",
     "connector": "loopback-component-storage",
     "provider": "filesystem",
-    "root": "./",
+    "root": "./server/storage",
     "maxFileSize": "5242880"
   }
 }
