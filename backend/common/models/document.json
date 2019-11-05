@@ -41,7 +41,8 @@
     },
     "isDeleted": {
       "type": "boolean",
-      "required": false
+      "required": true,
+      "default": false
     },
     "urlToShare": {
       "type": "string",
