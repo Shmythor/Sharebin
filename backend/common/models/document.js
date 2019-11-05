@@ -37,10 +37,14 @@ module.exports = function (Document) {
 
   Document.createURL = function (req, res, documentId, cb) {
     Document.findById(documentId).then((data) => {
-      if (data.urlToShare !== null) {
-        return crypto.randomBytes(20).toString('hex');
+      if (!data.urlToShare || data.urlToShare.length === 0 || data.urlToShare === "string") {
+        let url = crypto.randomBytes(20).toString('hex');
+        data.urlToShare = url;
+        data.save();
+        return url;
+      }else {
+        return data.urlToShare;
       }
-      return data.urlToShare;
     }).then((url) => cb(null, url))
       .catch(err => cb(err));
   }
