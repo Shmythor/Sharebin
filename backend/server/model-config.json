@@ -50,7 +50,9 @@
           "updateAll": true,
           "deleteById": true,
           "count": true,
-          "download": true
+          "download": true,
+          "createURL" : true,
+          "downloadByLink": true
         }
       }
     }
