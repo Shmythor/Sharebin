@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
+//import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
