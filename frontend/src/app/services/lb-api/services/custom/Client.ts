@@ -110,6 +110,7 @@ export class ClientApi extends BaseLoopBackApi {
    * file: File to upload
    * *: Params for the document
    *
+   * @param {object} data Request data.
    *
    *  - `req` – `{object}` -
    *
@@ -126,87 +127,87 @@ export class ClientApi extends BaseLoopBackApi {
    * This usually means the response is a `Client` object.)
    * </em>
    */
-  public uploadDocument(file: FormData, documentData: any = {}, clientId: any = {}, customHeaders?: Function): <any> {
+  public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Clients/:clientId/uploadDocument";
+      "/Clients/:clientId/uploadDocument";
     let _routeParams: any = {};
-  let _postBody: any = {};
-  let _urlParams: any = {};
-  if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
-  let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-  return result;
-}
-/**
- * @ngdoc method
- * @name sdk.Client#getCurrent
- * @methodOf sdk.Client
- *
- * @description
- *
- * Get data of the currently logged user. Fail with HTTP result 401
- * when there is no user logged in.
- *
- * @returns object An empty reference that will be
- *   populated with the actual data once the response is returned
- *   from the server.
- */
-public getCurrent(filter: LoopBackFilter = {}): Observable<any> {
-  let _method: string = "GET";
-let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() + "/Clients" + "/:id";
-let id: any = this.auth.getCurrentUserId();
-if (id == null)
-  id = '__anonymous__';
-let _routeParams: any = { id: id };
-let _urlParams: any = {};
-let _postBody: any = {};
-if (filter) _urlParams.filter = filter;
-return this.request(_method, _url, _routeParams, _urlParams, _postBody);
-}
-/**
- * Get data of the currently logged user that was returned by the last
- * call to {@link sdk.Client#login} or
- * {@link sdk.Client#getCurrent}. Return null when there
- * is no user logged in or the data of the current user were not fetched
- * yet.
- *
- * @returns object An Account instance.
- */
-public getCachedCurrent() {
-  return this.auth.getCurrentUserData();
-}
-/**
- * Get data of the currently logged access tokern that was returned by the last
- * call to {@link sdk.Client#login}
- *
- * @returns object An AccessToken instance.
- */
-public getCurrentToken(): AccessToken {
-  return this.auth.getToken();
-}
-/**
- * @name sdk.Client#isAuthenticated
- *
- * @returns {boolean} True if the current user is authenticated (logged in).
- */
-public isAuthenticated() {
-  return !(this.getCurrentId() === '' || this.getCurrentId() == null || this.getCurrentId() == 'null');
-}
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+  /**
+   * @ngdoc method
+   * @name sdk.Client#getCurrent
+   * @methodOf sdk.Client
+   *
+   * @description
+   *
+   * Get data of the currently logged user. Fail with HTTP result 401
+   * when there is no user logged in.
+   *
+   * @returns object An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   */
+  public getCurrent(filter: LoopBackFilter = {}): Observable<any> {
+    let _method: string = "GET";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() + "/Clients" + "/:id";
+    let id: any = this.auth.getCurrentUserId();
+    if (id == null)
+      id = '__anonymous__';
+    let _routeParams: any = { id: id };
+    let _urlParams: any = {};
+    let _postBody: any = {};
+    if (filter) _urlParams.filter = filter;
+    return this.request(_method, _url, _routeParams, _urlParams, _postBody);
+  }
+  /**
+   * Get data of the currently logged user that was returned by the last
+   * call to {@link sdk.Client#login} or
+   * {@link sdk.Client#getCurrent}. Return null when there
+   * is no user logged in or the data of the current user were not fetched
+   * yet.
+   *
+   * @returns object An Account instance.
+   */
+  public getCachedCurrent() {
+    return this.auth.getCurrentUserData();
+  }
+  /**
+   * Get data of the currently logged access tokern that was returned by the last
+   * call to {@link sdk.Client#login}
+   *
+   * @returns object An AccessToken instance.
+   */
+  public getCurrentToken(): AccessToken {
+    return this.auth.getToken();
+  }
+  /**
+   * @name sdk.Client#isAuthenticated
+   *
+   * @returns {boolean} True if the current user is authenticated (logged in).
+   */
+  public isAuthenticated() {
+    return !(this.getCurrentId() === '' || this.getCurrentId() == null || this.getCurrentId() == 'null');
+  }
 
-/**
- * @name sdk.Client#getCurrentId
- *
- * @returns object Id of the currently logged-in user or null.
- */
-public getCurrentId() {
-  return this.auth.getCurrentUserId();
-}
+  /**
+   * @name sdk.Client#getCurrentId
+   *
+   * @returns object Id of the currently logged-in user or null.
+   */
+  public getCurrentId() {
+    return this.auth.getCurrentUserId();
+  }
 
-/**
- * The name of the model represented by this $resource,
- * i.e. `Client`.
- */
-public getModelName() {
-  return "Client";
-}
+  /**
+   * The name of the model represented by this $resource,
+   * i.e. `Client`.
+   */
+  public getModelName() {
+    return "Client";
+  }
 }
