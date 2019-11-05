@@ -47,4 +47,28 @@ module.exports = function(Document) {
         http: {verb: 'GET', path: '/:documentId/download'}
     });
 
+    Document.observe('after delete', (ctx, next) => {
+        console.log('Deleted %s matching %j',
+          ctx.Model.pluralModelName,
+          ctx.where);
+        let Folder = App.models.Folder;
+        let Client = App.models.Client;
+
+        let documentData = ctx.instance;
+
+        Client.findById(documentData.clientId)
+        .then((client) => {
+            Folder.removeFile(client.email, documentData.path, (err, stdout) => {
+                if(err) { console.log('Error while removing document file: ', err); }
+                else { console.log('Removing file completed'); }
+            })
+        })
+        .catch((err) => {
+            console.log('Error while removing document file: ', err);
+        })
+
+        next();
+      });
+      
+
 };
