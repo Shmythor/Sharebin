@@ -219,4 +219,12 @@ export class HomeComponent implements OnInit {
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'none';
   }
+
+  showPapperBinButton(buttonId: any) {
+    document.getElementById('papperBinButton-' + buttonId).style.display = 'block';
+  }
+
+  hidePapperBinButton(buttonId: any) {
+    document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
+  }
 }
