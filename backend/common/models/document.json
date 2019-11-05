@@ -42,6 +42,10 @@
     "isDeleted": {
       "type": "boolean",
       "required": false
+    },
+    "urlToShare": {
+      "type": "string",
+      "required": false
     }
   },
   "validations": [],
