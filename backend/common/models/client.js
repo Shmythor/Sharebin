@@ -28,15 +28,8 @@ module.exports = function(Client) {
         Client.findById(clientId)
             .then((userObject) => {
                 if (!userObject)
-                    throw new Error(`User with id ${clientId} not found`);
-                
-                console.log(req);
-                console.log(res);
-                console.log(userObject);
-                
-
-                console.log("\n\n\n");
-
+                    throw new Error(`User with id ${clientId} not found`);                
+                    
                 return Folder.upload(req, res, {container: userObject.email})
             })
             .then((fileObj) => {

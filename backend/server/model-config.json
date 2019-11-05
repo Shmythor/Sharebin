@@ -50,7 +50,17 @@
           "updateAll": true,
           "deleteById": true,
           "count": true,
-          "download": true
+          "download": true,
+          "__get__metadatas": true,
+          "__create__metadatas": true,
+          "__delete__metadatas": true,
+          "__updateById__metadatas": true,
+          "__destroyById__metadatas": true,
+          "patchAttributes": true,
+          "updateAttributes": true,
+          "findOne": true,
+          "patchOrCreate": true,
+          "replaceOrCreate": true
         }
       }
     }
@@ -68,7 +78,12 @@
           "find": true,
           "updateAll": true,
           "deleteById": true,
-          "count": true
+          "count": true,
+          "patchAttributes": true,
+          "updateAttributes": true,
+          "findOne": true,
+          "patchOrCreate": true,
+          "replaceOrCreate": true
         }
       }
     }
@@ -86,7 +101,12 @@
           "find": true,
           "updateAll": true,
           "deleteById": true,
-          "count": true
+          "count": true,
+          "patchAttributes": true,
+          "updateAttributes": true,
+          "findOne": true,
+          "patchOrCreate": true,
+          "replaceOrCreate": true
         }
       }
     }
@@ -97,14 +117,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": false,
-          "create": true,
-          "exists": true,
-          "findById": true,
-          "find": true,
-          "updateAll": true,
-          "deleteById": true,
-          "count": true
+          "*": false
         }
       }
     }
@@ -125,7 +138,12 @@
           "deleteById": true,
           "count": true,
           "uploadDocument": true,
-          "getDocument": true
+          "getDocument": true,
+          "patchAttributes": true,
+          "updateAttributes": true,
+          "findOne": true,
+          "patchOrCreate": true,
+          "replaceOrCreate": true
         }
       }
     }
