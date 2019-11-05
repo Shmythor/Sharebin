@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId },
+      where: { clientId: userId},
       include: 'metadatas',
     };
 
