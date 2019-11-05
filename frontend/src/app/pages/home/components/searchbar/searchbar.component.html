@@ -1,10 +1,10 @@
-<div class="w-100 h-100 bg-light flex items-center justify-between">
+<div class="w-100 h-100 bg-light flex items-center justify-between custom-navbar">
     <i class="icon ion-md-search pl2"></i>
     <input class="w-100 h-100 pl2" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
     <div class="flex justify-around">
-        <button [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" class="mr1" (click)="filterBy('name')">Nombre</button>
-        <button [ngClass]="{'buttonActivated': descriptionActivated, 'buttonDisabled': !descriptionActivated}" class="ml1 mr1" (click)="filterBy('description')">Descripción</button>
-        <button [ngClass]="{'buttonActivated': metadataActivated, 'buttonDisabled': !metadataActivated}" class="ml1" (click)="filterBy('metadata')">Metadatos</button>
+        <button class="ma1" [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" (click)="filterBy('name')">Nombre</button>
+        <button class="ma1" [ngClass]="{'buttonActivated': descriptionActivated, 'buttonDisabled': !descriptionActivated}" (click)="filterBy('description')">Descripción</button>
+        <button class="ma1" [ngClass]="{'buttonActivated': metadataActivated, 'buttonDisabled': !metadataActivated}" (click)="filterBy('metadata')">Metadatos</button>
     </div>
 </div>
