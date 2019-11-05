@@ -39,13 +39,6 @@ module.exports = function populateClientsModel(app) {
         });
     });
 
-    // ClientModel.uploadDocument(fileToUpload, demoDescriptions[0], (err, res) => {
-    //     if(err) {
-    //         console.log('uploadDocument ERROR: ', err)
-    //     } else {
-    //         console.log('uploadDocument CORRECT');
-    //         console.log('uploadDocument RES: ', res);
-    //     }
-    // });
+    
 
 };
