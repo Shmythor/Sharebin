@@ -38,6 +38,10 @@
     "type": {
       "type": "string",
       "required": true
+    },
+    "isDeleted": {
+      "type": "boolean",
+      "required": false
     }
   },
   "validations": [],

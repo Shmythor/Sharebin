@@ -10,6 +10,7 @@ export interface DocumentInterface {
   "url"?: string;
   "size": number;
   "type": string;
+  "isDeleted"?: boolean;
   "id"?: any;
   "clientId"?: any;
   metadatas?: any[];
@@ -25,6 +26,7 @@ export class Document implements DocumentInterface {
   "url": string;
   "size": number;
   "type": string;
+  "isDeleted": boolean;
   "id": any;
   "clientId": any;
   metadatas: any[];
@@ -95,6 +97,10 @@ export class Document implements DocumentInterface {
         "type": {
           name: 'type',
           type: 'string'
+        },
+        "isDeleted": {
+          name: 'isDeleted',
+          type: 'boolean'
         },
         "id": {
           name: 'id',

@@ -33,6 +33,8 @@ import { InternalStorage } from './services/lb-api/storage/storage.swaps';
 import { HttpClientModule } from '@angular/common/http';
 import { SocketConnection } from './services/lb-api/sockets/socket.connections';
 import { SocketDriver } from './services/lb-api/sockets/socket.driver';
+import { ThemesComponent } from './pages/themes/themes.component';
+import { BinComponent } from './pages/bin/bin.component';
 
 
 
@@ -47,7 +49,9 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
     SearchbarComponent,
     UploadFilesComponent,
     VentanaemergComponent,
-    UploadFilesComponent
+    UploadFilesComponent,
+    ThemesComponent,
+    BinComponent
   ],
   entryComponents: [ VentanaemergComponent ],
   imports: [

@@ -49,9 +49,9 @@ export class ClientApi extends BaseLoopBackApi {
    *
    * El cuerpo de respuesta contiene propiedades de la AccessToken creada durante el inicio de la sesión.
    * Dependiendo del valor del parámetro `include`, el cuerpo puede contener propiedades adicionales:
-   *
+   * 
    *   - `user` - `U+007BUserU+007D` - Datos del usuario conectado actualmente. (`include=user`)
-   *
+   * 
    *
    */
   public login(credentials: any, include: any = 'user', rememberMe: boolean = true, customHeaders?: Function): Observable<any> {
@@ -76,7 +76,7 @@ export class ClientApi extends BaseLoopBackApi {
       )
       );
       return result;
-
+      
   }
 
   /**
@@ -100,23 +100,23 @@ export class ClientApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
        _urlParams.access_token = this.auth.getAccessTokenId();
-    this.auth.clear();
+    this.auth.clear(); 
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
-
   /**
-   * Upload a new document. Arguments:
-   * file: File to upload
-   * *: Params for the document
+   * Upload a new document. Arguments: 
+         * file: File to upload
+         * *: Params for the document
    *
+   * @param {object} data Request data.
    *
-   *  - `req` – `{object}` -
+   *  - `req` – `{object}` - 
    *
-   *  - `res` – `{object}` -
+   *  - `res` – `{object}` - 
    *
-   *  - `clientId` – `{string}` -
+   *  - `clientId` – `{string}` - 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -127,22 +127,17 @@ export class ClientApi extends BaseLoopBackApi {
    * This usually means the response is a `Client` object.)
    * </em>
    */
-  public uploadDocument(file: FormData, documentData: any = {}, clientId: any = {}, customHeaders?: Function): <any> {
+  public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    `/Clients/${clientId}/uploadDocument`;
+    "/Clients/:clientId/uploadDocument";
     let _routeParams: any = {};
-    let _postBody: any = documentData;
+    let _postBody: any = {};
     let _urlParams: any = {};
-    
-    _postBody["file"] = file;
-    
     if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
-    
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
-
   /**
    * @ngdoc method
    * @name sdk.Client#getCurrent
