@@ -46,7 +46,7 @@ filters = [true, false, false];
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId},
+      where: { clientId: userId, isDeleted: true},
       include: 'metadatas',
     };
 
