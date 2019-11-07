@@ -204,10 +204,16 @@ filters = [true, false, false];
       });
   }
 
-  move2PapperBin(documentId: string ){
-    /*
-    Necesito aqui llamar a la función que cambia un documento de la lista normal a la pappelera
-    */
+  move2Home(doc: any ){
+      /* update database */
+      this.docapi.replaceOrCreate( {id: doc.id,
+        name: doc.name, description: doc.description, path: doc.path,
+        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
+          (no) => { console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
+
+      );
+      this.getUserItemList();
   }
 /*
   downloadFromServer(documentId: string) {

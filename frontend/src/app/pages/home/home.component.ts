@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
@@ -130,7 +130,7 @@ export class HomeComponent implements OnInit {
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.updateAttributes(this.data[index].id, {
+      this.docapi.replaceOrCreate( {id: this.data[index].id,
         name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
           (no) => { console.log('mismuertos'); },
@@ -210,10 +210,16 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  move2PapperBin(documentId: string ){
-    /*
-    Necesito aqui llamar a la función que cambia un documento de la lista normal a la pappelera
-    */
+  move2PapperBin(doc: any ) {
+      /* update database */
+      this.docapi.replaceOrCreate( {id: doc.id,
+        name: doc.name, description: doc.description, path: doc.path,
+        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
+          (no) => { console.log('mismuertos'); },
+          (err) => {console.log('me cago en', err); }
+
+      );
+      this.getUserItemList();
   }
 /*
   downloadFromServer(documentId: string) {
