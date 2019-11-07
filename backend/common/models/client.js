@@ -29,14 +29,14 @@ module.exports = function(Client) {
             .then((userObject) => {
                 if (!userObject)
                     throw new Error(`User with id ${clientId} not found`);                
-                    
+
                 return Folder.upload(req, res, {container: userObject.email})
             })
             .then((fileObj) => {
                 let Document = App.models.Document;
                 let documentData = fileObj.fields;
                 let fileData = fileObj.files.file[0];
-
+                
                 console.log(fileData);
                 //Parche por si llega como un array por alguna razon.
                 if (typeof(documentData.description) == "array")
