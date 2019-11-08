@@ -57,7 +57,7 @@ export class ClientApi extends BaseLoopBackApi {
   public login(credentials: any, include: any = 'user', rememberMe: boolean = true, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Clients/login";
+      "/Clients/login";
     let _routeParams: any = {};
     let _postBody: any = {
       credentials: credentials
@@ -67,15 +67,15 @@ export class ClientApi extends BaseLoopBackApi {
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders)
       .pipe(
         map(
-        (response: any) => {
-          response.ttl = parseInt(response.ttl);
-          response.rememberMe = rememberMe;
-          this.auth.setToken(response);
-          return response;
-        }
-      )
+          (response: any) => {
+            response.ttl = parseInt(response.ttl);
+            response.rememberMe = rememberMe;
+            this.auth.setToken(response);
+            return response;
+          }
+        )
       );
-      return result;
+    return result;
 
   }
 
@@ -95,11 +95,11 @@ export class ClientApi extends BaseLoopBackApi {
   public logout(customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Clients/logout";
+      "/Clients/logout";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-       _urlParams.access_token = this.auth.getAccessTokenId();
+    _urlParams.access_token = this.auth.getAccessTokenId();
     this.auth.clear();
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
@@ -110,6 +110,7 @@ export class ClientApi extends BaseLoopBackApi {
    * file: File to upload
    * *: Params for the document
    *
+   * @param {object} data Request data.
    *
    *  - `req` – `{object}` -
    *
@@ -126,10 +127,10 @@ export class ClientApi extends BaseLoopBackApi {
    * This usually means the response is a `Client` object.)
    * </em>
    */
-  public uploadDocument(file: FormData, documentData: any = {}, clientId: any = {}, customHeaders?: Function): <any> {
+  public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/Clients/:clientId/uploadDocument";
+      "/Clients/:clientId/uploadDocument";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
@@ -156,7 +157,7 @@ export class ClientApi extends BaseLoopBackApi {
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() + "/Clients" + "/:id";
     let id: any = this.auth.getCurrentUserId();
     if (id == null)
-    id = '__anonymous__';
+      id = '__anonymous__';
     let _routeParams: any = { id: id };
     let _urlParams: any = {};
     let _postBody: any = {};

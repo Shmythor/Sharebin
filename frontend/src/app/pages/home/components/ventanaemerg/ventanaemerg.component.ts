@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-//import { HttpClient, HttpEventType } from '@angular/common/http';
+// import { HttpClient, HttpEventType } from '@angular/common/http';
 import { ClientApi, DocumentApi } from '../../../../services/lb-api/services/index';
 import { ModalService } from '../../../../shared/_modal';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ export class VentanaemergComponent implements OnInit {
   uploadedFilePath: string = null;
   bodyText: string;
 
-  constructor(private clientapi: ClientApi, private modalService: ModalService, private http: HttpClient){}
+  constructor(private clientapi: ClientApi, private modalService: ModalService, private http: HttpClient) {}
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -41,9 +41,9 @@ export class VentanaemergComponent implements OnInit {
     this.fileData = fileInput.target.files[0] as File;
     this.preview();
   }
- 
+
   preview() {
-    // Show preview 
+    // Show preview
     const mimeType = this.fileData.type;
     if (mimeType.match(/image\/*/) == null) {
       return;
@@ -57,7 +57,6 @@ export class VentanaemergComponent implements OnInit {
   }
 
   postFile(fileToUpload: File, clientId: any, description: any): Observable<HttpEvent<any>> {
-
     const endpoint = `http://localhost:3000/api/Clients/${clientId}/uploadDocument`;
     const formData: FormData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
@@ -71,9 +70,9 @@ export class VentanaemergComponent implements OnInit {
     headers.append('Content-Type', 'multipart/form-data');
 
     const options = {
-      params: params,
+      params,
       reportProgress: true,
-      headers: headers
+      headers
     };
 
     const req = new HttpRequest('POST', endpoint, formData, options);
@@ -86,27 +85,27 @@ export class VentanaemergComponent implements OnInit {
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
     .subscribe((document) => {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
-      console.log("Subida hecha");
-      //location.reload();
-      if(this.fileData.size > 0){
+      console.log('Subida hecha');
+      // location.reload();
+      if (this.fileData.size > 0) {
         this.showSuccessUploadMessage();
         this.addDataTable(this.fileData);
       }
     }, (err) => {
       this.showErrorUploadMessage();
-      console.log("Error al subir documento: " +err);
+      console.log('Error al subir documento: ' + err);
     });
   }
-  addDataTable(data: File){
-    document.getElementById('fileNameTable').innerHTML = "<strong>"+data.name+"</strong>";
-    document.getElementById('fileSizeTable').innerHTML = ""+data.size+" Bytes";
+  addDataTable(data: File) {
+    document.getElementById('fileNameTable').innerHTML = '<strong>' + data.name + '</strong>';
+    document.getElementById('fileSizeTable').innerHTML = '' + data.size + ' Bytes';
   }
 
-  showSuccessUploadMessage(){
+  showSuccessUploadMessage() {
     document.getElementById('fileUploadSuccess').style.display = 'block';
   }
 
-  showErrorUploadMessage(){
+  showErrorUploadMessage() {
     document.getElementById('fileUploadError').style.display = 'block';
   }
 }
