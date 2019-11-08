@@ -65,8 +65,6 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  
-
   getFilter(filter: string) {
     switch (filter) {
       case 'name': this.filters[0] = !this.filters[0]; break;
@@ -215,7 +213,7 @@ export class HomeComponent implements OnInit {
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
-          (no) => { console.log('mismuertos'); },
+          (no) => { this.showFileMove2BinMessage(); },
           (err) => {console.log('me cago en', err); }
 
       );
@@ -259,5 +257,13 @@ export class HomeComponent implements OnInit {
 
   hidePapperBinButton(buttonId: any) {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
+  }
+
+  showFileMove2BinMessage() {
+    document.getElementById('fileMove2Bin').style.display = 'block';
+  }
+
+  closeMessagefileMove2Bin(){
+    document.getElementById('fileMove2Bin').style.display = 'none';
   }
 }

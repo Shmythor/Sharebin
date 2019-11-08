@@ -112,34 +112,6 @@ filters = [true, false, false];
   }
 
 
-  saveChanges() {
-    const lastItemSelected = this.itemSelected;
-
-    if (this.itemSelected.id !== '') {
-      const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
-      const dataIdx = this.data[index];
-      /* update local data */
-      this.data[index].name = this.nameInput.nativeElement.value;
-      this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadatas = this.tempMetadata;
-
-      /* update database */
-      this.docapi.updateAttributes(this.data[index].id, {
-        name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
-        clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
-      );
-
-      this.tempMetadata.forEach((elem) => {
-        console.log(elem);
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
-        );
-      });
-    }
-  }
 
   postMetadata(metadata: any): Observable<HttpEvent<any>> {
 
@@ -173,18 +145,6 @@ filters = [true, false, false];
     this.tempMetadata[id].value = event.target.value;
   }
 
-  loadUploadModal() {
-    const dialogConfig = new MatDialogConfig();
- // dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '50%';
-
-    this.dialog.open(VentanaemergComponent, dialogConfig);
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.getUserItemList();
-    });
-  }
-
   upload() {
     console.log('postFile');
   }
@@ -209,11 +169,23 @@ filters = [true, false, false];
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
-          (no) => { console.log('mismuertos'); },
+          (no) => {this.showFileMove2HomeMessage(); },
           (err) => {console.log('me cago en', err); }
 
       );
       this.getUserItemList();
+  }
+
+  deletedAllFile(){
+    const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+       dialogConfig.autoFocus = true;
+       dialogConfig.width = '50%';
+   //me gustaria saber como crear dicha ventana que se llamme ventanaalertComponent
+      /* this.dialog.open(VentanaalertComponent, dialogConfig);
+       this.dialog.afterAllClosed.subscribe(() => {
+         this.getUserItemList();
+       });*/
   }
 /*
   downloadFromServer(documentId: string) {
@@ -263,7 +235,13 @@ filters = [true, false, false];
     document.getElementById('recoverButton-'+ buttonId).style.display = 'none';
   }
 
+  showFileMove2HomeMessage() {
+    document.getElementById('fileMove2Home').style.display = 'block';
+  }
 
+  closeMessagefileMove2Home(){
+    document.getElementById('fileMove2Home').style.display = 'none';
+  }
 
 
 }
