@@ -60,7 +60,10 @@
           "updateAttributes": true,
           "findOne": true,
           "patchOrCreate": true,
-          "replaceOrCreate": true
+          "replaceOrCreate": true,
+           "createURL" : true,
+          "downloadByLink": true
+
         }
       }
     }
