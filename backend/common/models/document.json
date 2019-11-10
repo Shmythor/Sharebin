@@ -41,6 +41,11 @@
     },
     "isDeleted": {
       "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "urlToShare": {
+      "type": "string",
       "required": false
     }
   },

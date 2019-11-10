@@ -16,7 +16,10 @@
         "@types/socket.io-client": "^1.4.32",
         "compression": "^1.0.3",
         "cors": "^2.5.2",
-        "helmet": "^3.10.0",
+        "crypto": "^1.0.1",
+        "diff": ">=3.5.0",
+        "growl": ">=1.10.0",
+        "helmet": "^3.21.2",
         "loopback": "^3.26.0",
         "loopback-boot": "^2.6.5",
         "loopback-component-explorer": "^6.2.0",
@@ -24,18 +27,15 @@
         "loopback-connector-mongodb": "^4.2.0",
         "multer": "^1.4.2",
         "serve-favicon": "^2.0.1",
-        "strong-error-handler": "^3.0.0",
-        "swagger-ui": ">=3.18.0",
-        "diff": ">=3.5.0",
-        "growl": ">=1.10.0"
+        "strong-error-handler": "^3.4.0"
     },
     "devDependencies": {
         "@mean-expert/loopback-sdk-builder": "^2.3.1",
-        "eslint": "^4.18.2",
-        "eslint-config-loopback": "^8.0.0",
-        "swagger-ui": ">=3.18.0",
         "diff": ">=3.5.0",
-        "growl": ">=1.10.0"
+        "eslint": "^4.19.1",
+        "eslint-config-loopback": "^8.0.0",
+        "growl": ">=1.10.0",
+        "swagger-ui": "^3.24.2"
     },
     "repository": {
         "type": "",

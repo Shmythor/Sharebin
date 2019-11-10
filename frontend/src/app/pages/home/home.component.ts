@@ -3,7 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
@@ -52,7 +52,7 @@ export class HomeComponent implements OnInit {
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId },
+      where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
 
@@ -64,8 +64,6 @@ export class HomeComponent implements OnInit {
       console.log('Wtf dude', error);
     });
   }
-
-  
 
   getFilter(filter: string) {
     switch (filter) {
@@ -130,7 +128,7 @@ export class HomeComponent implements OnInit {
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.updateAttributes(this.data[index].id, {
+      this.docapi.replaceOrCreate( {id: this.data[index].id,
         name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
           (no) => { console.log('mismuertos'); },
@@ -209,6 +207,18 @@ export class HomeComponent implements OnInit {
         window.open(url);
       });
   }
+
+  move2PapperBin(doc: any ) {
+      /* update database */
+      this.docapi.replaceOrCreate( {id: doc.id,
+        name: doc.name, description: doc.description, path: doc.path,
+        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
+          (no) => { this.showFileMove2BinMessage(); },
+          (err) => {console.log('me cago en', err); }
+
+      );
+      this.getUserItemList();
+  }
 /*
   downloadFromServer(documentId: string) {
 
@@ -248,5 +258,21 @@ export class HomeComponent implements OnInit {
 
   hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'none';
+  }
+
+  showPapperBinButton(buttonId: any) {
+    document.getElementById('papperBinButton-' + buttonId).style.display = 'block';
+  }
+
+  hidePapperBinButton(buttonId: any) {
+    document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
+  }
+
+  showFileMove2BinMessage() {
+    document.getElementById('fileMove2Bin').style.display = 'block';
+  }
+
+  closeMessagefileMove2Bin(){
+    document.getElementById('fileMove2Bin').style.display = 'none';
   }
 }
