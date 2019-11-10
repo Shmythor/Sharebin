@@ -219,6 +219,10 @@ export class HomeComponent implements OnInit {
       );
       this.getUserItemList();
   }
+
+  shareFile(document){
+    console.log("Share URL: " +`http://localhost:3000/api/Documents/${document.id}/download`);
+  }
 /*
   downloadFromServer(documentId: string) {
 
@@ -249,7 +253,9 @@ export class HomeComponent implements OnInit {
     if(document.getElementsByClassName("selectedFile")[0] != null){
       document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
     }
-    document.getElementById(file).parentNode.className += ' selectedFile';
+    let fileParentNode = document.getElementById(file) as HTMLElement;
+    const node = document.querySelector("#"+file) as HTMLElement;
+    node.parentNode.className += ' selectedFile';
   }
 
   showDownloadButton(buttonId: any) {
@@ -266,6 +272,14 @@ export class HomeComponent implements OnInit {
 
   hidePapperBinButton(buttonId: any) {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
+  }
+
+  showShareIcon(buttonId: any) {
+    document.getElementById('shareIcon-' + buttonId).style.display = 'block';
+  }
+
+  hideShareIcon(buttonId: any) {
+    document.getElementById('shareIcon-' + buttonId).style.display = 'none';
   }
 
   showFileMove2BinMessage() {
