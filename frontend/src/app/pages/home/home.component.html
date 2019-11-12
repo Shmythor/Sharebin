@@ -13,12 +13,23 @@
         <button class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()">Subir archivo</button>
     </div>
 
+    <!-- Contenido modal share -->
+    <jw-modal id="shareURLModal">
+        <div class="input-group mb-3">
+            <input type="text" id="shareURLContent" class="form-control" readonly placeholder="Document URL" aria-label="Document URL" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <span class="input-group-text" id="copyURL" style="cursor: pointer;" (click)="copyURL('shareURLContent')">Copiar</span>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
+    </jw-modal>
+
     <!-- Listado de archivos e información -->
     <div class="flex justify-between pt5 pb4 h-100">
         <div class="bg-light align-content-center" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">
             <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
                 <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div id="file{{dat.clientId}}" class="pl2" (mouseover)="showPapperBinButton(dat.id)" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hidePapperBinButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
+                    <div id="file{{dat.id}}" class="pl2" (click)="fileSelected('file'+dat.id)" (mouseover)="showDownloadButton(dat.id);showPapperBinButton(dat.id);showShareIcon(dat.id)" (mouseout)="hideDownloadButton(dat.id);hidePapperBinButton(dat.id);hideShareIcon(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
                         <p style="display: inline-block;">
                             <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
                             <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
@@ -29,6 +40,7 @@
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
                             <img src="../../../assets/icons/bin-black.svg" fill="black" width="24">
                         </button>
+                        <img id="shareIcon-{{dat.id}}" src="../../../assets/icons/share.svg" width="25" alt="share icon" style="display:none;float:right;cursor:pointer;" (click)="shareFile(dat)">
                     </div>
                 </div>
             </cdk-virtual-scroll-viewport>
