@@ -1,11 +1,3 @@
-.navbar-bg, .btn-primary {
-    background: #f7f7f7  !important;
-    color: #000000;
-    border: none !important;
+.navbar-bg {
+    background: #D3D5E0 !important;
 }
-.btn-primary:hover {
-    color: #000000 !important;
-}
-
-div{color: #000000 !important;}
-
