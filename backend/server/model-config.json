@@ -146,7 +146,8 @@
           "updateAttributes": true,
           "findOne": true,
           "patchOrCreate": true,
-          "replaceOrCreate": true
+          "replaceOrCreate": true,
+          "setTheme" : true
         }
       }
     }
