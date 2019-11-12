@@ -1,9 +1,15 @@
 /* tslint:disable */
+import {
+  Enterprise,
+  Document,
+  Folder
+} from '../index';
 
 declare var Object: any;
 export interface ClientInterface {
   "name": string;
   "createDate": Date;
+  "theme"?: string;
   "realm"?: string;
   "username"?: string;
   "email": string;
@@ -12,14 +18,15 @@ export interface ClientInterface {
   "enterpriseId"?: any;
   "password"?: string;
   accessTokens?: any[];
-  enterprise?: any;
-  documents?: any[];
-  folder?: any;
+  enterprise?: Enterprise;
+  documents?: Document[];
+  folder?: Folder;
 }
 
 export class Client implements ClientInterface {
   "name": string;
   "createDate": Date;
+  "theme": string;
   "realm": string;
   "username": string;
   "email": string;
@@ -28,9 +35,9 @@ export class Client implements ClientInterface {
   "enterpriseId": any;
   "password": string;
   accessTokens: any[];
-  enterprise: any;
-  documents: any[];
-  folder: any;
+  enterprise: Enterprise;
+  documents: Document[];
+  folder: Folder;
   constructor(data?: ClientInterface) {
     Object.assign(this, data);
   }
@@ -72,6 +79,10 @@ export class Client implements ClientInterface {
           name: 'createDate',
           type: 'Date'
         },
+        "theme": {
+          name: 'theme',
+          type: 'string'
+        },
         "realm": {
           name: 'realm',
           type: 'string'
@@ -112,24 +123,24 @@ export class Client implements ClientInterface {
         },
         enterprise: {
           name: 'enterprise',
-          type: 'any',
-          model: '',
+          type: 'Enterprise',
+          model: 'Enterprise',
           relationType: 'belongsTo',
                   keyFrom: 'enterpriseId',
           keyTo: 'id'
         },
         documents: {
           name: 'documents',
-          type: 'any[]',
-          model: '',
+          type: 'Document[]',
+          model: 'Document',
           relationType: 'hasMany',
                   keyFrom: 'id',
           keyTo: 'clientId'
         },
         folder: {
           name: 'folder',
-          type: 'any',
-          model: '',
+          type: 'Folder',
+          model: 'Folder',
           relationType: 'hasOne',
                   keyFrom: 'id',
           keyTo: 'clientId'

@@ -11,18 +11,6 @@ module.exports = function populateClientsModel(app) {
     let ClientModel = app.models.Client;
     let FolderModel = app.models.Folder;
 
-    // // Default files for demo porpuses
-    // let demoFilesPath = [
-    //     path.resolve(__dirname + '../../../demo_files/Fichero1.txt')
-    // ]
-
-    // let demoDescriptions = [
-    //     'Descipcion del fichero 1'
-    // ]
-
-    // let fileToUpload = fs.readFileSync(demoFilesPath[0]);
-
-    // Search by ID: if exists update, else create
     let clientsArr = [
         { username: 'Juan', email: 'john1@doe.com', password: 'password', name: 'John', createDate: Date.now() },
         { username: 'Yein', email: 'jane1@doe.com', password: 'password', name: 'Jane', createDate: Date.now() },
@@ -39,13 +27,6 @@ module.exports = function populateClientsModel(app) {
         });
     });
 
-    // ClientModel.uploadDocument(fileToUpload, demoDescriptions[0], (err, res) => {
-    //     if(err) {
-    //         console.log('uploadDocument ERROR: ', err)
-    //     } else {
-    //         console.log('uploadDocument CORRECT');
-    //         console.log('uploadDocument RES: ', res);
-    //     }
-    // });
+    
 
 };

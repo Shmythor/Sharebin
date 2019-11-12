@@ -168,13 +168,28 @@ filters = [true, false, false];
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
-          (no) => {this.showFileMove2HomeMessage(); },
-          (err) => {console.log('me cago en', err); },
-          ()=> { this.itemSelected = {id: '', name: '', description: '', metadatas: []};}
+          (no) => {
+            this.showFileMove2HomeMessage();
+            setTimeout(() => {this.closeMessagefileMove2Home();}, 5000);
+          },
+          (err) => {console.log('me cago en', err); }
 
       );
       this.getUserItemList();
   }
+
+  deletedFile(id: any ){
+    /* update database */
+    this.docapi.deleteById(id).subscribe(
+        (no) => {
+          this.showFileDeletedFileMessage();
+          setTimeout(() => {this.closeMessagefileDeletedFile();}, 5000);
+        },
+        (err) => {console.log('me cago en', err); }
+
+    );
+    this.getUserItemList();
+}
 
   deletedAllFile(){
     const dialogConfig = new MatDialogConfig();
@@ -244,6 +259,14 @@ filters = [true, false, false];
 
   closeMessagefileMove2Home(){
     document.getElementById('fileMove2Home').style.display = 'none';
+  }
+
+  showFileDeletedFileMessage() {
+    document.getElementById('fileDeletedFile').style.display = 'block';
+  }
+
+  closeMessagefileDeletedFile(){
+    document.getElementById('fileDeletedFile').style.display = 'none';
   }
 
 
