@@ -179,6 +179,18 @@ filters = [true, false, false];
       this.getUserItemList();
   }
 
+  deletedFile(id: any ){
+    /* update database */
+    this.docapi.deleteById(id).subscribe(
+        (no) => {
+          this.showFileDeletedFileMessage();
+        },
+        (err) => {console.log('me cago en', err); }
+
+    );
+    this.getUserItemList();
+}
+
   deletedAllFile(){
     const dialogConfig = new MatDialogConfig();
     // dialogConfig.disableClose = true;
@@ -244,6 +256,14 @@ filters = [true, false, false];
 
   closeMessagefileMove2Home(){
     document.getElementById('fileMove2Home').style.display = 'none';
+  }
+
+  showFileDeletedFileMessage() {
+    document.getElementById('fileDeletedFile').style.display = 'block';
+  }
+
+  closeMessagefileDeletedFile(){
+    document.getElementById('fileDeletedFile').style.display = 'none';
   }
 
 
