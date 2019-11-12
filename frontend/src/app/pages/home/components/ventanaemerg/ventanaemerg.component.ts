@@ -83,7 +83,7 @@ export class VentanaemergComponent implements OnInit {
   onUpload(fileDescription: string) {
     fileDescription = this.fileData.name;
     
-    if(this.fileData.size > 20971521){
+    if(this.fileData.size > 20971520){
       this.showLimitsUploadMessage();
       return;
     }
@@ -93,7 +93,7 @@ export class VentanaemergComponent implements OnInit {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
       //console.log("Subida hecha");
       //location.reload();
-      if(this.fileData.size > 0 && this.fileData.size < 20971521){
+      if(this.fileData.size > 0 && this.fileData.size <= 20971520){
         this.showSuccessUploadMessage();
         this.addDataTable(this.fileData);
       }      
@@ -109,14 +109,25 @@ export class VentanaemergComponent implements OnInit {
 
   showSuccessUploadMessage() {
     document.getElementById('fileUploadSuccess').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileUploadSuccess').style.display = 'none';
+    }, 2500);
   }
 
   showErrorUploadMessage() {
     document.getElementById('fileUploadError').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileUploadError').style.display = 'none';
+    }, 2500);
   }
 
-  showLimitsUploadMessage(){
+  showLimitsUploadMessage(){    
     document.getElementById('fileUploadLimit').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileUploadLimit').style.display = 'none';
+    }, 2500);
   }
 
 }
+
+
