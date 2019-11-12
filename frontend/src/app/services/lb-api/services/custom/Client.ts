@@ -167,6 +167,34 @@ export class ClientApi extends BaseLoopBackApi {
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
+
+  /**
+   * Changing/adding theme for user
+   *
+   * @param {object} data Request data.
+   *
+   *  - `clientId` – `{string}` - 
+   *
+   *  - `theme` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * This method returns no data.
+   */
+  public setTheme(clientId: any = {}, theme: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Clients/setTheme";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    if (typeof theme !== 'undefined' && theme !== null) _urlParams.theme = theme;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
   /**
    * @ngdoc method
    * @name sdk.Client#getCurrent

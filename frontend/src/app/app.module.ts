@@ -14,7 +14,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { VentanaemergComponent } from './pages/home/components/ventanaemerg/ventanaemerg.component';
 import { ModalModule } from '../app/shared/_modal';
 
-
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { SearchbarComponent } from './pages/home/components/searchbar/searchbar.component';
 import { UploadFilesComponent } from './pages/home/components/upload-files/upload-files.component';
