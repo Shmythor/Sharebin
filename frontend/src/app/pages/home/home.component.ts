@@ -226,21 +226,31 @@ export class HomeComponent implements OnInit {
   }
 
   shareFile(document){
+    this.resetShareModal();
     this.modalService.open("shareURLModal");
-    this.setupModal(document);
-    //
-    //console.log("Share URL: " +`http://localhost:3000/api/Documents/${document.id}/download`);
+    this.docapi.createURL(document.id).subscribe((docURL) => {
+      console.log(docURL);
+      this.setupModal(docURL);
+    }, (error) => {
+      console.log('URL no creada', error);
+    });
   }
 
-  setupModal(documento){
-    document.getElementById("copyURL").innerHTML = "Copiar";
-    document.getElementById("copyURL").style.background = "#e9ecef";
-    document.getElementById("copyURL").style.color = "#51585f";
-    document.getElementById("shareURLContent")['value'] = `http://localhost:3000/api/Documents/${documento.id}/download`;
+  setupModal(urlDocumento){
+    var documentShareURL = "http://localhost:3000/api/documents/downloadByLink/" + urlDocumento;
+    document.getElementById("shareURLContent")['value'] = documentShareURL;
   }
 
   closeModal(id: string) {
+    this.resetShareModal();
     this.modalService.close(id);
+  }
+
+  resetShareModal(){
+    document.getElementById("shareURLContent")['value'] = "";
+    document.getElementById("copyURL").innerHTML = "Copiar";
+    document.getElementById("copyURL").style.background = "#e9ecef";
+    document.getElementById("copyURL").style.color = "#51585f";
   }
 
   copyURL(inputElement){
@@ -249,7 +259,6 @@ export class HomeComponent implements OnInit {
     document.getElementById("copyURL").style.color = "#fff";
     document.getElementById(inputElement).select();
     document.execCommand('copy');
-    //inputElement.setSelectionRange(0, 0);
   }
 /*
   downloadFromServer(documentId: string) {
