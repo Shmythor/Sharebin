@@ -13,8 +13,16 @@ export class ThemesComponent implements OnInit {
   }
 
   switchTheme(newTheme: string) {
-   document.getElementById('currentTheme')['href'] = `./assets/themes/${newTheme}.css`;
+    document.getElementById('currentTheme')['href'] = `./assets/themes/${newTheme}.css`;
 
-   // AÑÁDIENDO COMENTARIOS RANDOM PARA PODER HACER UN PULL REQUEST QUE NO ME DEJA JODER PATRICIO DEJANOS TRABAJAAAAAAAAAAAAAAAAAAAR
+    if (newTheme !== 'winter') {
+      document.getElementById('home_navbar_icon')['src'] = '../../../assets/icons/home.svg';
+      document.getElementById('bin_navbar_icon')['src'] = '../../../assets/icons/bin.svg';
+      document.getElementById('themes_navbar_icon')['src'] = '../../../assets/icons/themes.svg';
+    } else {
+      document.getElementById('home_navbar_icon')['src'] = '../../../assets/icons/home-black.svg';
+      document.getElementById('bin_navbar_icon')['src'] = '../../../assets/icons/bin-black.svg';
+      document.getElementById('themes_navbar_icon')['src'] = '../../../assets/icons/themes-black.svg';
+    }
   }
 }
