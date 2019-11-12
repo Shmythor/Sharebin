@@ -35,6 +35,8 @@ import { SocketDriver } from './services/lb-api/sockets/socket.driver';
 import { ThemesComponent } from './pages/themes/themes.component';
 import { BinComponent } from './pages/bin/bin.component';
 import { VentanaalertComponent } from './pages/bin/ventanaalert/ventanaalert.component';
+import { ShareURLPopupComponent } from './pages/home/components/share-urlpopup/share-urlpopup.component';
+
 
 
 
@@ -53,6 +55,7 @@ import { VentanaalertComponent } from './pages/bin/ventanaalert/ventanaalert.com
     ThemesComponent,
     BinComponent,
     VentanaalertComponent
+    ShareURLPopupComponent
   ],
   entryComponents: [ VentanaemergComponent, VentanaalertComponent],
   imports: [

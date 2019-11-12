@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+//import { ShareURLComponent} from 'src/app/pages/home/components/share-urlpopup/share-urlpopup.component';
+import { ModalService } from '../../shared/_modal';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
@@ -34,7 +36,7 @@ export class HomeComponent implements OnInit {
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
-             public dialog: MatDialog, private http: HttpClient) {
+             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -222,6 +224,42 @@ export class HomeComponent implements OnInit {
       );
       this.getUserItemList();
   }
+
+  shareFile(document){
+    this.resetShareModal();
+    this.modalService.open("shareURLModal");
+    this.docapi.createURL(document.id).subscribe((docURL) => {
+      console.log(docURL);
+      this.setupModal(docURL);
+    }, (error) => {
+      console.log('URL no creada', error);
+    });
+  }
+
+  setupModal(urlDocumento){
+    var documentShareURL = "http://localhost:3000/api/documents/downloadByLink/" + urlDocumento;
+    document.getElementById("shareURLContent")['value'] = documentShareURL;
+  }
+
+  closeModal(id: string) {
+    this.resetShareModal();
+    this.modalService.close(id);
+  }
+
+  resetShareModal(){
+    document.getElementById("shareURLContent")['value'] = "";
+    document.getElementById("copyURL").innerHTML = "Copiar";
+    document.getElementById("copyURL").style.background = "#e9ecef";
+    document.getElementById("copyURL").style.color = "#51585f";
+  }
+
+  copyURL(inputElement){
+    document.getElementById("copyURL").innerHTML = "Copiado!";
+    document.getElementById("copyURL").style.background = "#23b180";
+    document.getElementById("copyURL").style.color = "#fff";
+    document.getElementById(inputElement).select();
+    document.execCommand('copy');
+  }
 /*
   downloadFromServer(documentId: string) {
 
@@ -246,6 +284,17 @@ export class HomeComponent implements OnInit {
   }
 */
 
+  //Resalta la fila del documento pulsado
+  //El diseño de la clase selectedFile está en el css
+  fileSelected(file: string){
+    if(document.getElementsByClassName("selectedFile")[0] != null){
+      document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
+    }
+    let fileParentNode = document.getElementById(file) as HTMLElement;
+    const node = document.querySelector("#"+file) as HTMLElement;
+    node.parentNode['className'] += ' selectedFile';
+  }
+
   showDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'block';
   }
@@ -260,6 +309,14 @@ export class HomeComponent implements OnInit {
 
   hidePapperBinButton(buttonId: any) {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
+  }
+
+  showShareIcon(buttonId: any) {
+    document.getElementById('shareIcon-' + buttonId).style.display = 'block';
+  }
+
+  hideShareIcon(buttonId: any) {
+    document.getElementById('shareIcon-' + buttonId).style.display = 'none';
   }
 
   showFileMove2BinMessage() {
