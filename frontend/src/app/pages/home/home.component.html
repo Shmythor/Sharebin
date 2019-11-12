@@ -16,6 +16,17 @@
         <button class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()">Subir archivo</button>
     </div>
 
+    <!-- Contenido modal share -->
+    <jw-modal id="shareURLModal">
+        <div class="input-group mb-3">
+            <input type="text" id="shareURLContent" class="form-control" readonly placeholder="Document URL" aria-label="Document URL" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <span class="input-group-text" id="copyURL" style="cursor: pointer;" (click)="copyURL('shareURLContent')">Copiar</span>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
+    </jw-modal>
+
     <!-- Listado de archivos e información -->
     <div class="flex justify-between pt5 pb4 h-100">
         <div class="bg-light align-content-center" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">

@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+//import { ShareURLComponent} from 'src/app/pages/home/components/share-urlpopup/share-urlpopup.component';
+import { ModalService } from '../../shared/_modal';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
@@ -34,7 +36,7 @@ export class HomeComponent implements OnInit {
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
-             public dialog: MatDialog, private http: HttpClient) {
+             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -221,7 +223,30 @@ export class HomeComponent implements OnInit {
   }
 
   shareFile(document){
-    console.log("Share URL: " +`http://localhost:3000/api/Documents/${document.id}/download`);
+    this.modalService.open("shareURLModal");
+    this.setupModal(document);
+    //
+    //console.log("Share URL: " +`http://localhost:3000/api/Documents/${document.id}/download`);
+  }
+
+  setupModal(documento){
+    document.getElementById("copyURL").innerHTML = "Copiar";
+    document.getElementById("copyURL").style.background = "#e9ecef";
+    document.getElementById("copyURL").style.color = "#51585f";
+    document.getElementById("shareURLContent")['value'] = `http://localhost:3000/api/Documents/${documento.id}/download`;
+  }
+
+  closeModal(id: string) {
+    this.modalService.close(id);
+  }
+
+  copyURL(inputElement){
+    document.getElementById("copyURL").innerHTML = "Copiado!";
+    document.getElementById("copyURL").style.background = "#23b180";
+    document.getElementById("copyURL").style.color = "#fff";
+    document.getElementById(inputElement).select();
+    document.execCommand('copy');
+    //inputElement.setSelectionRange(0, 0);
   }
 /*
   downloadFromServer(documentId: string) {
@@ -255,7 +280,7 @@ export class HomeComponent implements OnInit {
     }
     let fileParentNode = document.getElementById(file) as HTMLElement;
     const node = document.querySelector("#"+file) as HTMLElement;
-    node.parentNode.className += ' selectedFile';
+    node.parentNode['className'] += ' selectedFile';
   }
 
   showDownloadButton(buttonId: any) {
