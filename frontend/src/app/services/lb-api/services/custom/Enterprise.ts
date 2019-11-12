@@ -30,6 +30,35 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
+   * Patch an existing model instance or insert a new one into the data source.
+   *
+   * @param {object} data Request data.
+   *
+   *  - `data` – `{object}` - Model instance data
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Enterprise` object.)
+   * </em>
+   */
+  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PATCH";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Enterprises";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * The name of the model represented by this $resource,
    * i.e. `Enterprise`.
    */
