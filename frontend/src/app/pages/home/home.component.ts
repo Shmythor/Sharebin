@@ -321,6 +321,9 @@ export class HomeComponent implements OnInit {
 
   showFileMove2BinMessage() {
     document.getElementById('fileMove2Bin').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileMove2Bin').style.display = 'none';
+    }, 3000);
   }
 
   closeMessagefileMove2Bin(){
