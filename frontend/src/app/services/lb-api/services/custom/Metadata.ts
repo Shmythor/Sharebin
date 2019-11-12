@@ -31,7 +31,7 @@ export class MetadataApi extends BaseLoopBackApi {
   }
 
   /**
-   * Capta la relación belongsTo document.
+   * Fetches belongsTo relation document.
    *
    * @param {any} id Metadata id
    *

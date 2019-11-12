@@ -1,4 +1,7 @@
 /* tslint:disable */
+import {
+  Document
+} from '../index';
 
 declare var Object: any;
 export interface MetadataInterface {
@@ -8,7 +11,7 @@ export interface MetadataInterface {
   "updateDate": Date;
   "id"?: any;
   "documentId"?: any;
-  document?: any;
+  document?: Document;
 }
 
 export class Metadata implements MetadataInterface {
@@ -18,7 +21,7 @@ export class Metadata implements MetadataInterface {
   "updateDate": Date;
   "id": any;
   "documentId": any;
-  document: any;
+  document: Document;
   constructor(data?: MetadataInterface) {
     Object.assign(this, data);
   }
@@ -62,11 +65,13 @@ export class Metadata implements MetadataInterface {
         },
         "createDate": {
           name: 'createDate',
-          type: 'Date'
+          type: 'Date',
+          default: new Date(0)
         },
         "updateDate": {
           name: 'updateDate',
-          type: 'Date'
+          type: 'Date',
+          default: new Date(0)
         },
         "id": {
           name: 'id',
@@ -80,8 +85,8 @@ export class Metadata implements MetadataInterface {
       relations: {
         document: {
           name: 'document',
-          type: 'any',
-          model: '',
+          type: 'Document',
+          model: 'Document',
           relationType: 'belongsTo',
                   keyFrom: 'documentId',
           keyTo: 'id'

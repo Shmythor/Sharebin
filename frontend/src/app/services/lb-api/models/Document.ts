@@ -10,6 +10,8 @@ export interface DocumentInterface {
   "url"?: string;
   "size": number;
   "type": string;
+  "isDeleted": boolean;
+  "urlToShare"?: string;
   "id"?: any;
   "clientId"?: any;
   metadatas?: any[];
@@ -25,6 +27,8 @@ export class Document implements DocumentInterface {
   "url": string;
   "size": number;
   "type": string;
+  "isDeleted": boolean;
+  "urlToShare": string;
   "id": any;
   "clientId": any;
   metadatas: any[];
@@ -94,6 +98,15 @@ export class Document implements DocumentInterface {
         },
         "type": {
           name: 'type',
+          type: 'string'
+        },
+        "isDeleted": {
+          name: 'isDeleted',
+          type: 'boolean',
+          default: false
+        },
+        "urlToShare": {
+          name: 'urlToShare',
           type: 'string'
         },
         "id": {

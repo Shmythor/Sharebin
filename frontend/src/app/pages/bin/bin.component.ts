@@ -3,24 +3,18 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-bin',
+  templateUrl: './bin.component.html',
+  styleUrls: ['./bin.component.css']
 })
-export class HomeComponent implements OnInit {
-  @ViewChild('textarea', {static: false}) textarea: ElementRef;
+export class BinComponent implements OnInit {
+   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
-
-  /*
-    filters[0]: name
-    filters[1]: description
-    filters[2]: metadata
-  */
-  filters = [true, false, false];
+filters = [true, false, false];
 
 
   data: any;
@@ -52,7 +46,7 @@ export class HomeComponent implements OnInit {
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
-      where: { clientId: userId, isDeleted: false},
+      where: { clientId: userId, isDeleted: true},
       include: 'metadatas',
     };
 
@@ -64,6 +58,8 @@ export class HomeComponent implements OnInit {
       console.log('Wtf dude', error);
     });
   }
+
+  
 
   getFilter(filter: string) {
     switch (filter) {
@@ -116,34 +112,6 @@ export class HomeComponent implements OnInit {
   }
 
 
-  saveChanges() {
-    const lastItemSelected = this.itemSelected;
-
-    if (this.itemSelected.id !== '') {
-      const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
-      const dataIdx = this.data[index];
-      /* update local data */
-      this.data[index].name = this.nameInput.nativeElement.value;
-      this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadatas = this.tempMetadata;
-
-      /* update database */
-      this.docapi.replaceOrCreate( {id: this.data[index].id,
-        name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
-        clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
-      );
-
-      this.tempMetadata.forEach((elem) => {
-        console.log(elem);
-        this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
-        );
-      });
-    }
-  }
 
   postMetadata(metadata: any): Observable<HttpEvent<any>> {
 
@@ -177,18 +145,6 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id].value = event.target.value;
   }
 
-  loadUploadModal() {
-    const dialogConfig = new MatDialogConfig();
- // dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-    dialogConfig.width = '50%';
-
-    this.dialog.open(VentanaemergComponent, dialogConfig);
-    this.dialog.afterAllClosed.subscribe(() => {
-      this.getUserItemList();
-    });
-  }
-
   upload() {
     console.log('postFile');
   }
@@ -208,19 +164,31 @@ export class HomeComponent implements OnInit {
       });
   }
 
-  move2PapperBin(doc: any ) {
+  move2Home(doc: any ){
       /* update database */
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
-        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
-          (no) => { 
-            this.showFileMove2BinMessage();
-            //setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
-           },
+        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
+          (no) => {
+            this.showFileMove2HomeMessage();
+            setTimeout(() => {this.closeMessagefileMove2Home();}, 5000);
+          },
           (err) => {console.log('me cago en', err); }
 
       );
       this.getUserItemList();
+  }
+
+  deletedAllFile(){
+    const dialogConfig = new MatDialogConfig();
+    // dialogConfig.disableClose = true;
+       dialogConfig.autoFocus = true;
+       dialogConfig.width = '50%';
+   //me gustaria saber como crear dicha ventana que se llamme ventanaalertComponent
+      /* this.dialog.open(VentanaalertComponent, dialogConfig);
+       this.dialog.afterAllClosed.subscribe(() => {
+         this.getUserItemList();
+       });*/
   }
 /*
   downloadFromServer(documentId: string) {
@@ -262,11 +230,21 @@ export class HomeComponent implements OnInit {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
   }
 
-  showFileMove2BinMessage() {
-    document.getElementById('fileMove2Bin').style.display = 'block';
+  showRecoverButton(buttonId: any){
+    document.getElementById('recoverButton-' + buttonId).style.display = 'block';
   }
 
-  closeMessagefileMove2Bin(){
-    document.getElementById('fileMove2Bin').style.display = 'none';
+  hideRecoverButton(buttonId: any){
+    document.getElementById('recoverButton-'+ buttonId).style.display = 'none';
   }
+
+  showFileMove2HomeMessage() {
+    document.getElementById('fileMove2Home').style.display = 'block';
+  }
+
+  closeMessagefileMove2Home(){
+    document.getElementById('fileMove2Home').style.display = 'none';
+  }
+
+
 }

@@ -1,0 +1,39 @@
+<div class="h-100">
+    <h2>Temas</h2>
+
+    <h3 class="tc">¡Escoge un tema!</h3>
+
+    <div class="flex items-center justify-around h-100 w-100 mt5">
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-dark pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('dark')">Tema nocturno</button>
+        </div>
+
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-day pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('light')">Tema diurno</button>
+        </div>
+
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-acuatic pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('acuatic')">Tema actuático</button>
+        </div>
+    </div>
+
+    <div class="flex items-center justify-around h-100 w-100 mt5">
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-warm pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('warm')">Tema cálido</button>
+        </div>
+
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-winter pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('winter')">Tema invernal</button>
+        </div>
+
+        <div class="flex flex-column items-center w-100">
+            <div class="theme-spring pa5 w-75"> </div>
+            <button class="btn btn-primary mt3" (click)="switchTheme('spring')">Tema primaveral</button>
+        </div>
+    </div>
+</div>
