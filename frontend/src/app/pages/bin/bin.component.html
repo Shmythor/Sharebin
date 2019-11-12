@@ -1,9 +1,4 @@
 <div class="h-100">
-
-    <div id="fileMove2Home" class="alert alert-success" role="alert" style="display:none;" (click)="closeMessagefileMove2Home()">
-    <!-- Faltaría colocar bonito el botón con un buen estilo-->
-     Movido Fichero al Inicio.
-    </div>
     <h2>Papelera</h2>
 
     <!-- Barra de búsqueda y subida de archivos -->
@@ -17,18 +12,19 @@
         <div class="w-70 bg-light align-content-center">
             <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
                 <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div id="file{{dat.clientId}}" class="pl2" (mouseover)="showPapperBinButton(dat.id)" (mouseover)="showRecoverButton(dat.id)" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hidePapperBinButton(dat.id)"  (mouseout)="hideRecoverButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
+                    <div id="file{{dat.clientId}}" class="pl2" (mouseover)="showPapperBinButton(dat.id)" (mouseover)="showRecoverButton(dat.id)" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hidePapperBinButton(dat.id)" (mouseout)="hideRecoverButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)"
+                        style="border-bottom: 1px solid #c1c1c1;">
                         <p style="display: inline-block;">
                             <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
                             <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
                         </p>
-                        <button id="downloadButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="downloadFile(dat)"><!--<a style="text-decoration: none;" target="_blank" href="../../../assets/ShareBin_Logo.png">Download</a>-->
+                        <button id="downloadButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="downloadFile(dat)"><!--<a style="text-decoration: none;" target="_blank" href="../../../assets/ShareBin_Logo.png">Download</a>-->
                             Download 
                         </button>
-                        <button id="papperBinButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="deletedFile(dat.id)">
+                        <button id="papperBinButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="deletedFile(dat.id)">
                             Deleted
                         </button>
-                        <button id="recoverButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="move2Home(dat)">
+                        <button id="recoverButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="move2Home(dat)">
                             Recuperar
                         </button>
                     </div>
@@ -59,5 +55,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="fileMove2Home" class="alert alert-success w-70" role="alert" style="display:none;" (click)="closeMessagefileMove2Home()">
+        <!-- Faltaría colocar bonito el botón con un buen estilo-->
+        Movido Fichero al Inicio.
     </div>
 </div>

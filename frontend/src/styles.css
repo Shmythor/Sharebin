@@ -12,23 +12,20 @@ body {
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.arribaEmergente{
-    
+.arribaEmergente {    
     margin-left: 10%;
     margin-right: 10%;
     text-align: center;
 }
 
-.centroEmergente{
-    
+.centroEmergente {    
     height: 60%;
     margin-left: 10%;
     margin-right: 10%;
     text-align: center;
 }
 
-.botonesEmergente{
-   
+.botonesEmergente {   
     align-self: flex-end;
     text-align: center;
 }
