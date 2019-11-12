@@ -213,7 +213,10 @@ export class HomeComponent implements OnInit {
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
-          (no) => { this.showFileMove2BinMessage(); },
+          (no) => { 
+            this.showFileMove2BinMessage();
+            //setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
+           },
           (err) => {console.log('me cago en', err); }
 
       );

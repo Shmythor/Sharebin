@@ -563,14 +563,17 @@ export class ClientApi extends BaseLoopBackApi {
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
     "/Clients/:id/documents";
     let _routeParams: any = {
+ 
       id: id
     };
+   
     let _postBody: any = {};
     let _urlParams: any = {};
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
+ 
   /**
    * Recuentos documents de Client.
    *
@@ -709,6 +712,7 @@ export class ClientApi extends BaseLoopBackApi {
    * Dependiendo del valor del parámetro `include`, el cuerpo puede contener propiedades adicionales:
    * 
    *   - `user` - `U+007BUserU+007D` - Datos del usuario conectado actualmente. (`include=user`)
+
    * 
    *
    */
@@ -873,6 +877,7 @@ export class ClientApi extends BaseLoopBackApi {
       }
     };
     let _urlParams: any = {};
+
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
@@ -916,6 +921,7 @@ export class ClientApi extends BaseLoopBackApi {
    *
    *  - `res` – `{object}` - 
    *
+
    *  - `clientId` – `{string}` - 
    *
    * @returns {object} An empty reference that will be
@@ -935,6 +941,34 @@ export class ClientApi extends BaseLoopBackApi {
     let _postBody: any = {};
     let _urlParams: any = {};
     if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Changing/adding theme for user
+   *
+   * @param {object} data Request data.
+   *
+   *  - `clientId` – `{string}` - 
+   *
+   *  - `theme` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * This method returns no data.
+   */
+  public setTheme(clientId: any = {}, theme: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Clients/setTheme";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof clientId !== 'undefined' && clientId !== null) _urlParams.clientId = clientId;
+    if (typeof theme !== 'undefined' && theme !== null) _urlParams.theme = theme;
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
