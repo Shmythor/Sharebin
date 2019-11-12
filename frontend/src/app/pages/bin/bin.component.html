@@ -1,1 +1,64 @@
-<p>bin works!</p>
+<div class="h-100">
+    <h2>Papelera</h2>
+
+    <!-- Barra de búsqueda y subida de archivos -->
+    <div class="flex justify-between mt4">
+        <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+        <button class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()">Vaciar Papelera</button>
+    </div>
+
+    <!-- Listado de archivos e información -->
+    <div class="flex justify-between mt4 h-75">
+        <div class="w-70 bg-light align-content-center">
+            <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
+                <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
+                    <div id="file{{dat.clientId}}" class="pl2" (mouseover)="showPapperBinButton(dat.id)" (mouseover)="showRecoverButton(dat.id)" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hidePapperBinButton(dat.id)" (mouseout)="hideRecoverButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)"
+                        style="border-bottom: 1px solid #c1c1c1;">
+                        <p style="display: inline-block;">
+                            <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
+                            <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
+                        </p>
+                        <button id="downloadButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="downloadFile(dat)"><!--<a style="text-decoration: none;" target="_blank" href="../../../assets/ShareBin_Logo.png">Download</a>-->
+                            Download 
+                        </button>
+                        <button id="papperBinButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="deletedFile(dat.id)">
+                            Deleted
+                        </button>
+                        <button id="recoverButton-{{dat.id}}" class="btn btn-outline-primary btn-sm mr2 ml2" style="display:none;float:right;" (click)="move2Home(dat)">
+                            Recuperar
+                        </button>
+                    </div>
+                </div>
+            </cdk-virtual-scroll-viewport>
+        </div>
+        <div class="w-25 flex flex-column justify-between">
+            <div>
+                <div>Archivo seleccionado</div>
+                <div class="line-breaker mb3"></div>
+
+                <div class="w-100 mb3">
+                    <label for="itemName" class="w-100">Nombre</label>
+                    <input #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                </div>
+                <div class="w-100 mb2">
+                    <label for="itemDescription" class="w-100">Descripción</label>
+                    <textarea #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                </div>
+                <div class="w-100 mb2">
+                    <div>Metadatos</div>
+                    <div class="flex flex-wrap">
+                        <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
+                            <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
+                            <input [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fileMove2Home" class="alert alert-success w-70" role="alert" style="display:none;" (click)="closeMessagefileMove2Home()">
+        <!-- Faltaría colocar bonito el botón con un buen estilo-->
+        Movido Fichero al Inicio.
+    </div>
+</div>
