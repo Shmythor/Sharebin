@@ -42,28 +42,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": false,
-          "create": true,
-          "exists": true,
-          "findById": true,
-          "find": true,
-          "updateAll": true,
-          "deleteById": true,
-          "count": true,
-          "download": true,
-          "__get__metadatas": true,
-          "__create__metadatas": true,
-          "__delete__metadatas": true,
-          "__updateById__metadatas": true,
-          "__destroyById__metadatas": true,
-          "patchAttributes": true,
-          "updateAttributes": true,
-          "findOne": true,
-          "patchOrCreate": true,
-          "replaceOrCreate": true,
-           "createURL" : true,
-          "downloadByLink": true
-
+          "*": true
         }
       }
     }
@@ -74,19 +53,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": true,
-          "create": true,
-          "exists": true,
-          "findById": true,
-          "find": true,
-          "updateAll": true,
-          "deleteById": true,
-          "count": true,
-          "patchAttributes": true,
-          "updateAttributes": true,
-          "findOne": true,
-          "patchOrCreate": true,
-          "replaceOrCreate": true
+          "*": true
         }
       }
     }
@@ -97,19 +64,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": false,
-          "create": true,
-          "exists": true,
-          "findById": true,
-          "find": true,
-          "updateAll": true,
-          "deleteById": true,
-          "count": true,
-          "patchAttributes": true,
-          "updateAttributes": true,
-          "findOne": true,
-          "patchOrCreate": true,
-          "replaceOrCreate": true
+          "*": true
         }
       }
     }
@@ -120,7 +75,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": false
+          "*": true
         }
       }
     }
@@ -131,23 +86,7 @@
     "options": {
       "remoting": {
         "sharedMethods": {
-          "*": false,
-          "login": true,
-          "logout": true,
-          "create": true,
-          "exists": true,
-          "find": true,
-          "findById": true,
-          "deleteById": true,
-          "count": true,
-          "uploadDocument": true,
-          "getDocument": true,
-          "patchAttributes": true,
-          "updateAttributes": true,
-          "findOne": true,
-          "patchOrCreate": true,
-          "replaceOrCreate": true,
-          "setTheme" : true
+          "*": true
         }
       }
     }
