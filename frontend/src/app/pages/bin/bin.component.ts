@@ -184,6 +184,7 @@ filters = [true, false, false];
     this.docapi.deleteById(id).subscribe(
         (no) => {
           this.showFileDeletedFileMessage();
+          setTimeout(() => {this.closeMessagefileDeletedFile();}, 5000);
         },
         (err) => {console.log('me cago en', err); }
 
