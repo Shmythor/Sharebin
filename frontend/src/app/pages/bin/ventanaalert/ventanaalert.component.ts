@@ -22,14 +22,17 @@ export class VentanaalertComponent implements OnInit {
     }
 
     deleteAllElement(){
-     this.docapi.destroyAll([{isDeleted: false}]).subscribe(
-       ()=>{ this.showConfirm()});
-     
+     this.docapi.destroyAll({isDeleted: true}).subscribe(() => {
+      this.showConfirm();
+    });
     }
 
 
     showConfirm(){
       document.getElementById('confirmDeleted').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('confirmDeleted').style.display = 'none';
+      }, 3000);
     }
 
 
