@@ -34,6 +34,7 @@ import { SocketConnection } from './services/lb-api/sockets/socket.connections';
 import { SocketDriver } from './services/lb-api/sockets/socket.driver';
 import { ThemesComponent } from './pages/themes/themes.component';
 import { BinComponent } from './pages/bin/bin.component';
+import { VentanaalertComponent } from './pages/bin/ventanaalert/ventanaalert.component';
 
 
 
@@ -50,9 +51,10 @@ import { BinComponent } from './pages/bin/bin.component';
     VentanaemergComponent,
     UploadFilesComponent,
     ThemesComponent,
-    BinComponent
+    BinComponent,
+    VentanaalertComponent
   ],
-  entryComponents: [ VentanaemergComponent ],
+  entryComponents: [ VentanaemergComponent, VentanaalertComponent],
   imports: [
     BrowserModule,
     HttpClientModule,

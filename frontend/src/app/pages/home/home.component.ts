@@ -214,7 +214,8 @@ export class HomeComponent implements OnInit {
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
           (no) => { this.showFileMove2BinMessage(); },
-          (err) => {console.log('me cago en', err); }
+          (err) => {console.log('me cago en', err); },
+          () => { this.itemSelected = {id: '', name: '', description: '', metadatas: []};}
 
       );
       this.getUserItemList();
@@ -261,6 +262,9 @@ export class HomeComponent implements OnInit {
 
   showFileMove2BinMessage() {
     document.getElementById('fileMove2Bin').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileMove2Bin').style.display = 'none';
+    }, 3000);
   }
 
   closeMessagefileMove2Bin(){

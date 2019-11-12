@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
-import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
+import { VentanaalertComponent } from 'src/app/pages/bin/ventanaalert/ventanaalert.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
+import { VentanaemergComponent } from '../home/components/ventanaemerg/ventanaemerg.component';
 
 @Component({
   selector: 'app-bin',
@@ -58,8 +59,6 @@ filters = [true, false, false];
       console.log('Wtf dude', error);
     });
   }
-
-  
 
   getFilter(filter: string) {
     switch (filter) {
@@ -170,7 +169,8 @@ filters = [true, false, false];
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
           (no) => {this.showFileMove2HomeMessage(); },
-          (err) => {console.log('me cago en', err); }
+          (err) => {console.log('me cago en', err); },
+          ()=> { this.itemSelected = {id: '', name: '', description: '', metadatas: []};}
 
       );
       this.getUserItemList();
@@ -178,14 +178,14 @@ filters = [true, false, false];
 
   deletedAllFile(){
     const dialogConfig = new MatDialogConfig();
-    // dialogConfig.disableClose = true;
-       dialogConfig.autoFocus = true;
-       dialogConfig.width = '50%';
-   //me gustaria saber como crear dicha ventana que se llamme ventanaalertComponent
-      /* this.dialog.open(VentanaalertComponent, dialogConfig);
-       this.dialog.afterAllClosed.subscribe(() => {
+ // dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.width = '50%';
+
+    this.dialog.open(VentanaalertComponent, dialogConfig);
+    this.dialog.afterAllClosed.subscribe(() => {
          this.getUserItemList();
-       });*/
+       });
   }
 /*
   downloadFromServer(documentId: string) {
@@ -237,6 +237,9 @@ filters = [true, false, false];
 
   showFileMove2HomeMessage() {
     document.getElementById('fileMove2Home').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('fileMove2Home').style.display = 'none';
+    }, 3000);
   }
 
   closeMessagefileMove2Home(){
