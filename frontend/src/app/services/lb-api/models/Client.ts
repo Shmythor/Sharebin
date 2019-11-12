@@ -4,6 +4,7 @@ declare var Object: any;
 export interface ClientInterface {
   "name": string;
   "createDate": Date;
+  "theme"?: string;
   "realm"?: string;
   "username"?: string;
   "email": string;
@@ -20,6 +21,7 @@ export interface ClientInterface {
 export class Client implements ClientInterface {
   "name": string;
   "createDate": Date;
+  "theme": string;
   "realm": string;
   "username": string;
   "email": string;
@@ -71,6 +73,10 @@ export class Client implements ClientInterface {
         "createDate": {
           name: 'createDate',
           type: 'Date'
+        },
+        "theme": {
+          name: 'theme',
+          type: 'string'
         },
         "realm": {
           name: 'realm',
