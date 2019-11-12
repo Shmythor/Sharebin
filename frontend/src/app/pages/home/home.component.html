@@ -1,13 +1,10 @@
-<div class="h-100 w-100" >
+<div class="h-100 w-100">
     <!-- Barra de búsqueda y subida de archivos -->
-    <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display:none;" (click)="closeMessagefileMove2Bin()" >
-    <!-- Faltaría colocar bonito el botón con un buen estilo-->
-     Movido Fichero a la papelera.
-    </div>
+
     <div class="flex justify-between">
-     <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display:none;">
-            Movido Fichero a la papelera.<button (click)="closeMessagefileMove2Bin()" >X</button>
-            </div>
+        <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display:none;">
+            Movido Fichero a la papelera.<button (click)="closeMessagefileMove2Bin()">X</button>
+        </div>
         <div class="w-70 flex">
             <h2>Inicio</h2>
             <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
@@ -37,11 +34,11 @@
                             <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
                             <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
                         </p>
-                        <button id="papperBinButton-{{dat.id}}" class="btn btn-outline-danger btn-sm" style="display:none;float:right;" (click)="move2PapperBin(dat)">
-                        Delete
+                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr4" (click)="downloadFile(dat)">
+                            <img src="../../../assets/icons/share-black.svg" width="24">
                         </button>
-                        <button id="downloadButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="downloadFile(dat)">
-                            Download 
+                        <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
+                            <img src="../../../assets/icons/bin-black.svg" fill="black" width="24">
                         </button>
                         <img id="shareIcon-{{dat.id}}" src="../../../assets/icons/share.svg" width="25" alt="share icon" style="display:none;float:right;cursor:pointer;" (click)="shareFile(dat)">
                     </div>
@@ -76,5 +73,10 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display: block;" (click)="closeMessagefileMove2Bin()">
+        <!-- Faltaría colocar bonito el botón con un buen estilo-->
+        Movido Fichero a la papelera.
     </div>
 </div>

@@ -12,4 +12,7 @@ export class ThemesComponent implements OnInit {
   ngOnInit() {
   }
 
+  switchTheme(newTheme: string) {
+   document.getElementById('currentTheme')['href'] = `./assets/themes/${newTheme}.css`;
+  }
 }

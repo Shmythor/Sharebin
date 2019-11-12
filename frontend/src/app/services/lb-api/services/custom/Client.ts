@@ -30,6 +30,35 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
+   * Patch an existing model instance or insert a new one into the data source.
+   *
+   * @param {object} data Request data.
+   *
+   *  - `data` – `{object}` - Model instance data
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * <em>
+   * (The remote method definition does not provide any description.
+   * This usually means the response is a `Client` object.)
+   * </em>
+   */
+  public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "PATCH";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/Clients";
+    let _routeParams: any = {};
+    let _postBody: any = {
+      data: data
+    };
+    let _urlParams: any = {};
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
    * Login a user with username/email and password.
    *
    * @param {string} include Related objects to include in the response. See the description of return value for more details.
@@ -47,17 +76,17 @@ export class ClientApi extends BaseLoopBackApi {
    *   populated with the actual data once the response is returned
    *   from the server.
    *
-   * El cuerpo de respuesta contiene propiedades de la AccessToken creada durante el inicio de la sesión.
-   * Dependiendo del valor del parámetro `include`, el cuerpo puede contener propiedades adicionales:
-   *
-   *   - `user` - `U+007BUserU+007D` - Datos del usuario conectado actualmente. (`include=user`)
-   *
+   * The response body contains properties of the AccessToken created on login.
+   * Depending on the value of `include` parameter, the body may contain additional properties:
+   * 
+   *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
+   * 
    *
    */
   public login(credentials: any, include: any = 'user', rememberMe: boolean = true, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-      "/Clients/login";
+    "/Clients/login";
     let _routeParams: any = {};
     let _postBody: any = {
       credentials: credentials
@@ -67,16 +96,16 @@ export class ClientApi extends BaseLoopBackApi {
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders)
       .pipe(
         map(
-          (response: any) => {
-            response.ttl = parseInt(response.ttl);
-            response.rememberMe = rememberMe;
-            this.auth.setToken(response);
-            return response;
-          }
-        )
+        (response: any) => {
+          response.ttl = parseInt(response.ttl);
+          response.rememberMe = rememberMe;
+          this.auth.setToken(response);
+          return response;
+        }
+      )
       );
-    return result;
-
+      return result;
+      
   }
 
   /**
@@ -95,28 +124,28 @@ export class ClientApi extends BaseLoopBackApi {
   public logout(customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-      "/Clients/logout";
+    "/Clients/logout";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
-    _urlParams.access_token = this.auth.getAccessTokenId();
-    this.auth.clear();
+       _urlParams.access_token = this.auth.getAccessTokenId();
+    this.auth.clear(); 
     let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
     return result;
   }
 
   /**
-   * Upload a new document. Arguments:
-   * file: File to upload
-   * *: Params for the document
+   * Upload a new document. Arguments: 
+         * file: File to upload
+         * *: Params for the document
    *
    * @param {object} data Request data.
    *
-   *  - `req` – `{object}` -
+   *  - `req` – `{object}` - 
    *
-   *  - `res` – `{object}` -
+   *  - `res` – `{object}` - 
    *
-   *  - `clientId` – `{string}` -
+   *  - `clientId` – `{string}` - 
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -130,7 +159,7 @@ export class ClientApi extends BaseLoopBackApi {
   public uploadDocument(req: any = {}, res: any = {}, clientId: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "POST";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-      "/Clients/:clientId/uploadDocument";
+    "/Clients/:clientId/uploadDocument";
     let _routeParams: any = {};
     let _postBody: any = {};
     let _urlParams: any = {};
@@ -157,7 +186,7 @@ export class ClientApi extends BaseLoopBackApi {
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() + "/Clients" + "/:id";
     let id: any = this.auth.getCurrentUserId();
     if (id == null)
-      id = '__anonymous__';
+    id = '__anonymous__';
     let _routeParams: any = { id: id };
     let _urlParams: any = {};
     let _postBody: any = {};

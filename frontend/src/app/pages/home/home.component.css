@@ -53,3 +53,10 @@
     height: 1px;
     background: #C4C4C4;
 }
+
+.file-button {
+    float: right;
+    background-color: transparent;
+    display: none;
+    border: none;
+}
