@@ -3,14 +3,15 @@ const fs = require('fs');
 const path = require('path');
 // const assert = require('assert');
 const describe = require('mocha').describe
+const chai = require('chai-http')
 const app = require('../server/server');
 
 
 let ClientModel = app.models.Client;
 let DocumentModel = app.models.Document;
+let testID;
 
-describe("Create user test", async () => {
-    // borrar antes y depués del test
+before("Create user test", () => {
     let client = { 
         username: 'Test',
         email: 'test1@doe.com', 
@@ -18,24 +19,36 @@ describe("Create user test", async () => {
         name: 'Test', 
         createDate: Date.now() 
     };
-    let testID;
-    try {
-        // await insertTestClient(client);
-        await deleteTestClient()
-        await insertTestClient(client);
-        testID = await getTestID();
-    } catch(err) {
-        console.log('An error ocurred during insertTestClient and/or deleteTestClient: ', err);
-    }
+    // await insertTestClient(client);
+    // await deleteTestClient()
+    // await insertTestClient(client);
+    // testID = await getTestID();
 
-    it("File size limited to 20MB", () => {
+    deleteTestClient().then(() => {
+        console.log('deleteTestClient promise done. Calling insertTestClient');
+        return insertTestClient(client);
+    })
+    .then(() => {
+        console.log('insertTestClient promise done. Calling getTestID');
+        getTestID();
+    })
+    .then((id) => {
+        testID = id;
+        console.log('Current testID value: ', testID)
+    })
+    .catch(err => {
+        console.log('An error ocurred during insertTestClient and/or deleteTestClient: ', err);
+    })
+});
+
+describe("File size limit test", async () => {
+    it("Test if can POST a file under 20MB", () => {
         let direction = path.join(__dirname, '/git_gia.pdf');
         console.log('File direction to use in postFile method: ',direction);
         console.log('Test id to use in postFile method: ', testID);
         let file = fs.readFileSync(direction);
         postFile(file, testID, "Archivo test de subida")
     })
-
 })
 
     
