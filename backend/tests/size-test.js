@@ -45,7 +45,6 @@ describe("File size limit test", () => {
         chai.request(url)
             .post(`/api/Clients/${testClientID}/uploadDocument`)
             .set('content-type', 'application/x-www-form-urlencoded')
-            // .send({myparam: 'test'})
             .send(formData)
             .end((err, res) => {
                 if(err) {
