@@ -8,18 +8,18 @@ chai.use(chaiHttp);
 const url= 'http://localhost:3000';
 
 let testClient = { 
-    username: 'Test',
-    email: 'test1@doe.com', 
-    password: 'password', 
-    name: 'Test', 
-    createDate: Date.now() 
+    "username": 'Test',
+    "email": 'test1@doe.com', 
+    "password": 'password', 
+    "name": 'Test', 
+    "createDate": Date.now() 
 };
 
 describe('Insert a client: ',()=>{
 
 	it('should insert a client', (done) => {
 		chai.request(url)
-			.post('/Clients')
+			.post('/api/Clients')
 			.send(testClient)
 			.end((err,res) => {
 				console.log(res.body)
