@@ -15,7 +15,7 @@ body {
     background: var(--main-brand-color) !important;
 }
 
-.navbar-bg, .btn-primary {
+.navbar-bg {
     background: var(--main-brand-color) !important;
     /* fallback for old browsers */
     background: -webkit-linear-gradient(132deg, var(--main-brand-color) 0%, var(--light-accent) 100%) !important;
