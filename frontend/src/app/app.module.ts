@@ -54,7 +54,7 @@ import { ShareURLPopupComponent } from './pages/home/components/share-urlpopup/s
     UploadFilesComponent,
     ThemesComponent,
     BinComponent,
-    VentanaalertComponent
+    VentanaalertComponent,
     ShareURLPopupComponent
   ],
   entryComponents: [ VentanaemergComponent, VentanaalertComponent],
