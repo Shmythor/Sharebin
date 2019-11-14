@@ -11,6 +11,7 @@ body {
 
 .btn-primary {
     background: var(--main-brand-color);
+    border: none;
 }
 .navbar-bg {
     background: var(--light-accent) !important;

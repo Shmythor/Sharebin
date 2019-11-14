@@ -13,6 +13,7 @@ body {
 .btn-primary {
     background: var(--dark-accent);
     color: var(--dark-shades);
+    border: none;
 }
 .navbar-bg {
     background: var(--main-brand-color) !important;

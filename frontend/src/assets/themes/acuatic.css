@@ -10,6 +10,11 @@ body {
    
 }
 
+.btn-primary {
+    border: none;
+    background: var(--main-brand-color) !important;
+}
+
 .navbar-bg, .btn-primary {
     background: var(--main-brand-color) !important;
     /* fallback for old browsers */
