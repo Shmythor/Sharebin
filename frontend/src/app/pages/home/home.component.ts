@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
-
+    
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
@@ -212,6 +212,7 @@ export class HomeComponent implements OnInit {
 
   move2PapperBin(doc: any ) {
       /* update database */
+      
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
@@ -258,6 +259,7 @@ export class HomeComponent implements OnInit {
     document.getElementById("copyURL").style.background = "#23b180";
     document.getElementById("copyURL").style.color = "#fff";
     document.getElementById(inputElement).focus(); //Antes select
+   // (document.getElementById(inputElement) as HTMLInputElement).select();
     document.execCommand('copy');
   }
 /*

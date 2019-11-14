@@ -10,15 +10,19 @@
         "start": "node .",
         "posttest": "npm run lint && npm audit",
         "build:sdk": "./node_modules/.bin/lb-sdk server/server.js ./frontend/src/app/shared/sdk",
-        "regenmethods": "./node_modules/.bin/lb-sdk ./server/server.js ../frontend/src/app/services/lb-api"
+        "regenmethods": "./node_modules/.bin/lb-sdk ./server/server.js ../frontend/src/app/services/lb-api",
+        "test": "mocha"
     },
     "dependencies": {
         "@types/socket.io-client": "^1.4.32",
+        "chai": "^4.2.0",
+        "chai-http": "^4.3.0",
         "compression": "^1.0.3",
         "cors": "^2.5.2",
         "crypto": "^1.0.1",
         "diff": ">=3.5.0",
         "growl": "^1.10.5",
+        "form-data": "^3.0.0",
         "helmet": "^3.21.2",
         "loopback": "^3.26.0",
         "loopback-boot": "^2.6.5",
