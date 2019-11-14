@@ -23,6 +23,14 @@
         <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
     </jw-modal>
 
+    <ejs-grid [dataSource]='datos' [allowSorting]="true">
+        <e-columns>
+            <e-column field='OrderID' headerText='Order ID' textAlign='Right'></e-column>
+            <e-column field='CustomerID' headerText='Customer ID'></e-column>
+            <e-column field='Freight' headerText='Freight' textAlign='Right' format='C2'></e-column>
+            <e-column field='OrderDate' headerText='Order Date' textAlign='Right' format='yMd'></e-column>
+        </e-columns>
+    </ejs-grid>
     <!-- Listado de archivos e información -->
     <div class="flex justify-between pt5 pb4 h-100">
         <div class="bg-light align-content-center" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">
@@ -72,10 +80,5 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display: block;" (click)="closeMessagefileMove2Bin()">
-        <!-- Faltaría colocar bonito el botón con un buen estilo-->
-        Movido Fichero a la papelera.
     </div>
 </div>

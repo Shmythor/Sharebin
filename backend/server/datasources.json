@@ -19,7 +19,7 @@
     "nameConflict": "makeUnique",
     "connector": "loopback-component-storage",
     "provider": "filesystem",
-    "root": "/home/crigasro/Escritorio/Sharebin/backend/server/storage",
+    "root": "./server/storage",
     "maxFileSize": "20971520‬"
   }
 }

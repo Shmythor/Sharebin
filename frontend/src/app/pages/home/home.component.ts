@@ -8,6 +8,8 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 
+import { testData } from './datasource';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,6 +18,8 @@ import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 export class HomeComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
+
+  public datos: Object[];
 
   /*
     filters[0]: name
@@ -48,6 +52,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.datos = testData;
     this.getUserItemList();
   }
 
@@ -228,10 +233,10 @@ export class HomeComponent implements OnInit {
 
   shareFile(document){
     this.resetShareModal();
-    this.modalService.open("shareURLModal");
     this.docapi.createURL(document.id).subscribe((docURL) => {
       console.log(docURL);
       this.setupModal(docURL);
+      this.modalService.open("shareURLModal");
     }, (error) => {
       console.log('URL no creada', error);
     });
