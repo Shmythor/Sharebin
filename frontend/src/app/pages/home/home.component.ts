@@ -259,6 +259,7 @@ export class HomeComponent implements OnInit {
     document.getElementById("copyURL").style.background = "#23b180";
     document.getElementById("copyURL").style.color = "#fff";
     (document.getElementById(inputElement) as HTMLInputElement).select();
+    // document.getElementById(inputElement).select();
     document.execCommand('copy');
   }
 /*
