@@ -1,12 +1,30 @@
-.navbar-bg, .btn-primary {
-    background: #f7f7f7  !important;
-    color: #000000;
-    border: none !important;
-}
-.btn-primary:hover {
-    color: #000000 !important;
+html,
+body {
+    --light-shades: rgb(228, 236, 240);
+    --light-accent: #f5f7fa;
+    --main-brand-color: #b8c6db;
+    --dark-accent: #8EC5FC;
+    --dark-shades: #212E2B;
+
+    background: var(--light-shades) !important;
+   
 }
 
-div { 
-    color: #000000 !important;
+.btn-primary {
+    background: var(--dark-accent);
+    color: var(--dark-shades);
+    border: none;
 }
+.navbar-bg {
+    background: var(--main-brand-color) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(315deg, #f5f7fa 0%, #b8c6db 74%) !important; 
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(315deg, #f5f7fa 0%, #b8c6db 74%) !important; 
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+div {
+    color: var(--dark-shades)
+}
+
+
