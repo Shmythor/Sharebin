@@ -10,17 +10,30 @@ body {
    
 }
 
-.btn-primary {
-    background: var(--dark-accent);
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
+    border: none !important;
     color: var(--dark-shades);
-    border: none;
 }
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades);
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+    color: var(--dark-shades);
+}
+
+
 .navbar-bg {
     background: var(--main-brand-color) !important;
     /* fallback for old browsers */
-    background: -webkit-linear-gradient(315deg, #f5f7fa 0%, #b8c6db 74%) !important; 
+    background: -webkit-linear-gradient(315deg, #b8c6db 0%, #b8c6db 74%) !important; 
     /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(315deg, #f5f7fa 0%, #b8c6db 74%) !important; 
+    background: linear-gradient(315deg, #b8c6db 0%, #b8c6db 74%) !important; 
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 div {
