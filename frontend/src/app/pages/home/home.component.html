@@ -1,9 +1,6 @@
-<div class="h-100 w-100">
+<div class="h-100 w-100" style="position: relative">
     <!-- Barra de búsqueda y subida de archivos -->
     <div class="flex justify-between">
-        <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display:none;">
-            Movido Fichero a la papelera.<button (click)="closeMessagefileMove2Bin()">X</button>
-        </div>
         <div class="w-70 flex">
             <h2>Inicio</h2>
             <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
@@ -28,7 +25,9 @@
         <div class="bg-light align-content-center" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">
             <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
                 <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div id="file{{dat.id}}" class="pl2" (click)="fileSelected('file'+dat.id)" (mouseover)="showDownloadButton(dat.id);showPapperBinButton(dat.id);showShareIcon(dat.id)" (mouseout)="hideDownloadButton(dat.id);hidePapperBinButton(dat.id);hideShareIcon(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
+                    <div id="file{{dat.id}}" class="pl2" (click)="fileSelected('file'+dat.id)"
+                    (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id)"
+                    (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
                         <p style="display: inline-block;">
                             <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
                             <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
@@ -39,7 +38,7 @@
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
                             <img src="../../../assets/icons/bin-black.svg" fill="black" width="24">
                         </button>
-                        <img id="shareIcon-{{dat.id}}" src="../../../assets/icons/share.svg" width="25" alt="share icon" style="display:none;float:right;cursor:pointer;" (click)="shareFile(dat)">
+                        <img id="shareIcon-{{dat.id}}" src="../../../assets/icons/share.svg" width="25" alt="share icon" style="display:none; float:right; cursor:pointer;" (click)="shareFile(dat)">
                     </div>
                 </div>
             </cdk-virtual-scroll-viewport>
@@ -74,7 +73,7 @@
         </div>
     </div>
 
-    <div id="fileMove2Bin" class="alert alert-danger" role="alert" style="display: block;" (click)="closeMessagefileMove2Bin()">
+    <div id="fileMove2Bin" class="alert alert-danger w-100" role="alert" style="display: block; position: absolute; bottom: 0" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
         <!-- Faltaría colocar bonito el botón con un buen estilo-->
         Movido Fichero a la papelera.
     </div>

@@ -37,3 +37,5 @@ body {
 .searchbar-bg, input, textarea, cdk-virtual-scroll-viewport {
     background: var(--light-accent) !important;
 }
+
+div { color: var(--light-shades); }
