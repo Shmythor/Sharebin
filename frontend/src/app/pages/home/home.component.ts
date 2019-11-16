@@ -58,25 +58,6 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  clearSortFilter(){
-    this.dataOrder = "";
-  }
-
-  checkFilterSort():string{
-    let sort = "";
-
-    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
-      sort = "ASC";
-    }else if(this.dataOrder.indexOf("ASC") >= 0){
-      sort = "DESC";
-    }else{
-      this.dataOrder = "";
-      sort = "";
-    }
-
-    return sort;
-  }
-
   deleteSortIcons(){
     if(document.getElementById("sortUpIcon") != null){
       document.getElementById("sortUpIcon").remove();
