@@ -82,6 +82,15 @@ filters = [true, false, false];
     }, err => { console.log('getDocIDbyName ERROR: ', err); })
   }
 
+  fileSelected(file: string){
+    if(document.getElementsByClassName("selectedFile")[0] != null){
+      document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
+    }
+    let fileParentNode = document.getElementById(file) as HTMLElement;
+    const node = document.querySelector("#"+file) as HTMLElement;
+    node.parentNode['className'] += ' selectedFile';
+  }
+
   getSearch(search: string) {
     this.searchValue = search;
 

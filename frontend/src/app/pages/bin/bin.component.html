@@ -1,9 +1,13 @@
 <div class="h-100">
-    <h2>Papelera</h2>
+    
 
     <!-- Barra de búsqueda y subida de archivos -->
-    <div class="flex justify-between mt4">
-        <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+    <div class="flex justify-between">
+        <div class="w-70 flex">
+            <h2>Papelera</h2>
+            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+        </div>
+
         <button class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()">Vaciar Papelera</button>
     </div>
 
@@ -31,7 +35,7 @@
                 </div>
             </cdk-virtual-scroll-viewport>
         </div>
-        <div class="w-25 flex flex-column justify-between">
+        <div class="w-25 flex flex-column justify-between" >
             <div>
                 <div>Archivo seleccionado</div>
                 <div class="line-breaker mb3"></div>

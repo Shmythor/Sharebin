@@ -35,9 +35,29 @@
     border-radius: 2px;
 }
 
+.pb2 {
+    padding-bottom: 0;
+}
+
+.pl2>img,
+.pl2>button {
+    margin: 0 10px;
+}
+
+.selectedFile {
+    background-color: #D9DDF3;
+}
+
 .line-breaker {
     /* Rectangle */
     width: 100%;
     height: 1px;
     background: #C4C4C4;
+}
+
+.file-button {
+    float: right;
+    background-color: transparent;
+    display: none;
+    border: none;
 }
