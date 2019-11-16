@@ -2,11 +2,11 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
-//import { ShareURLComponent} from 'src/app/pages/home/components/share-urlpopup/share-urlpopup.component';
 import { ModalService } from '../../shared/_modal';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
+import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
 @Component({
   selector: 'app-home',
@@ -36,7 +36,8 @@ export class HomeComponent implements OnInit {
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
-             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService) {
+             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
+             public hideAndSeekService: HideAndSeekService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -57,7 +58,7 @@ export class HomeComponent implements OnInit {
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
-    
+
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
@@ -80,13 +81,13 @@ export class HomeComponent implements OnInit {
   getDocIDbyName(name: string) {
     this.docapi.find().subscribe(docArray => {
       docArray.forEach(doc => {
-        let docname = doc[0].name;
+        const docname = doc[0].name;
         console.log(docname);
-        if(docname == name) {
+        if (docname === name) {
           return doc[0].id;
         }
-      })
-    }, err => { console.log('getDocIDbyName ERROR: ', err); })
+      });
+    }, err => { console.log('getDocIDbyName ERROR: ', err); });
   }
 
   getSearch(search: string) {
@@ -212,13 +213,12 @@ export class HomeComponent implements OnInit {
 
   move2PapperBin(doc: any ) {
       /* update database */
-      
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
-          (no) => { 
-            this.showFileMove2BinMessage();
-            //setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
+          (no) => {
+            this.hideAndSeekService.showFileMove2BinMessage();
+            // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
            },
           (err) => {console.log('me cago en', err); }
 
@@ -226,9 +226,9 @@ export class HomeComponent implements OnInit {
       this.getUserItemList();
   }
 
-  shareFile(document){
+  shareFile(document) {
     this.resetShareModal();
-    this.modalService.open("shareURLModal");
+    this.modalService.open('shareURLModal');
     this.docapi.createURL(document.id).subscribe((docURL) => {
       console.log(docURL);
       this.setupModal(docURL);
@@ -237,9 +237,9 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  setupModal(urlDocumento){
-    var documentShareURL = "http://localhost:3000/api/documents/downloadByLink/" + urlDocumento;
-    document.getElementById("shareURLContent")['value'] = documentShareURL;
+  setupModal(urlDocumento) {
+    const documentShareURL = 'http://localhost:3000/api/documents/downloadByLink/' + urlDocumento;
+    (document.getElementById('shareURLContent') as HTMLInputElement).value = documentShareURL;
   }
 
   closeModal(id: string) {
@@ -247,87 +247,29 @@ export class HomeComponent implements OnInit {
     this.modalService.close(id);
   }
 
-  resetShareModal(){
-    document.getElementById("shareURLContent")['value'] = "";
-    document.getElementById("copyURL").innerHTML = "Copiar";
-    document.getElementById("copyURL").style.background = "#e9ecef";
-    document.getElementById("copyURL").style.color = "#51585f";
+  resetShareModal() {
+    (document.getElementById('shareURLContent') as HTMLInputElement).value = '';
+    document.getElementById('copyURL').innerHTML = 'Copiar';
+    document.getElementById('copyURL').style.background = '#e9ecef';
+    document.getElementById('copyURL').style.color = '#51585f';
   }
 
-  copyURL(inputElement){
-    document.getElementById("copyURL").innerHTML = "Copiado!";
-    document.getElementById("copyURL").style.background = "#23b180";
-    document.getElementById("copyURL").style.color = "#fff";
+  copyURL(inputElement) {
+    document.getElementById('copyURL').innerHTML = 'Copiado!';
+    document.getElementById('copyURL').style.background = '#23b180';
+    document.getElementById('copyURL').style.color = '#fff';
     (document.getElementById(inputElement) as HTMLInputElement).select();
     document.execCommand('copy');
   }
-/*
-  downloadFromServer(documentId: string) {
 
-    const endpoint = ;
-    const formData: FormData = new FormData();
-
-    let params = new HttpParams();
-    let headers = new HttpHeaders();
-
-    headers.append('Content-Type', 'application/json');
-   // headers.append('Content-Type', 'multipart/form-data');
-
-    const options = {
-      params: params,
-      reportProgress: true,
-      headers: headers
-    };
-
-    const req = new HttpRequest('GET', endpoint, formData, options);
-
-    return this.http.request(req);
-  }
-*/
-
-  //Resalta la fila del documento pulsado
-  //El diseño de la clase selectedFile está en el css
+  // Resalta la fila del documento pulsado
+  // El diseño de la clase selectedFile está en el css
   fileSelected(file: string){
-    if(document.getElementsByClassName("selectedFile")[0] != null){
-      document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
+    if (document.getElementsByClassName('selectedFile')[0] != null){
+      document.getElementsByClassName('selectedFile')[0].classList.remove('selectedFile');
     }
-    let fileParentNode = document.getElementById(file) as HTMLElement;
-    const node = document.querySelector("#"+file) as HTMLElement;
+    const fileParentNode = document.getElementById(file) as HTMLElement;
+    const node = document.querySelector('#' + file) as HTMLElement;
     node.parentNode['className'] += ' selectedFile';
-  }
-
-  showDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton-' + buttonId).style.display = 'block';
-  }
-
-  hideDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton-' + buttonId).style.display = 'none';
-  }
-
-  showPapperBinButton(buttonId: any) {
-    document.getElementById('papperBinButton-' + buttonId).style.display = 'block';
-  }
-
-  hidePapperBinButton(buttonId: any) {
-    document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
-  }
-
-  showShareIcon(buttonId: any) {
-    document.getElementById('shareIcon-' + buttonId).style.display = 'block';
-  }
-
-  hideShareIcon(buttonId: any) {
-    document.getElementById('shareIcon-' + buttonId).style.display = 'none';
-  }
-
-  showFileMove2BinMessage() {
-    document.getElementById('fileMove2Bin').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('fileMove2Bin').style.display = 'none';
-    }, 3000);
-  }
-
-  closeMessagefileMove2Bin(){
-    document.getElementById('fileMove2Bin').style.display = 'none';
   }
 }
