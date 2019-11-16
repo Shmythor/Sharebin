@@ -30,6 +30,7 @@ export class HomeComponent implements OnInit {
 
 
   data: any;
+  dataOrder: string;
   dataFiltered: any;
   itemSelected: any;
   textAreaText: string;
@@ -46,6 +47,7 @@ export class HomeComponent implements OnInit {
     this.metadata = [];
     this.tempMetadata = [];
     this.hoverIndex = -1;
+    this.dataOrder = "";
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
@@ -56,9 +58,114 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
+  clearSortFilter(){
+    this.dataOrder = "";
+  }
+
+  checkFilterSort():string{
+    let sort = "";
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      sort = "ASC";
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      sort = "DESC";
+    }else{
+      this.dataOrder = "";
+      sort = "";
+    }
+
+    return sort;
+  }
+
+  deleteSortIcons(){
+    if(document.getElementById("sortUpIcon") != null){
+      document.getElementById("sortUpIcon").remove();
+    }
+
+    if(document.getElementById("sortDownIcon") != null){
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortNameColumn(){
+
+    if(this.dataOrder.indexOf("name") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "name ASC";
+      document.getElementById("nameColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "name DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("nameColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortCreateDateColumn(){
+
+    if(this.dataOrder.indexOf("createDate") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "createDate ASC";
+      document.getElementById("createDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "createDate DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("createDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortUpdateDateColumn(){
+
+    if(this.dataOrder.indexOf("updateDate") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "updateDate ASC";
+      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "updateDate DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  changeOrder(event:any){
+
+    if(event.target.id == "nameColumn"){
+      this.sortNameColumn();
+    }else if(event.target.id == "createDateColumn"){
+      this.sortCreateDateColumn();
+    }else if(event.target.id == "updateDateColumn"){
+      this.sortUpdateDateColumn();
+    }else{
+      console.log("No data order filter!");
+      return;
+    }
+    this.getUserItemList();
+  }
+
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
+      order: this.dataOrder,
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
@@ -66,7 +173,7 @@ export class HomeComponent implements OnInit {
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
-      console.log('ngOnInit findById data: ', docList);
+      //console.log('ngOnInit findById data: ', docList);
     }, (error) => {
       console.log('Wtf dude', error);
     });
@@ -115,6 +222,10 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(data: any) {
+
+    document.getElementsByClassName("table")[0].style.width = "70%";
+    document.getElementsByClassName("table")[0].style.float = "left";
+
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
     this.tempMetadata = this.itemSelected.metadatas;
@@ -234,7 +345,6 @@ export class HomeComponent implements OnInit {
   shareFile(document){
     this.resetShareModal();
     this.docapi.createURL(document.id).subscribe((docURL) => {
-      console.log(docURL);
       this.setupModal(docURL);
       this.modalService.open("shareURLModal");
     }, (error) => {
@@ -297,9 +407,8 @@ export class HomeComponent implements OnInit {
     if(document.getElementsByClassName("selectedFile")[0] != null){
       document.getElementsByClassName("selectedFile")[0].classList.remove("selectedFile");
     }
-    let fileParentNode = document.getElementById(file) as HTMLElement;
-    const node = document.querySelector("#"+file) as HTMLElement;
-    node.parentNode['className'] += ' selectedFile';
+    
+    document.getElementById(file).classList.add("selectedFile");
   }
 
   showDownloadButton(buttonId: any) {

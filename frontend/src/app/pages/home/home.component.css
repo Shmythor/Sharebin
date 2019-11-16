@@ -54,7 +54,7 @@
 }
 
 .selectedFile {
-    background-color: #D9DDF3;
+    background-color: rgba(0,0,0,.075);
 }
 
 .line-breaker {
@@ -69,4 +69,19 @@
     background-color: transparent;
     display: none;
     border: none;
+}
+
+.table {
+    background-color: #ffffff;
+    margin-top: 2em;
+    margin-right: 2em;
+    border-radius: 4px;
+}
+
+#nameColumn, #createDateColumn, #updateDateColumn {
+    cursor: pointer;
+}
+
+#nameColumn:hover, #createDateColumn:hover, #updateDateColumn:hover {
+    background-color: rgba(0,0,0,.075);
 }
