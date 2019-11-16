@@ -40,7 +40,6 @@ export class HideAndSeekService {
 
   public closeMessagefileMove2Bin() {
     document.getElementById('fileMove2Bin').style.display = 'none';
-    console.log(document.getElementById('fileMove2Bin').style);
   }
 
   public showRecoverButton(buttonId: any){

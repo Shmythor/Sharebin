@@ -14,7 +14,7 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) { }
 
   ngOnInit() {
-    this.themesService.refreshTheme();
+    this.themesService.refreshTheme(true);
   }
 
   select(val) {
