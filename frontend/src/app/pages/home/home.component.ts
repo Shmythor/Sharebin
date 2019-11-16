@@ -69,7 +69,6 @@ export class HomeComponent implements OnInit {
   }
 
   sortNameColumn(){
-
     if(this.dataOrder.indexOf("name") < 0){
       this.dataOrder = "";
       this.deleteSortIcons();
@@ -89,7 +88,6 @@ export class HomeComponent implements OnInit {
   }
 
   sortCreateDateColumn(){
-
     if(this.dataOrder.indexOf("createDate") < 0){
       this.dataOrder = "";
       this.deleteSortIcons();
@@ -109,7 +107,6 @@ export class HomeComponent implements OnInit {
   }
 
   sortUpdateDateColumn(){
-
     if(this.dataOrder.indexOf("updateDate") < 0){
       this.dataOrder = "";
       this.deleteSortIcons();
@@ -204,8 +201,8 @@ export class HomeComponent implements OnInit {
 
   itemPressed(data: any) {
 
-    document.getElementsByClassName("table")[0].style.width = "70%";
-    document.getElementsByClassName("table")[0].style.float = "left";
+    //Reducir el ancho de la tabla de ficheros
+    document.getElementsByClassName("table")[0].setAttribute("style", "width: 70%; float: left;");
 
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
