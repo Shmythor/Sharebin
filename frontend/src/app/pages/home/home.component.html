@@ -37,7 +37,7 @@
             </ng-template>
     </ejs-grid>-->
 
-    <table class="table table-hover" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">
+    <table class="table table-hover">
             <thead>
               <tr>
                 <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
@@ -50,20 +50,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2" (click)="itemPressed(dat);fileSelected('file'+dat.id)" (mouseover)="showDownloadButton(dat.id);showPapperBinButton(dat.id);showShareIcon(dat.id)" (mouseout)="hideDownloadButton(dat.id);hidePapperBinButton(dat.id);hideShareIcon(dat.id)">
-                    <td> {{ dat.name }}</td>
-                    <td> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
-                    <td> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
-                    <td>
+                    <td id="fileName"> {{ dat.name }}</td>
+                    <td id="fileCreateDate"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
                             <img src="../../../assets/icons/download.svg" width="24">
                         </button>
                     </td>
-                    <td>
+                    <td id="fileShare">
                         <button id="shareIcon-{{dat.id}}" class="file-button ml2 mr2" (click)="shareFile(dat)">
                             <img src="../../../assets/icons/share-black.svg" width="24">
                         </button>
                     </td>
-                    <td>
+                    <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
                             <img src="../../../assets/icons/bin-black.svg" width="24">
                         </button>
@@ -71,31 +71,31 @@
                 <tr>
             </tbody>
           </table>
-          <div class="w-25 flex flex-column justify-between" style="margin-top: 2em;float: left;" [ngStyle]="{'display':itemSelected.id === '' ? 'none' : 'block' }">
-            <div>
-                <div><strong>Archivo seleccionado</strong></div>
-                <div class="line-breaker mb3"></div>
+          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em;float: left;display: none;">
+            <div id="dataEditionPanelContent">
+                <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
+                <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
 
                 <div class="w-100 mb3">
-                    <label for="itemName" class="w-100">Nombre</label>
-                    <input #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                    <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
                 </div>
                 <div class="w-100 mb2">
-                    <label for="itemDescription" class="w-100">Descripción</label>
-                    <textarea #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                    <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
                 </div>
                 <div class="w-100 mb2">
-                    <div>Metadatos</div>
+                    <div id="dataEditionPanelMetadataTag">Metadatos</div>
                     <div class="flex flex-wrap">
                         <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
                             <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
                             <input [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
                         </div>
-                        <div *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1" (click)="newMetadata()">Añadir... </div>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1" (click)="newMetadata()">Añadir... </div>
                     </div>
                 </div>
                 <div class="tc">
-                    <button class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+                    <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
                 </div>
             </div>
         </div>

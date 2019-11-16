@@ -51,6 +51,13 @@ export class HomeComponent implements OnInit {
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
+
+    document.addEventListener('click', function(event) {
+      if((event.target as HTMLElement).id.indexOf("file") < 0 && (event.target as HTMLElement).id.indexOf("dataEditionPanel") < 0 && document.getElementById("dataEditionPanel").style.display == "block"){
+        document.getElementsByClassName("table")[0].setAttribute("style", "width: 100%; float: left;");
+        document.getElementById("dataEditionPanel").style.display = "none";
+      }
+   });
   }
 
   ngOnInit() {
@@ -126,7 +133,6 @@ export class HomeComponent implements OnInit {
   }
 
   changeOrder(event:any){
-
     if(event.target.id == "nameColumn"){
       this.sortNameColumn();
     }else if(event.target.id == "createDateColumn"){
@@ -200,9 +206,9 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(data: any) {
-
     //Reducir el ancho de la tabla de ficheros
     document.getElementsByClassName("table")[0].setAttribute("style", "width: 70%; float: left;");
+    document.getElementById("dataEditionPanel").style.display = "block";
 
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
