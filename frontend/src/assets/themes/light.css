@@ -3,16 +3,29 @@ body {
     --light-shades: #F6EFED;
     --light-accent: #63BED9;
     --main-brand-color: #21D4FD;
-    --dark-accent: #B721FF;
+    --dark-accent: rgb(33, 136, 253);
     --dark-shades: #1C1F32;
 
     background: var(--light-shades) !important;
 }
 
-.btn-primary {
-    background: var(--main-brand-color);
-    border: none;
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
+    border: none !important;
 }
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+}
+
+
+
 .navbar-bg {
     background: var(--main-brand-color) !important;
     /* fallback for old browsers */

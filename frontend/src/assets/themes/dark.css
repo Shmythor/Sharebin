@@ -1,20 +1,29 @@
 html,
 body {
     --light-shades: #F0EFEA;
-    --light-accent: #81B3B3;
+    --light-accent: rgb(216, 216, 216);
     --main-brand-color: #28313b;
     --dark-accent: #485461;
     --dark-shades: #212E2B;
 
-    background: #485461 !important;
+    background: var(--dark-accent) !important;
 }
 
-.btn-primary {
-    background-color: #485461 !important;
-    background-image: linear-gradient(315deg, var(--dark-accent) 0%, var(--main-brand-color) 74%) !important;
-
-    border: none;
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
+    border: none !important;
 }
+
+.buttonDisabled {
+    border-color: var(--dark-shades) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-shades) !important;
+    border: none !important;
+}
+
 
 .navbar-bg {
     background: var(--main-brand-color) !important;
@@ -24,3 +33,10 @@ body {
     background: linear-gradient(315deg, var(--dark-accent) 0%, var(--main-brand-color) 74%) !important;  
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
 }
+
+.searchbar-bg, input, textarea, cdk-virtual-scroll-viewport, .custom-input-container, .list-item {
+    background: var(--light-accent) !important;
+    color: var(--dark-shades);
+}
+
+div { color: var(--light-shades); }

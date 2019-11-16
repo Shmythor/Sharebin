@@ -1,6 +1,6 @@
-<div class="w-100 h-100 bg-light flex items-center justify-between custom-navbar">
+<div class="w-100 h-100 bg-light flex items-center justify-between searchbar-bg">
     <i class="icon ion-md-search pl2"></i>
-    <input class="w-100 h-100 pl2" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
+    <input class="w-100 h-100 pl2 searchbar-bg" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
     <div class="flex justify-around">
         <button class="ma1" [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" (click)="filterBy('name')">Nombre</button>
