@@ -48,15 +48,16 @@ export class HomeComponent implements OnInit {
     this.metadata = [];
     this.tempMetadata = [];
     this.hoverIndex = -1;
-    this.dataOrder = "";
+    this.dataOrder = '';
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
 
-    document.addEventListener('click', function(event) {
-      if((event.target as HTMLElement).id.indexOf("file") < 0 && (event.target as HTMLElement).id.indexOf("dataEditionPanel") < 0 && document.getElementById("dataEditionPanel").style.display == "block"){
-        document.getElementsByClassName("table")[0].setAttribute("style", "width: 100%; float: left;");
-        document.getElementById("dataEditionPanel").style.display = "none";
+    document.addEventListener('click', (event) => {
+      if ((event.target as HTMLElement).id.indexOf('file') < 0 && (event.target as HTMLElement).id.indexOf('dataEditionPanel') < 0 &&
+      document.getElementById('dataEditionPanel').style.display === 'block') {
+        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+        document.getElementById('dataEditionPanel').style.display = 'none';
       }
    });
   }
@@ -66,82 +67,90 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  deleteSortIcons(){
-    if(document.getElementById("sortUpIcon") != null){
-      document.getElementById("sortUpIcon").remove();
+  deleteSortIcons() {
+    if (document.getElementById('sortUpIcon') != null) {
+      document.getElementById('sortUpIcon').remove();
     }
 
-    if(document.getElementById("sortDownIcon") != null){
-      document.getElementById("sortDownIcon").remove();
+    if (document.getElementById('sortDownIcon') != null) {
+      document.getElementById('sortDownIcon').remove();
     }
   }
 
-  sortNameColumn(){
-    if(this.dataOrder.indexOf("name") < 0){
-      this.dataOrder = "";
+  sortNameColumn() {
+    if (this.dataOrder.indexOf('name') < 0) {
+      this.dataOrder = '';
       this.deleteSortIcons();
     }
 
-    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
-      this.dataOrder = "name ASC";
-      document.getElementById("nameColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
-    }else if(this.dataOrder.indexOf("ASC") >= 0){
-      this.dataOrder = "name DESC";
-      document.getElementById("sortUpIcon").remove();
-      document.getElementById("nameColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
-    }else{
-      this.dataOrder = "";
-      document.getElementById("sortDownIcon").remove();
+    if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
+      this.dataOrder = 'name ASC';
+      document.getElementById('nameColumn').innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    } else if (this.dataOrder.indexOf('ASC') >= 0) {
+      this.dataOrder = 'name DESC';
+      document.getElementById('sortUpIcon').remove();
+      document.getElementById('nameColumn').innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    } else {
+      this.dataOrder = '';
+      document.getElementById('sortDownIcon').remove();
     }
   }
 
-  sortCreateDateColumn(){
-    if(this.dataOrder.indexOf("createDate") < 0){
-      this.dataOrder = "";
+  sortCreateDateColumn() {
+    if (this.dataOrder.indexOf('createDate') < 0) {
+      this.dataOrder = '';
       this.deleteSortIcons();
     }
 
-    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
-      this.dataOrder = "createDate ASC";
-      document.getElementById("createDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
-    }else if(this.dataOrder.indexOf("ASC") >= 0){
-      this.dataOrder = "createDate DESC";
-      document.getElementById("sortUpIcon").remove();
-      document.getElementById("createDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
-    }else{
-      this.dataOrder = "";
-      document.getElementById("sortDownIcon").remove();
+    if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
+      this.dataOrder = 'createDate ASC';
+      document.getElementById('createDateColumn').innerHTML += 
+      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+
+    } else if (this.dataOrder.indexOf('ASC') >= 0) {
+      this.dataOrder = 'createDate DESC';
+      document.getElementById('sortUpIcon').remove();
+      document.getElementById('createDateColumn').innerHTML +=
+        '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+
+    } else {
+      this.dataOrder = '';
+      document.getElementById('sortDownIcon').remove();
     }
   }
 
-  sortUpdateDateColumn(){
-    if(this.dataOrder.indexOf("updateDate") < 0){
-      this.dataOrder = "";
+  sortUpdateDateColumn() {
+    if (this.dataOrder.indexOf('updateDate') < 0) {
+      this.dataOrder = '';
       this.deleteSortIcons();
     }
 
-    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
-      this.dataOrder = "updateDate ASC";
-      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
-    }else if(this.dataOrder.indexOf("ASC") >= 0){
-      this.dataOrder = "updateDate DESC";
-      document.getElementById("sortUpIcon").remove();
-      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
-    }else{
-      this.dataOrder = "";
-      document.getElementById("sortDownIcon").remove();
+    if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
+      this.dataOrder = 'updateDate ASC';
+      document.getElementById('updateDateColumn').innerHTML += 
+      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+
+    } else if (this.dataOrder.indexOf('ASC') >= 0) {
+      this.dataOrder = 'updateDate DESC';
+      document.getElementById('sortUpIcon').remove();
+      document.getElementById('updateDateColumn').innerHTML +=
+      '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+
+    } else {
+      this.dataOrder = '';
+      document.getElementById('sortDownIcon').remove();
     }
   }
 
-  changeOrder(event:any){
-    if(event.target.id == "nameColumn"){
+  changeOrder(event: any) {
+    if (event.target.id === 'nameColumn') {
       this.sortNameColumn();
-    }else if(event.target.id == "createDateColumn"){
+    } else if (event.target.id === 'createDateColumn') {
       this.sortCreateDateColumn();
-    }else if(event.target.id == "updateDateColumn"){
+    } else if (event.target.id === 'updateDateColumn') {
       this.sortUpdateDateColumn();
-    }else{
-      console.log("No data order filter!");
+    } else {
+      console.log('No data order filter!');
       return;
     }
     this.getUserItemList();
@@ -158,7 +167,7 @@ export class HomeComponent implements OnInit {
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
-      //console.log('ngOnInit findById data: ', docList);
+      // console.log('ngOnInit findById data: ', docList);
     }, (error) => {
       console.log('Wtf dude', error);
     });
@@ -207,9 +216,9 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(data: any) {
-    //Reducir el ancho de la tabla de ficheros
-    document.getElementsByClassName("table")[0].setAttribute("style", "width: 70%; float: left;");
-    document.getElementById("dataEditionPanel").style.display = "block";
+    // Reducir el ancho de la tabla de ficheros
+    document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+    document.getElementById('dataEditionPanel').style.display = 'block';
 
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
@@ -282,7 +291,6 @@ export class HomeComponent implements OnInit {
 
   loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
- // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.width = '50%';
 
@@ -290,10 +298,6 @@ export class HomeComponent implements OnInit {
     this.dialog.afterAllClosed.subscribe(() => {
       this.getUserItemList();
     });
-  }
-
-  upload() {
-    console.log('postFile');
   }
 
   downloadFile(document) {
@@ -331,7 +335,7 @@ export class HomeComponent implements OnInit {
     this.modalService.open('shareURLModal');
     this.docapi.createURL(document.id).subscribe((docURL) => {
       this.setupModal(docURL);
-      this.modalService.open("shareURLModal");
+      this.modalService.open('shareURLModal');
     }, (error) => {
       console.log('URL no creada', error);
     });
@@ -364,16 +368,11 @@ export class HomeComponent implements OnInit {
 
   // Resalta la fila del documento pulsado
   // El diseño de la clase selectedFile está en el css
-  fileSelected(file: string){
-    if (document.getElementsByClassName('selectedFile')[0] != null){
+  fileSelected(file: string) {
+    if (document.getElementsByClassName('selectedFile')[0] != null) {
       document.getElementsByClassName('selectedFile')[0].classList.remove('selectedFile');
     }
-    // fronted shaheer (17/11/2019)
-    document.getElementById(file).classList.add("selectedFile");
-    
-    //development (17/11/2019)
-    //const fileParentNode = document.getElementById(file) as HTMLElement;
-    //const node = document.querySelector('#' + file) as HTMLElement;
-    //node.parentNode['className'] += ' selectedFile';
+
+    document.getElementById(file).classList.add('selectedFile');
   }
 }
