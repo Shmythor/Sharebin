@@ -19,7 +19,7 @@
     "nameConflict": "makeUnique",
     "connector": "loopback-component-storage",
     "provider": "filesystem",
-    "root": "C:/Users/sergi/Desktop/Universidad/4A/PIN/Sharebin/backend/server",
+    "root": "./server/storage",
     "maxFileSize": "20971520‬"
   }
 }
