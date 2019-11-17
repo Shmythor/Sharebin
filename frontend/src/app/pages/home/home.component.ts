@@ -8,6 +8,8 @@ import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
+import { testData } from './datasource';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -16,6 +18,8 @@ import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 export class HomeComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
+
+  public datos: Object[];
 
   /*
     filters[0]: name
@@ -26,6 +30,7 @@ export class HomeComponent implements OnInit {
 
 
   data: any;
+  dataOrder: string;
   dataFiltered: any;
   itemSelected: any;
   textAreaText: string;
@@ -43,18 +48,109 @@ export class HomeComponent implements OnInit {
     this.metadata = [];
     this.tempMetadata = [];
     this.hoverIndex = -1;
+    this.dataOrder = "";
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
+
+    document.addEventListener('click', function(event) {
+      if((event.target as HTMLElement).id.indexOf("file") < 0 && (event.target as HTMLElement).id.indexOf("dataEditionPanel") < 0 && document.getElementById("dataEditionPanel").style.display == "block"){
+        document.getElementsByClassName("table")[0].setAttribute("style", "width: 100%; float: left;");
+        document.getElementById("dataEditionPanel").style.display = "none";
+      }
+   });
   }
 
   ngOnInit() {
+    this.datos = testData;
+    this.getUserItemList();
+  }
+
+  deleteSortIcons(){
+    if(document.getElementById("sortUpIcon") != null){
+      document.getElementById("sortUpIcon").remove();
+    }
+
+    if(document.getElementById("sortDownIcon") != null){
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortNameColumn(){
+    if(this.dataOrder.indexOf("name") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "name ASC";
+      document.getElementById("nameColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "name DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("nameColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortCreateDateColumn(){
+    if(this.dataOrder.indexOf("createDate") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "createDate ASC";
+      document.getElementById("createDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "createDate DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("createDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  sortUpdateDateColumn(){
+    if(this.dataOrder.indexOf("updateDate") < 0){
+      this.dataOrder = "";
+      this.deleteSortIcons();
+    }
+
+    if(this.dataOrder.indexOf("ASC") < 0 && this.dataOrder.indexOf("DESC") < 0){
+      this.dataOrder = "updateDate ASC";
+      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+    }else if(this.dataOrder.indexOf("ASC") >= 0){
+      this.dataOrder = "updateDate DESC";
+      document.getElementById("sortUpIcon").remove();
+      document.getElementById("updateDateColumn").innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+    }else{
+      this.dataOrder = "";
+      document.getElementById("sortDownIcon").remove();
+    }
+  }
+
+  changeOrder(event:any){
+    if(event.target.id == "nameColumn"){
+      this.sortNameColumn();
+    }else if(event.target.id == "createDateColumn"){
+      this.sortCreateDateColumn();
+    }else if(event.target.id == "updateDateColumn"){
+      this.sortUpdateDateColumn();
+    }else{
+      console.log("No data order filter!");
+      return;
+    }
     this.getUserItemList();
   }
 
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
+      order: this.dataOrder,
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
@@ -62,7 +158,7 @@ export class HomeComponent implements OnInit {
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
-      console.log('ngOnInit findById data: ', docList);
+      //console.log('ngOnInit findById data: ', docList);
     }, (error) => {
       console.log('Wtf dude', error);
     });
@@ -111,6 +207,10 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(data: any) {
+    //Reducir el ancho de la tabla de ficheros
+    document.getElementsByClassName("table")[0].setAttribute("style", "width: 70%; float: left;");
+    document.getElementById("dataEditionPanel").style.display = "block";
+
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
     this.tempMetadata = this.itemSelected.metadatas;
@@ -230,8 +330,8 @@ export class HomeComponent implements OnInit {
     this.resetShareModal();
     this.modalService.open('shareURLModal');
     this.docapi.createURL(document.id).subscribe((docURL) => {
-      console.log(docURL);
       this.setupModal(docURL);
+      this.modalService.open("shareURLModal");
     }, (error) => {
       console.log('URL no creada', error);
     });
@@ -254,7 +354,7 @@ export class HomeComponent implements OnInit {
     document.getElementById('copyURL').style.color = '#51585f';
   }
 
-  copyURL(inputElement) {
+ copyURL(inputElement) {
     document.getElementById('copyURL').innerHTML = 'Copiado!';
     document.getElementById('copyURL').style.background = '#23b180';
     document.getElementById('copyURL').style.color = '#fff';
@@ -268,8 +368,12 @@ export class HomeComponent implements OnInit {
     if (document.getElementsByClassName('selectedFile')[0] != null){
       document.getElementsByClassName('selectedFile')[0].classList.remove('selectedFile');
     }
-    const fileParentNode = document.getElementById(file) as HTMLElement;
-    const node = document.querySelector('#' + file) as HTMLElement;
-    node.parentNode['className'] += ' selectedFile';
+    // fronted shaheer (17/11/2019)
+    document.getElementById(file).classList.add("selectedFile");
+    
+    //development (17/11/2019)
+    //const fileParentNode = document.getElementById(file) as HTMLElement;
+    //const node = document.querySelector('#' + file) as HTMLElement;
+    //node.parentNode['className'] += ' selectedFile';
   }
 }
