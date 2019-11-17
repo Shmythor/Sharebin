@@ -321,13 +321,15 @@ export class HomeComponent implements OnInit {
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
           (no) => {
+            this.itemSelected = {id: '', name: '', description: '', metadatas: []};
             this.hideAndSeekService.showFileMove2BinMessage();
+            this.getUserItemList();
             // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
            },
           (err) => {console.log('me cago en', err); }
 
       );
-      this.getUserItemList();
+      //this.getUserItemList();
   }
 
   shareFile(document) {
