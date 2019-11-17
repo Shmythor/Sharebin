@@ -1,4 +1,42 @@
-.navbar-bg, .btn-primary {
-    background: #262626 !important;
+html,
+body {
+    --light-shades: #F0EFEA;
+    --light-accent: rgb(216, 216, 216);
+    --main-brand-color: #28313b;
+    --dark-accent: #485461;
+    --dark-shades: #212E2B;
+
+    background: var(--dark-accent) !important;
+}
+
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
     border: none !important;
 }
+
+.buttonDisabled {
+    border-color: var(--dark-shades) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-shades) !important;
+    border: none !important;
+}
+
+
+.navbar-bg {
+    background: var(--main-brand-color) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(315deg, var(--dark-accent) 0%, var(--main-brand-color) 74%) !important;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(315deg, var(--dark-accent) 0%, var(--main-brand-color) 74%) !important;  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
+}
+
+.searchbar-bg, input, textarea, .custom-input-container, .metadataNew, .list-item {
+    background: var(--light-shades) !important;
+    color: var(--dark-shades);
+}
+
+div { color: var(--light-shades); }
