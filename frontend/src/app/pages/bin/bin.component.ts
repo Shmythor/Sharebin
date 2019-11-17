@@ -172,7 +172,7 @@ filters = [true, false, false];
             this.showFileMove2HomeMessage();
             setTimeout(() => {this.closeMessagefileMove2Home();}, 5000);
           },
-          (err) => {console.log('me cago en', err); }
+          (err) => {console.log('An error ocurred while taking document out of bin: ', err); }
 
       );
       this.getUserItemList();
