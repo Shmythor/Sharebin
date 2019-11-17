@@ -32,22 +32,39 @@ let testClientID = "5dcc3b6e68cdd20eb4017d97";
 // 	});
 // });
 
-
+// Test that we can get a user to test the files with.
+describe("Getting user...", () => {
+    let formData = new FormData();
+    
+    it("Get first user from database", (done) => {
+        chai.request(url)
+            .get(`/api/Clients/`)
+            .set('Accept', 'application/json')
+            .end((err, res) => {
+                if(err) {
+                    console.log('An error ocurred: ')
+                }
+                testClientID = res.body[0].id;
+                // console.log(res.body)
+				expect(res).to.have.status(200);
+				done();
+            })
+    })
+})
+ 
 // Test that a file under 20MB can be uploaded
 describe("File size limit test 1", () => {
-    let direction = path.join(__dirname, '/git_guia.pdf');   
-    let file = fs.readFileSync(direction);
+    let fileName = 'git_guia.pdf';
+    let filePath = path.join(__dirname, '/' + fileName);   
     let description = "Archivo test de subida";
 
-    let formData = new FormData();
-    formData.append('file', file, file.name);
-    formData.append('description', description);
     
     it("should POST a file under 20MB", (done) => {
         chai.request(url)
             .post(`/api/Clients/${testClientID}/uploadDocument`)
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send(formData)
+            .attach('file', filePath, fileName)
+            .field('description', description)
             .end((err, res) => {
                 if(err) {
                     console.log('An error ocurred: ', err)
@@ -61,24 +78,18 @@ describe("File size limit test 1", () => {
 
 // Test that a file over 20MB cannot be uploaded
 describe("File size limit test 2", () => {
-    let direction = path.join(__dirname, '/video_mini.mp4');   
-    let file2 = fs.readFileSync(direction);
-    let description = "Archivo test de subida";
+    let fileName = "video.mp4";
+    let filePath = path.join(__dirname, '/' + fileName);   
 
-    let formData = new FormData();
-    formData.append('file', file2, file2.name);
-    formData.append('description', description);
+    let description = "Archivo test de subida";
     
     it("should NOT POST a file OVER 20MB", (done) => {
         chai.request(url)
             .post(`/api/Clients/${testClientID}/uploadDocument`)
             .set('content-type', 'application/x-www-form-urlencoded')
-            .send(formData)
+            .attach('file', filePath, fileName)
+            .field('description', description)
             .end((err, res) => {
-                if(err) {
-                    console.log('An error ocurred: ', err)
-                }
-                // console.log(res.body)
 				expect(res).not.have.status(200);
                 done();
             })
