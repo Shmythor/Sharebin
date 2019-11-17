@@ -4,9 +4,6 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class ThemesService {
-
-    private currentTheme: string;
-
     constructor() { }
 
     public switchTheme(newTheme: string) {

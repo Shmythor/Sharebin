@@ -13,6 +13,9 @@ var multer = require('multer');
 
 var app = module.exports = loopback();
 
+// Tell the bodyparser middleware to accept more data
+app.use(bodyParser.json({limit: "20mb"}));
+app.use(bodyParser.urlencoded({limit: "20mb", extended: true, parameterLimit:50000}));
 
 app.start = function() {
   // start the web server

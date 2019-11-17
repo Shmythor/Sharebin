@@ -20,6 +20,6 @@
         "connector": "loopback-component-storage",
         "provider": "filesystem",
         "root": "./server/storage",
-        "maxFileSize": "20971520‬"
+        "maxFileSize": "20586660"
     }
 }

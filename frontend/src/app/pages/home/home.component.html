@@ -20,64 +20,92 @@
         <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
     </jw-modal>
 
-    <!-- Listado de archivos e información -->
-    <div class="flex justify-between pt5 pb4 h-100">
-        <div class="bg-light align-content-center" [ngStyle]="{'width':itemSelected.id === '' ? '100%' : '70%' }">
-            <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
-                <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div id="file{{dat.id}}" class="pl2 list-item" (click)="fileSelected('file' + dat.id)"
-                    (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id)"
-                    (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
-                        <p style="display: inline-block;">
-                            <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
-                            <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
-                        </p>
-                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr4" (click)="downloadFile(dat)">
+    <!--<ejs-grid [dataSource]='dataFiltered' [allowSorting]="true">
+        <e-columns>
+            <e-column field='OrderID' headerText='Nombre'></e-column>
+            <e-column field='CustomerID' headerText='Fecha de modificación'></e-column>
+            <e-column></e-column>
+        </e-columns>
+        <ng-template #rowTemplate>
+                <tr *ngFor="let address of dataFiltered; let i = index">
+                        <td> {{ address.name }}</td>
+                        <td> {{ address.createDate }} </td>
+                    <tr>
+            </ng-template>
+    </ejs-grid>-->
+
+    <table class="table table-hover" id="itemsTable">
+            <thead>
+              <tr>
+                <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
+                <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
+                <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
+                (click)="itemPressed(dat); fileSelected('file' + dat.id)"
+                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id)"
+                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id)">
+                    <td id="fileName"> {{ dat.name }}</td>
+                    <td id="fileCreateDate"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileDownload">
+                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
+                            <img src="../../../assets/icons/download.svg" width="24">
+                        </button>
+                    </td>
+                    <td id="fileShare">
+                        <button id="shareIcon-{{dat.id}}" class="file-button ml2 mr2" (click)="shareFile(dat)">
                             <img src="../../../assets/icons/share-black.svg" width="24">
                         </button>
+                    </td>
+                    <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
-                            <img src="../../../assets/icons/bin-black.svg" fill="black" width="24">
+                            <img src="../../../assets/icons/bin-black.svg" width="24">
                         </button>
-                        <img id="shareIcon-{{dat.id}}" src="../../../assets/icons/share.svg" width="25" alt="share icon" style="display:none; float:right; cursor:pointer;" (click)="shareFile(dat)">
-                    </div>
-                </div>
-            </cdk-virtual-scroll-viewport>
-        </div>
-        <div class="w-25 flex flex-column justify-between" [ngStyle]="{'display':itemSelected.id === '' ? 'none' : 'block' }">
-            <div>
-                <div><strong>Archivo seleccionado</strong></div>
-                <div class="line-breaker mb3"></div>
+                    </td>
+                <tr>
+            </tbody>
+          </table>
+
+          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
+            <div id="dataEditionPanelContent">
+                <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
+                <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
 
                 <div class="w-100 mb3">
-                    <label for="itemName" class="w-100">Nombre</label>
-                    <input #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                    <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
                 </div>
                 <div class="w-100 mb2">
-                    <label for="itemDescription" class="w-100">Descripción</label>
-                    <textarea #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                    <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
                 </div>
                 <div class="w-100 mb2">
-                    <div>Metadatos</div>
+                    <div id="dataEditionPanelMetadataTag">Metadatos</div>
                     <div class="flex flex-wrap">
                         <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
                             <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
                             <input [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
                         </div>
-                        <div *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1" (click)="newMetadata()">Añadir... </div>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
                     </div>
                 </div>
-                <div class="tc mt5">
-                    <button class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+                <div class="tc">
+                    <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
                 </div>
             </div>
+
         </div>
     </div>
-
-<<<<<<< HEAD
-=======
+        </div>    
     <div id="fileMove2Bin" class="alert alert-danger w-100" role="alert" style="display: none; position: absolute; bottom: 0" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
         <!-- Faltaría colocar bonito el botón con un buen estilo-->
         Movido Fichero a la papelera.
     </div>
->>>>>>> origin/development
+
 </div>
