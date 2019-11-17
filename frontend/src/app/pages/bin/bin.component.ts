@@ -6,6 +6,7 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { VentanaemergComponent } from '../home/components/ventanaemerg/ventanaemerg.component';
+import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
 @Component({
   selector: 'app-bin',
@@ -29,7 +30,7 @@ filters = [true, false, false];
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
-             public dialog: MatDialog, private http: HttpClient) {
+             public dialog: MatDialog, private http: HttpClient, public hideAndSeekService: HideAndSeekService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -73,13 +74,13 @@ filters = [true, false, false];
   getDocIDbyName(name: string) {
     this.docapi.find().subscribe(docArray => {
       docArray.forEach(doc => {
-        let docname = doc[0].name;
+        const docname = doc[0].name;
         console.log(docname);
-        if(docname == name) {
+        if (docname === name) {
           return doc[0].id;
         }
-      })
-    }, err => { console.log('getDocIDbyName ERROR: ', err); })
+      });
+    }, err => { console.log('getDocIDbyName ERROR: ', err); });
   }
 
   getSearch(search: string) {
@@ -113,7 +114,6 @@ filters = [true, false, false];
 
 
   postMetadata(metadata: any): Observable<HttpEvent<any>> {
-
     const endpoint = 'http://localhost:3000/api/metadata';
 
     const params = new HttpParams();
@@ -134,7 +134,6 @@ filters = [true, false, false];
 
   newMetadata() {
     this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
-   // console.log(this.tempMetadata);
   }
 
   updateMetadataKey(event: any, id: any) {
@@ -142,10 +141,6 @@ filters = [true, false, false];
   }
   updateMetadataValue(event: any, id: any) {
     this.tempMetadata[id].value = event.target.value;
-  }
-
-  upload() {
-    console.log('postFile');
   }
 
   downloadFile(document) {
@@ -163,35 +158,35 @@ filters = [true, false, false];
       });
   }
 
-  move2Home(doc: any ){
+  move2Home(doc: any ) {
       /* update database */
       this.docapi.replaceOrCreate( {id: doc.id,
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
           (no) => {
-            this.showFileMove2HomeMessage();
-            setTimeout(() => {this.closeMessagefileMove2Home();}, 5000);
+            this.hideAndSeekService.showFileMove2HomeMessage();
+            setTimeout(() => {this.hideAndSeekService.closeMessagefileMove2Home(); }, 5000);
           },
-          (err) => {console.log('me cago en', err); }
+          (err) => { console.log('me cago en', err); }
 
       );
       this.getUserItemList();
   }
 
-  deletedFile(id: any ){
+  deletedFile(id: any ) {
     /* update database */
     this.docapi.deleteById(id).subscribe(
         (no) => {
-          this.showFileDeletedFileMessage();
-          setTimeout(() => {this.closeMessagefileDeletedFile();}, 5000);
+          this.hideAndSeekService.showFileDeletedFileMessage();
+          setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 5000);
         },
-        (err) => {console.log('me cago en', err); }
+        (err) => { console.log('me cago en', err); }
 
     );
     this.getUserItemList();
 }
 
-  deletedAllFile(){
+  deletedAllFile() {
     const dialogConfig = new MatDialogConfig();
  // dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -199,75 +194,7 @@ filters = [true, false, false];
 
     this.dialog.open(VentanaalertComponent, dialogConfig);
     this.dialog.afterAllClosed.subscribe(() => {
-         this.getUserItemList();
-       });
+      this.getUserItemList();
+    });
   }
-/*
-  downloadFromServer(documentId: string) {
-
-    const endpoint = ;
-    const formData: FormData = new FormData();
-
-    let params = new HttpParams();
-    let headers = new HttpHeaders();
-
-    headers.append('Content-Type', 'application/json');
-   // headers.append('Content-Type', 'multipart/form-data');
-
-    const options = {
-      params: params,
-      reportProgress: true,
-      headers: headers
-    };
-
-    const req = new HttpRequest('GET', endpoint, formData, options);
-
-    return this.http.request(req);
-  }
-*/
-
-  showDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton-' + buttonId).style.display = 'block';
-  }
-
-  hideDownloadButton(buttonId: any) {
-    document.getElementById('downloadButton-' + buttonId).style.display = 'none';
-  }
-
-  showPapperBinButton(buttonId: any) {
-    document.getElementById('papperBinButton-' + buttonId).style.display = 'block';
-  }
-
-  hidePapperBinButton(buttonId: any) {
-    document.getElementById('papperBinButton-' + buttonId).style.display = 'none';
-  }
-
-  showRecoverButton(buttonId: any){
-    document.getElementById('recoverButton-' + buttonId).style.display = 'block';
-  }
-
-  hideRecoverButton(buttonId: any){
-    document.getElementById('recoverButton-'+ buttonId).style.display = 'none';
-  }
-
-  showFileMove2HomeMessage() {
-    document.getElementById('fileMove2Home').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('fileMove2Home').style.display = 'none';
-    }, 3000);
-  }
-
-  closeMessagefileMove2Home(){
-    document.getElementById('fileMove2Home').style.display = 'none';
-  }
-
-  showFileDeletedFileMessage() {
-    document.getElementById('fileDeletedFile').style.display = 'block';
-  }
-
-  closeMessagefileDeletedFile(){
-    document.getElementById('fileDeletedFile').style.display = 'none';
-  }
-
-
 }

@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClientApi } from '../../services/lb-api/services/index';
 import { Client } from '../../services/lb-api/models/Client';
 import { LoginService } from '../../services/login.service';
+import { ThemesService } from '../../services/themes.service';
 
 
 @Component({
@@ -13,18 +14,16 @@ import { LoginService } from '../../services/login.service';
 })
 
 export class LoginComponent implements OnInit {
-
-  sharebinLogo = '../../../assets/ShareBin_Logo.png';
   registerForm: FormGroup;
   submitted = false;
   clients = [
-            {username:'shaheer@s',password:'shaheer'},
-            {username:'sergio@s',password:'sergio'},
-            {username:'johans@j',password:'johans'}
+            {username: 'shaheer@s', password: 'shaheer'},
+            {username: 'sergio@s', password: 'sergio'},
+            {username: 'johans@j', password: 'johans'}
           ];
 
   constructor(private route: Router, private formBuilder: FormBuilder, private clientapi: ClientApi,
-              private loginService: LoginService) {
+              private loginService: LoginService, private themesService: ThemesService) {
   }
 
   ngOnInit() {
@@ -35,6 +34,8 @@ export class LoginComponent implements OnInit {
 
     if (this.loginService.getUserLoggedIn != null) {
       this.goHome();
+   } else {
+      this.themesService.refreshTheme(true);
    }
   }
 
@@ -42,7 +43,7 @@ export class LoginComponent implements OnInit {
 
   goHome() {
     // Comento esto porque era parte de una prueba que no llegamos a hacer
-    // pero lo dejo para que lo tengais de referencia 
+    // pero lo dejo para que lo tengais de referencia
     // (Para descomentar facilmente, seleccionad el texto a descomentar y ctl + shift + 7)
     // try {
     //   this.clientapi.login(this.clients[0], () => {
@@ -89,7 +90,7 @@ export class LoginComponent implements OnInit {
       this.registerForm.reset();
   }
 
-  showLoginError(){
+  showLoginError() {
     document.getElementById('incorrectDataAlert').style.display = 'block';
     setTimeout(() => {
       document.getElementById('incorrectDataAlert').style.display = 'none';

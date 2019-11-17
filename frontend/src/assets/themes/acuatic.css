@@ -3,17 +3,28 @@ body {
     --light-shades: rgb(213, 239, 248);
     --light-accent: #4DB4D0;
     --main-brand-color: #11489F;
-    --dark-accent: #756F80;
+    --dark-accent: rgb(7, 56, 134);
     --dark-shades: #16151F;
 
     background: var(--light-shades) !important;
    
 }
 
-.btn-primary {
-    border: none;
+.btn-primary, .buttonActivated {
     background: var(--main-brand-color) !important;
+    border: none !important;
 }
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+}
+
 
 .navbar-bg {
     background: var(--main-brand-color) !important;
