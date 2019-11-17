@@ -52,9 +52,6 @@ export class HideAndSeekService {
 
   public showFileMove2HomeMessage() {
     document.getElementById('fileMove2Home').style.display = 'block';
-    setTimeout(() => {
-      document.getElementById('fileMove2Home').style.display = 'none';
-    }, 3000);
   }
 
   public closeMessagefileMove2Home(){
