@@ -30,17 +30,17 @@
                     <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24">
+                            <img src="../../../assets/icons/download.svg" width="24" alt="descargar">
                         </button>
                     </td>
                     <td id="fileRecover">
                         <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/recoverBin.svg" width="24">
+                            <img src="../../../assets/icons/recoverBin.svg" width="24" alt="recuperar">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24">
+                            <img src="../../../assets/icons/bin-black.svg" width="24" alt="borrar">
                         </button>
                     </td>
                     
@@ -80,5 +80,4 @@
         <!-- Faltaría colocar bonito el botón con un buen estilo-->
         Borrado documento permanentemente. No podrás recuperarlo.
     </div>
-
 </div>
