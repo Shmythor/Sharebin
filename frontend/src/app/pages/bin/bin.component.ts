@@ -8,6 +8,7 @@ import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
 import { testData } from '../home/datasource';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
   selector: 'app-bin',
@@ -42,7 +43,7 @@ export class BinComponent implements OnInit {
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService) {
+             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -307,17 +308,25 @@ export class BinComponent implements OnInit {
 }
 
 deletedFile(id: any ) {
-  /* update database */
-  this.docapi.deleteById(id).subscribe(
-      (no) => {
-        this.itemSelected = {id: '', name: '', description: '', metadatas: []};
-        this.hideAndSeekService.showFileDeletedFileMessage();
-        setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 5000);
-      },
-      (err) => { console.log('me cago en', err); }
+  /* open confirmation dialog */
+  this.dialogService.openConfirmDialog()
+  .afterClosed().subscribe(res =>{
+    if(res){
+      /* update database */
+      this.docapi.deleteById(id).subscribe(
+        (no) => {
+          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          this.hideAndSeekService.showFileDeletedFileMessage();
+          setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 5000);
+        },
+        (err) => { console.log('me cago en', err); }
 
-  );
-  this.getUserItemList();
+      );
+      this.getUserItemList();
+    }
+  })
+
+  
 }
 
 deletedAllFile() {
