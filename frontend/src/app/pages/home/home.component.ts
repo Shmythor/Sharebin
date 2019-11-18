@@ -223,16 +223,21 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  itemPressed(data: any) {
-    // Reducir el ancho de la tabla de ficheros
-    document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
-    document.getElementById('dataEditionPanel').style.display = 'block';
+  itemPressed(event: any, data: any) {
+    let isDownload = (event.target as HTMLElement).id == "downloadButtonIcon";
+    let isShare = (event.target as HTMLElement).id == "shareButtonIcon";
+    let isDelete = (event.target as HTMLElement).id == "deleteButtonIcon";
+    // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
+    if(!isDownload && !isShare && !isDelete){
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'block';
 
-    this.itemSelected = data;
-    this.metadata = this.itemSelected.metadatas;
-    this.tempMetadata = this.itemSelected.metadatas;
+      this.itemSelected = data;
+      this.metadata = this.itemSelected.metadatas;
+      this.tempMetadata = this.itemSelected.metadatas;
 
-    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+      this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+    }
   }
 
 
