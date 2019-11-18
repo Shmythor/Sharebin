@@ -54,17 +54,25 @@ export class HomeComponent implements OnInit {
     this.textAreaText = this.itemSelected.description;
 
     document.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).id.indexOf('file') < 0 && (event.target as HTMLElement).id.indexOf('dataEditionPanel') < 0 &&
-      document.getElementById('dataEditionPanel').style.display === 'block') {
-        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-        document.getElementById('dataEditionPanel').style.display = 'none';
-      }
-   });
+      //Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      this.editionPanelVisibility(event);
+    });
   }
 
   ngOnInit() {
     this.datos = testData;
     this.getUserItemList();
+  }
+
+  editionPanelVisibility(event){
+    let searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    let filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    let editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'none';
+    }
   }
 
   deleteSortIcons() {
