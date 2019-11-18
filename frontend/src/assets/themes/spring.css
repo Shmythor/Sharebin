@@ -1,3 +1,36 @@
+html,
+body {
+    --light-shades: #F0EFEA;
+    --light-accent: #3bb78f;
+    --main-brand-color: #0bab64;
+    --dark-accent: rgb(8, 122, 100);
+    --dark-shades: #212E2B;
+
+    background: var(--light-shades) !important;    
+}
+
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
+    border: none !important;
+}
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+}
+
+
 .navbar-bg {
-    background: #30AA68 !important;
+    background: var(--light-accent) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(315deg, var(--light-accent) 0%, var(--main-brand-color) 74%) !important;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(315deg, var(--light-accent) 0%, var(--main-brand-color) 74%) !important;
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

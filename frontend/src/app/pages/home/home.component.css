@@ -1,3 +1,13 @@
+@import '../../../../node_modules/@syncfusion/ej2-base/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-buttons/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-calendars/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-inputs/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';  
+@import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+
 .list-container {
     height: 100%;
 }
@@ -29,10 +39,21 @@
 }
 
 .custom-input-container {
-    /* bg */
     border: 1px solid #C4C4C4;
     box-sizing: border-box;
     border-radius: 2px;
+}
+
+.pb2 {
+    padding-bottom: 0;
+}
+
+.pl2 > img, .pl2 > button {
+    margin: 0 10px;
+}
+
+.selectedFile {
+    background-color: rgba(0,0,0,.075);
 }
 
 .line-breaker {
@@ -47,4 +68,19 @@
     background-color: transparent;
     display: none;
     border: none;
+}
+
+.table {
+    background-color: #ffffff;
+    margin-top: 2em;
+    margin-right: 2em;
+    border-radius: 4px;
+}
+
+#nameColumn, #createDateColumn, #updateDateColumn {
+    cursor: pointer;
+}
+
+#nameColumn:hover, #createDateColumn:hover, #updateDateColumn:hover {
+    background-color: rgba(0,0,0,.075);
 }

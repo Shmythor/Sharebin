@@ -12,7 +12,7 @@ module.exports = function(Client) {
             FolderModel.createContainer({name: user.email, path: user.email}, (err, folder) => {
                 //console.log(err);
             });
-        
+
         next();
     });
 
@@ -22,13 +22,13 @@ module.exports = function(Client) {
 
 
         console.log(clientId);
-        
+
         console.log("uploadDocument");
 
         Client.findById(clientId)
             .then((userObject) => {
                 if (!userObject)
-                    throw new Error(`User with id ${clientId} not found`);                
+                    throw new Error(`User with id ${clientId} not found`);
 
                 return Folder.upload(req, res, {container: userObject.email})
             })
@@ -36,7 +36,7 @@ module.exports = function(Client) {
                 let Document = App.models.Document;
                 let documentData = fileObj.fields;
                 let fileData = fileObj.files.file[0];
-                
+
                 console.log(fileData);
                 //Parche por si llega como un array por alguna razon.
                 if (typeof(documentData.description) == "array")
@@ -57,9 +57,19 @@ module.exports = function(Client) {
             .catch(err => cb(err));
     }
 
+
+    Client.setTheme = function(clientId, theme, cb) {
+      Client.findById(clientId)
+        .then((client) =>{
+          client.theme = theme;
+          client.save();
+        }).then(() =>cb(null))
+        .catch(err => cb(err));
+    };
+
     Client.remoteMethod('uploadDocument', {
-        description: "Upload a new document. Arguments: \n" + 
-        "file: File to upload\n" + 
+        description: "Upload a new document. Arguments: \n" +
+        "file: File to upload\n" +
         "*: Params for the document",
         accepts: [
             {arg: 'req', type: 'object', http: {source: 'req'}},
@@ -69,5 +79,13 @@ module.exports = function(Client) {
         returns: {arg: 'documentData', type: 'object', root: true},
         http: {verb: 'post', path: '/:clientId/uploadDocument'}
     });
-    
+
+    Client.remoteMethod('setTheme',{
+      description: "Changing/adding theme for user",
+      accepts : [
+        {arg: 'clientId', type: 'string'},
+        {arg: 'theme', type: 'string'}
+      ]
+    })
+
 };

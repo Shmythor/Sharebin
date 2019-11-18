@@ -1,16 +1,10 @@
-<div class="w-100 row">
-    <app-navbar class="col-3"></app-navbar>
+<div class="w-100 h-100 row">
+    <app-navbar class="col-3 h-100"></app-navbar>
 
     <span class="col-9" [ngSwitch]="componentToLoad">
         <div *ngSwitchCase="'home'" class="container w-100 pt5 pb5 vh-100">
             <app-home></app-home>
         </div>
-        <!--<div *ngSwitchCase="'metadata'" class="container w-100 pt5 pb5 vh-100">
-            <app-metadata></app-metadata>
-        </div>
-        <div *ngSwitchCase="'audit'" class="container w-100 pt-5">
-            <app-audit></app-audit>
-        </div> -->
         <div *ngSwitchCase="'themes'" class="container w-100 pt-5">
             <app-themes></app-themes>
         </div>

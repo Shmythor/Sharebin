@@ -1,3 +1,41 @@
+html,
+body {
+    --light-shades: #F7F9FA;
+    --light-accent: #ec9f05;
+    --main-brand-color: #ff4e00;
+    --dark-accent: #ff2600;
+    --dark-shades: #686871;
+
+    background: var(--light-shades) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(to right, var(--light-shades), var(--light-accent)) !important;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, var(--light-shades), var(--light-accent)) !important;
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
+    border: none !important;
+}
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+}
+
+
 .navbar-bg {
-    background: #F56443 !important;
+    background: var(--main-brand-color) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(315deg, var(--main-brand-color) 0%, var(--light-accent) 74%) !important;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(315deg, var(--main-brand-color) 0%, var(--light-accent) 74%) !important;
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoginService } from '../../services/login.service';
+import { ThemesService } from '../../services/themes.service';
 
 @Component({
   selector: 'app-navbar',
@@ -10,9 +11,10 @@ import { LoginService } from '../../services/login.service';
 export class NavbarComponent implements OnInit {
   navbarSelection: string;
 
-  constructor(private router: Router, private loginService: LoginService) { }
+  constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) { }
 
   ngOnInit() {
+    this.themesService.refreshTheme(true);
   }
 
   select(val) {
@@ -22,5 +24,9 @@ export class NavbarComponent implements OnInit {
   logOut() {
     this.loginService.destroyUserLoggedIn();
     this.router.navigate(['login']);
+  }
+
+  getThemeStored(): string {
+    return localStorage.getItem('currentTheme');
   }
 }
