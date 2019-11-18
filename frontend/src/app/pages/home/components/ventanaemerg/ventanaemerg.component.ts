@@ -111,21 +111,21 @@ export class VentanaemergComponent implements OnInit {
     document.getElementById('fileUploadSuccess').style.display = 'block';
     setTimeout(() => {
       document.getElementById('fileUploadSuccess').style.display = 'none';
-    }, 2500);
+    }, 2000);
   }
 
   showErrorUploadMessage() {
     document.getElementById('fileUploadError').style.display = 'block';
     setTimeout(() => {
       document.getElementById('fileUploadError').style.display = 'none';
-    }, 2500);
+    }, 2000);
   }
 
   showLimitsUploadMessage(){    
     document.getElementById('fileUploadLimit').style.display = 'block';
     setTimeout(() => {
       document.getElementById('fileUploadLimit').style.display = 'none';
-    }, 2500);
+    }, 2000);
   }
 
 }
