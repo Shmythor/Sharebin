@@ -20,20 +20,6 @@
         <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
     </jw-modal>
 
-    <!--<ejs-grid [dataSource]='dataFiltered' [allowSorting]="true">
-        <e-columns>
-            <e-column field='OrderID' headerText='Nombre'></e-column>
-            <e-column field='CustomerID' headerText='Fecha de modificación'></e-column>
-            <e-column></e-column>
-        </e-columns>
-        <ng-template #rowTemplate>
-                <tr *ngFor="let address of dataFiltered; let i = index">
-                        <td> {{ address.name }}</td>
-                        <td> {{ address.createDate }} </td>
-                    <tr>
-            </ng-template>
-    </ejs-grid>-->
-
     <table class="table table-hover" id="itemsTable">
             <thead>
               <tr>
@@ -55,17 +41,17 @@
                     <td id="fileUpdateDate" title="Fecha de modificación"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="15" title="Descargar">
+                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="15" title="Descargar" alt="descargar">
                         </button>
                     </td>
                     <td id="fileShare">
                         <button id="shareIcon-{{dat.id}}" class="file-button ml2 mr2" (click)="shareFile(dat)">
-                            <img id="shareButtonIcon" src="../../../assets/icons/share-black.svg" width="24" title="Compartir">
+                            <img id="shareButtonIcon" src="../../../assets/icons/share-black.svg" width="24" title="Compartir" alt="compartir">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
-                            <img id="deleteButtonIcon" src="../../../assets/icons/bin-black.svg" width="24" title="Eliminar">
+                            <img id="deleteButtonIcon" src="../../../assets/icons/bin-black.svg" width="24" title="Eliminar" alt="borrar">
                         </button>
                     </td>
                 <tr>

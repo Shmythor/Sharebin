@@ -9,22 +9,6 @@
         <button class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()">Vaciar Papelera</button>
     </div>
 
-  
-
-    <!--<ejs-grid [dataSource]='dataFiltered' [allowSorting]="true">
-        <e-columns>
-            <e-column field='OrderID' headerText='Nombre'></e-column>
-            <e-column field='CustomerID' headerText='Fecha de modificación'></e-column>
-            <e-column></e-column>
-        </e-columns>
-        <ng-template #rowTemplate>
-                <tr *ngFor="let address of dataFiltered; let i = index">
-                        <td> {{ address.name }}</td>
-                        <td> {{ address.createDate }} </td>
-                    <tr>
-            </ng-template>
-    </ejs-grid>-->
-
     <table class="table table-hover" id="itemsTable">
             <thead>
               <tr>
@@ -46,17 +30,17 @@
                     <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24">
+                            <img src="../../../assets/icons/download.svg" width="24" alt="descargar">
                         </button>
                     </td>
                     <td id="fileRecover">
                         <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/recoverBin.svg" width="24">
+                            <img src="../../../assets/icons/recoverBin.svg" width="24" alt="recuperar">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24">
+                            <img src="../../../assets/icons/bin-black.svg" width="24" alt="borrar">
                         </button>
                     </td>
                     
@@ -96,5 +80,4 @@
         <!-- Faltaría colocar bonito el botón con un buen estilo-->
         Borrado documento permanentemente. No podrás recuperarlo.
     </div>
-
 </div>

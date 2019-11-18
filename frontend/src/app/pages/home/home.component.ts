@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit {
     this.textAreaText = this.itemSelected.description;
 
     document.addEventListener('click', (event) => {
-      //Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      // Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
       this.editionPanelVisibility(event);
     });
   }
@@ -64,10 +64,10 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  editionPanelVisibility(event){
-    let searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
-    let filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
-    let editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+  editionPanelVisibility(event) {
+    const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
 
     if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
@@ -112,7 +112,7 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'createDate ASC';
-      document.getElementById('createDateColumn').innerHTML += 
+      document.getElementById('createDateColumn').innerHTML +=
       '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
@@ -135,7 +135,7 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'updateDate ASC';
-      document.getElementById('updateDateColumn').innerHTML += 
+      document.getElementById('updateDateColumn').innerHTML +=
       '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
@@ -214,9 +214,10 @@ export class HomeComponent implements OnInit {
       if (this.filters[1]) { res = res || elem.description.toLowerCase().includes(search.toLowerCase()); }
       /* Filtrando por metadata */
       if (this.filters[2]) {
-      Object.keys(elem.metadata).forEach(element => {
-       // res = res || element.toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
-          res = res || elem.metadata[element].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
+      Object.keys(elem.metadatas).forEach(idx => {
+        const element = elem.metadatas[idx];
+       // res = res || element['key'].toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
+        res = res || element['value'].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
       });
       }
       return res;
@@ -224,11 +225,11 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(event: any, data: any) {
-    let isDownload = (event.target as HTMLElement).id == "downloadButtonIcon";
-    let isShare = (event.target as HTMLElement).id == "shareButtonIcon";
-    let isDelete = (event.target as HTMLElement).id == "deleteButtonIcon";
+    const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
+    const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
+    const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
-    if(!isDownload && !isShare && !isDelete){
+    if (!isDownload && !isShare && !isDelete) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'block';
 
@@ -342,7 +343,7 @@ export class HomeComponent implements OnInit {
           (err) => {console.log('me cago en', err); }
 
       );
-      //this.getUserItemList();
+      // this.getUserItemList();
   }
 
   shareFile(document) {
