@@ -54,17 +54,25 @@ export class HomeComponent implements OnInit {
     this.textAreaText = this.itemSelected.description;
 
     document.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).id.indexOf('file') < 0 && (event.target as HTMLElement).id.indexOf('dataEditionPanel') < 0 &&
-      document.getElementById('dataEditionPanel').style.display === 'block') {
-        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-        document.getElementById('dataEditionPanel').style.display = 'none';
-      }
-   });
+      //Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      this.editionPanelVisibility(event);
+    });
   }
 
   ngOnInit() {
     this.datos = testData;
     this.getUserItemList();
+  }
+
+  editionPanelVisibility(event){
+    let searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    let filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    let editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'none';
+    }
   }
 
   deleteSortIcons() {
@@ -215,16 +223,21 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  itemPressed(data: any) {
-    // Reducir el ancho de la tabla de ficheros
-    document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
-    document.getElementById('dataEditionPanel').style.display = 'block';
+  itemPressed(event: any, data: any) {
+    let isDownload = (event.target as HTMLElement).id == "downloadButtonIcon";
+    let isShare = (event.target as HTMLElement).id == "shareButtonIcon";
+    let isDelete = (event.target as HTMLElement).id == "deleteButtonIcon";
+    // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
+    if(!isDownload && !isShare && !isDelete){
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'block';
 
-    this.itemSelected = data;
-    this.metadata = this.itemSelected.metadatas;
-    this.tempMetadata = this.itemSelected.metadatas;
+      this.itemSelected = data;
+      this.metadata = this.itemSelected.metadatas;
+      this.tempMetadata = this.itemSelected.metadatas;
 
-    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+      this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+    }
   }
 
 

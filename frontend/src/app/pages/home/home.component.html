@@ -47,25 +47,25 @@
             </thead>
             <tbody>
                 <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
-                (click)="itemPressed(dat); fileSelected('file' + dat.id)"
+                (click)="itemPressed($event, dat); fileSelected('file' + dat.id)"
                 (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id)"
                 (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id)">
-                    <td id="fileName"> {{ dat.name }}</td>
-                    <td id="fileCreateDate"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
-                    <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileName" title="Nombre"> {{ dat.name }}</td>
+                    <td id="fileCreateDate" title="Fecha de creación"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate" title="Fecha de modificación"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24">
+                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="15" title="Descargar">
                         </button>
                     </td>
                     <td id="fileShare">
                         <button id="shareIcon-{{dat.id}}" class="file-button ml2 mr2" (click)="shareFile(dat)">
-                            <img src="../../../assets/icons/share-black.svg" width="24">
+                            <img id="shareButtonIcon" src="../../../assets/icons/share-black.svg" width="24" title="Compartir">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24">
+                            <img id="deleteButtonIcon" src="../../../assets/icons/bin-black.svg" width="24" title="Eliminar">
                         </button>
                     </td>
                 <tr>
@@ -89,8 +89,8 @@
                     <div id="dataEditionPanelMetadataTag">Metadatos</div>
                     <div class="flex flex-wrap">
                         <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
-                            <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
-                            <input [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
+                            <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
+                            <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
                         </div>
                         <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
                     </div>

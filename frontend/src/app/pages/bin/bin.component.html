@@ -35,7 +35,7 @@
                     </td>
                     <td id="fileRecover">
                         <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/share-black.svg" width="24">
+                            <img src="../../../assets/icons/recoverBin.svg" width="24">
                         </button>
                     </td>
                     <td id="fileDelete">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>    
-    <div id="fileMove2Home" class="alert alert-danger w-100" role="alert" style="display: none; position: absolute; bottom: 0" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
+    <div id="fileMove2Home" class="alert alert-success w-100" role="alert" style="display: none; position: absolute; bottom: 0" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
         <!-- Faltaría colocar bonito el botón con un buen estilo-->
         Movido Fichero al Inicio.
     </div>
