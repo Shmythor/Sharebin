@@ -298,7 +298,7 @@ export class BinComponent implements OnInit {
         (no) => {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileMove2HomeMessage();
-          setTimeout(() => {this.hideAndSeekService.closeMessagefileMove2Home(); }, 5000);
+          setTimeout(() => {this.hideAndSeekService.closeMessagefileMove2Home(); }, 2500);
           this.getUserItemList();
         },
         (err) => { console.log('me cago en', err); }
@@ -317,7 +317,7 @@ deletedFile(id: any ) {
         (no) => {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileDeletedFileMessage();
-          setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 5000);
+          setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 2500);
         },
         (err) => { console.log('me cago en', err); }
 
