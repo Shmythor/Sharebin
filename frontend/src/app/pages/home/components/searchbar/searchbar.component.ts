@@ -33,5 +33,4 @@ export class SearchbarComponent implements OnInit {
   search(event: any) {
     this.searchToEmit.emit(event.target.value);
   }
-
 }

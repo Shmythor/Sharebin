@@ -1,4 +1,36 @@
-.navbar-bg, .btn-primary {
-    background: linear-gradient(180deg, #7B68EE 0%, #00BFFF 100%) !important;
+html,
+body {
+    --light-shades: #F6EFED;
+    --light-accent: #63BED9;
+    --main-brand-color: #21D4FD;
+    --dark-accent: rgb(33, 136, 253);
+    --dark-shades: #1C1F32;
+
+    background: var(--light-shades) !important;
+}
+
+.btn-primary, .buttonActivated {
+    background: var(--main-brand-color) !important;
     border: none !important;
+}
+
+.buttonDisabled {
+    border-color: var(--dark-accent) !important;
+    color: var(--dark-shades) !important;
+}
+
+.btn-primary:hover, .buttonActivated:hover {
+    background: var(--dark-accent) !important;
+    border: none !important;
+}
+
+
+
+.navbar-bg {
+    background: var(--main-brand-color) !important;
+    /* fallback for old browsers */
+    background: -webkit-linear-gradient(315deg, #83eaf1 0%, #63a4ff 74%) !important;
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(315deg, #83eaf1 0%, #63a4ff 74%) !important;
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */   
 }

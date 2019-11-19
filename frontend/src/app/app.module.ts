@@ -30,6 +30,9 @@ import {ThemesComponent} from './pages/themes/themes.component';
 import {BinComponent} from './pages/bin/bin.component';
 import {VentanaalertComponent} from './pages/bin/ventanaalert/ventanaalert.component';
 import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/share-urlpopup.component';
+import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
+import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 
 
 @NgModule({
@@ -47,9 +50,10 @@ import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/sha
     ThemesComponent,
     BinComponent,
     VentanaalertComponent,
-    ShareURLPopupComponent
+    ShareURLPopupComponent,
+    MatConfirmDialogComponent
   ],
-  entryComponents: [VentanaemergComponent, VentanaalertComponent],
+  entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
@@ -58,7 +62,8 @@ import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/sha
     ScrollingModule,
     ReactiveFormsModule,
     MaterialModule,
-    ModalModule
+    ModalModule,
+    GridModule
   ],
   providers: [
     ClientApi,
@@ -69,7 +74,11 @@ import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/sha
     MetadataApi,
     SDKModels,
     LoopBackAuth,
-    InternalStorage
+    InternalStorage,
+    PageService,
+    SortService,
+    FilterService,
+    GroupService
   ],
   bootstrap: [AppComponent],
 })
