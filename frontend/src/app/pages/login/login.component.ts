@@ -42,16 +42,6 @@ export class LoginComponent implements OnInit {
   get f() { return this.registerForm.controls; }
 
   goHome() {
-    // Comento esto porque era parte de una prueba que no llegamos a hacer
-    // pero lo dejo para que lo tengais de referencia
-    // (Para descomentar facilmente, seleccionad el texto a descomentar y ctl + shift + 7)
-    // try {
-    //   this.clientapi.login(this.clients[0], () => {
-    //     console.log('Todo esta correcto!!! uwu');
-    //   });
-    // } catch (err) {
-    //   console.log('Efectivamente, error en el clientapi: ', err);
-    // }
     this.route.navigateByUrl('/home');
   }
 
