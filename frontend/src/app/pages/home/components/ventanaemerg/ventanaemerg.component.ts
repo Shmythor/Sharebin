@@ -4,11 +4,12 @@ import { ClientApi, DocumentApi } from '../../../../services/lb-api/services/ind
 import { ModalService } from '../../../../shared/_modal';
 import { Observable } from 'rxjs';
 import { HttpRequest, HttpParams, HttpClient, HttpEvent, HttpHeaders } from '@angular/common/http';
+import { ThemesService } from '../../../../services/themes.service';
 
 @Component({
   selector: 'app-ventanaemerg',
   templateUrl: './ventanaemerg.component.html',
-  styleUrls: ['./ventanaemerg.component.css']
+  styleUrls: ['./ventanaemerg.component.scss']
 })
 export class VentanaemergComponent implements OnInit {
 
@@ -19,7 +20,8 @@ export class VentanaemergComponent implements OnInit {
   uploadedFilePath: string = null;
   bodyText: string;
 
-  constructor(private clientapi: ClientApi, private modalService: ModalService, private http: HttpClient) {}
+  constructor(private clientapi: ClientApi, private modalService: ModalService,
+    private http: HttpClient, private themesService: ThemesService) {}
 
   openModal(id: string) {
     this.modalService.open(id);
@@ -34,7 +36,7 @@ export class VentanaemergComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.themesService.refreshTheme(true);
   }
 
   fileProgress(fileInput: any) {
