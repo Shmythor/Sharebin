@@ -13,7 +13,8 @@
     },
     "createDate": {
       "type": "date",
-      "required": true
+      "required": true,
+      "default": "$now"
     },
     "theme": {
       "type": "string",

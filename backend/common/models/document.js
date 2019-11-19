@@ -3,13 +3,38 @@
 let App = require('../../server/server');
 const crypto = require('crypto');
 
+let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted" ]
 module.exports = function (Document) {
-  /*Document.sharedClass.methods().forEach(function(method) {
-      console.log(method.name);
-  });*/
-
   // clientId mantatory
   Document.validatesPresenceOf('clientId');
+
+  Document.observe('after save', function creationAuditor(ctx, next) {
+    if (ctx.isNewInstance)
+      Document.createAuditorDocument(ctx.instance.id, "CREATED")
+
+    next();
+  });
+  Document.observe('before save', function createAuditorsAfterModify(ctx, next) {
+    if (ctx.isNewInstance) return next();
+
+      ModifCheckParams.forEach((field) => {
+
+        if ((field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
+          Document.createAuditorDocument(ctx.currentInstance.id, field, ctx.data[field], ctx.currentInstance[field])
+          .then((auditor) => {
+            console.log("SE HA CREADO AUDITOR");
+          })
+          .catch(err => console.log(err));
+      })
+    
+    next();
+  });
+
+  Document.createAuditorDocument = function(docId, field, newValue, oldValue) {
+    let Auditor = App.models.Auditor;
+
+    return Auditor.upsert({documentId: docId, modified_elem: field, old_value: oldValue, new_value: newValue})
+  }
 
   Document.download = function (req, res, documentId, cb) {
     let Folder = App.models.Folder;
