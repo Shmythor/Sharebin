@@ -318,11 +318,11 @@ deletedFile(id: any ) {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileDeletedFileMessage();
           setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 2500);
+          this.getUserItemList();
         },
         (err) => { console.log('me cago en', err); }
 
       );
-      this.getUserItemList();
     }
   })
 
