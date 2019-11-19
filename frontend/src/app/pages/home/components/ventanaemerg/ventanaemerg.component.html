@@ -1,33 +1,31 @@
 <div class="col-md-12">
-    <div id="fileUploadSuccess" class="alert alert-success" role="alert" style="display:none;">
+    <div id="fileUploadSuccess" class="alert alert-success" role="alert" style="display:none; text-align: center; opacity: 0.7;">
         Fichero subido correctamente.
     </div>
-    <div id="fileUploadError" class="alert alert-danger" role="alert" style="display:none;">
+    <div id="fileUploadError" class="alert alert-danger" role="alert" style="display:none; text-align: center; opacity: 0.7;">
         Error al subir el fichero. Recuerda que no se pueden subir ficheros vacíos!
     </div>   
-    <div id="fileUploadLimit" class="alert alert-danger" role="alert" style="display:none;">
-        Error al subir el fichero. Recuerda que no se pueden subir ficheros que excedan los 20 MB!
+    <div id="fileUploadLimit" class="alert alert-danger" role="alert" style="display:none; text-align: center; opacity: 0.7;">
+        Error! Recuerda que no se pueden subir ficheros que excedan los 20 MB!
     </div>   
     <h3>Selecciona tus archivos</h3>
 </div>
 
-<div class="col-md-12">
+<div class="col-md-13">
     <img src="/assets/uploadImagen.png" />
 </div>
 
 <div class="col-md-12 mb2">
     <!--<h3>Subir Archivos</h3>-->
     <input type="file" (change)="fileProgress($event)" #fileInput>
+    
 
-    <!--(click)="fileInput.click()"-->
-    <div class="flex justify-center">
+
         <button type="button" class="btn btn-success ma3" (click)="onUpload('')">        
             <span class="glyphicon glyphicon-upload"></span> Sube tus archivos
         </button>
-        <button type="button" class="btn btn-danger ma3" (click)="clearFiles()">
-            <span class="glyphicon glyphicon-trash"></span> Eliminar archivos subidos
-        </button>
-    </div>
+        
+    
 
     <jw-modal id="fileDescription">
         <!--<p>Nombre del fichero: <span id="fileName"></span></p>-->

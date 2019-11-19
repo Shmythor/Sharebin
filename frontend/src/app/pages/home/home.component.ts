@@ -54,17 +54,25 @@ export class HomeComponent implements OnInit {
     this.textAreaText = this.itemSelected.description;
 
     document.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).id.indexOf('file') < 0 && (event.target as HTMLElement).id.indexOf('dataEditionPanel') < 0 &&
-      document.getElementById('dataEditionPanel').style.display === 'block') {
-        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-        document.getElementById('dataEditionPanel').style.display = 'none';
-      }
-   });
+      // Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      this.editionPanelVisibility(event);
+    });
   }
 
   ngOnInit() {
     this.datos = testData;
     this.getUserItemList();
+  }
+
+  editionPanelVisibility(event) {
+    const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'none';
+    }
   }
 
   deleteSortIcons() {
@@ -104,7 +112,7 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'createDate ASC';
-      document.getElementById('createDateColumn').innerHTML += 
+      document.getElementById('createDateColumn').innerHTML +=
       '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
@@ -127,7 +135,7 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'updateDate ASC';
-      document.getElementById('updateDateColumn').innerHTML += 
+      document.getElementById('updateDateColumn').innerHTML +=
       '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
@@ -206,25 +214,31 @@ export class HomeComponent implements OnInit {
       if (this.filters[1]) { res = res || elem.description.toLowerCase().includes(search.toLowerCase()); }
       /* Filtrando por metadata */
       if (this.filters[2]) {
-      Object.keys(elem.metadata).forEach(element => {
-       // res = res || element.toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
-          res = res || elem.metadata[element].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
+      Object.keys(elem.metadatas).forEach(idx => {
+        const element = elem.metadatas[idx];
+       // res = res || element['key'].toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
+        res = res || element['value'].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
       });
       }
       return res;
     });
   }
 
-  itemPressed(data: any) {
-    // Reducir el ancho de la tabla de ficheros
-    document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
-    document.getElementById('dataEditionPanel').style.display = 'block';
+  itemPressed(event: any, data: any) {
+    const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
+    const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
+    const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
+    // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
+    if (!isDownload && !isShare && !isDelete) {
+      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      document.getElementById('dataEditionPanel').style.display = 'block';
 
-    this.itemSelected = data;
-    this.metadata = this.itemSelected.metadatas;
-    this.tempMetadata = this.itemSelected.metadatas;
+      this.itemSelected = data;
+      this.metadata = this.itemSelected.metadatas;
+      this.tempMetadata = this.itemSelected.metadatas;
 
-    this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+      this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
+    }
   }
 
 
@@ -321,13 +335,15 @@ export class HomeComponent implements OnInit {
         name: doc.name, description: doc.description, path: doc.path,
         clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
           (no) => {
+            this.itemSelected = {id: '', name: '', description: '', metadatas: []};
             this.hideAndSeekService.showFileMove2BinMessage();
+            this.getUserItemList();
             // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
            },
           (err) => {console.log('me cago en', err); }
 
       );
-      this.getUserItemList();
+      // this.getUserItemList();
   }
 
   shareFile(document) {

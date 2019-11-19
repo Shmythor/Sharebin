@@ -32,6 +32,7 @@ import {VentanaalertComponent} from './pages/bin/ventanaalert/ventanaalert.compo
 import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/share-urlpopup.component';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
+import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
 
 
 @NgModule({
@@ -49,9 +50,10 @@ import { PageService, SortService, FilterService, GroupService } from '@syncfusi
     ThemesComponent,
     BinComponent,
     VentanaalertComponent,
-    ShareURLPopupComponent
+    ShareURLPopupComponent,
+    MatConfirmDialogComponent
   ],
-  entryComponents: [VentanaemergComponent, VentanaalertComponent],
+  entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
     BrowserModule,
     HttpClientModule,
