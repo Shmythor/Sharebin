@@ -102,7 +102,6 @@ export class VentanaemergComponent implements OnInit {
       console.log('Error al subir documento: ' + err);
     });
   }
-
   addDataTable(data: File) {
     document.getElementById('fileNameTable').innerHTML = '<strong>' + data.name + '</strong>';
     document.getElementById('fileSizeTable').innerHTML = '' + data.size + ' Bytes';
@@ -128,6 +127,7 @@ export class VentanaemergComponent implements OnInit {
       document.getElementById('fileUploadLimit').style.display = 'none';
     }, 2000);
   }
+
 }
 
 
