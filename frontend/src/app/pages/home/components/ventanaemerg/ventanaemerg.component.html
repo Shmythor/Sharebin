@@ -11,23 +11,21 @@
     <h3>Selecciona tus archivos</h3>
 </div>
 
-<div class="col-md-12">
+<div class="col-md-13">
     <img src="/assets/uploadImagen.png" />
 </div>
 
 <div class="col-md-12 mb2">
     <!--<h3>Subir Archivos</h3>-->
     <input type="file" (change)="fileProgress($event)" #fileInput>
+    
 
-    <!--(click)="fileInput.click()"-->
-    <div class="flex justify-center">
+
         <button type="button" class="btn btn-success ma3" (click)="onUpload('')">        
             <span class="glyphicon glyphicon-upload"></span> Sube tus archivos
         </button>
-        <button type="button" class="btn btn-danger ma3" (click)="clearFiles()">
-            <span class="glyphicon glyphicon-trash"></span> Eliminar archivos subidos
-        </button>
-    </div>
+        
+    
 
     <jw-modal id="fileDescription">
         <!--<p>Nombre del fichero: <span id="fileName"></span></p>-->
