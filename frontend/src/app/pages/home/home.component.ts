@@ -269,6 +269,8 @@ export class HomeComponent implements OnInit {
         );
       });
     }
+    this.showsaveChangeMessage();
+    return;
   }
 
   postMetadata(metadata: any): Observable<HttpEvent<any>> {
@@ -390,5 +392,11 @@ export class HomeComponent implements OnInit {
     }
 
     document.getElementById(file).classList.add('selectedFile');
+  }
+  showsaveChangeMessage() {
+    document.getElementById('confirmChange').style.display = 'block';
+    setTimeout(() => {
+      document.getElementById('confirmChange').style.display = 'none';
+    }, 2000);
   }
 }
