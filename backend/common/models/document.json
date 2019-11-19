@@ -51,6 +51,11 @@
   },
   "validations": [],
   "relations": {
+    "auditors": {
+      "type": "hasMany",
+      "model": "Auditor",
+      "foreignKey": ""
+    },
     "metadatas": {
       "type": "hasMany",
       "model": "Metadata",

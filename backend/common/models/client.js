@@ -6,8 +6,7 @@ module.exports = function(Client) {
     Client.observe('before save', function createClientStorage(ctx, next) {
         let FolderModel = App.models.Folder;
         let user = ctx.instance;
-
-        console.log(user);
+        
         if (ctx.isNewInstance)
             FolderModel.createContainer({name: user.email, path: user.email}, (err, folder) => {
                 //console.log(err);
