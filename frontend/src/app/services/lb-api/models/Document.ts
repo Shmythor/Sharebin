@@ -1,4 +1,8 @@
 /* tslint:disable */
+import {
+  Metadata,
+  Client
+} from '../index';
 
 declare var Object: any;
 export interface DocumentInterface {
@@ -11,10 +15,11 @@ export interface DocumentInterface {
   "size": number;
   "type": string;
   "isDeleted": boolean;
+  "urlToShare"?: string;
   "id"?: any;
   "clientId"?: any;
-  metadatas?: any[];
-  client?: any;
+  metadatas?: Metadata[];
+  client?: Client;
 }
 
 export class Document implements DocumentInterface {
@@ -27,10 +32,11 @@ export class Document implements DocumentInterface {
   "size": number;
   "type": string;
   "isDeleted": boolean;
+  "urlToShare": string;
   "id": any;
   "clientId": any;
-  metadatas: any[];
-  client: any;
+  metadatas: Metadata[];
+  client: Client;
   constructor(data?: DocumentInterface) {
     Object.assign(this, data);
   }
@@ -103,6 +109,10 @@ export class Document implements DocumentInterface {
           type: 'boolean',
           default: false
         },
+        "urlToShare": {
+          name: 'urlToShare',
+          type: 'string'
+        },
         "id": {
           name: 'id',
           type: 'any'
@@ -115,16 +125,16 @@ export class Document implements DocumentInterface {
       relations: {
         metadatas: {
           name: 'metadatas',
-          type: 'any[]',
-          model: '',
+          type: 'Metadata[]',
+          model: 'Metadata',
           relationType: 'hasMany',
                   keyFrom: 'id',
           keyTo: 'documentId'
         },
         client: {
           name: 'client',
-          type: 'any',
-          model: '',
+          type: 'Client',
+          model: 'Client',
           relationType: 'belongsTo',
                   keyFrom: 'clientId',
           keyTo: 'id'

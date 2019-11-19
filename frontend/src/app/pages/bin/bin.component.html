@@ -1,55 +1,78 @@
-<div class="h-100">
-
-    <div id="fileMove2Home" class="alert alert-success" role="alert" style="display:none;" (click)="closeMessagefileMove2Home()">
-    <!-- Faltaría colocar bonito el botón con un buen estilo-->
-     Movido Fichero al Inicio.
-    </div>
-    <h2>Papelera</h2>
-
+<div class="h-100 w-100" style="position: relative">
     <!-- Barra de búsqueda y subida de archivos -->
-    <div class="flex justify-between mt4">
-        <app-searchbar class="w-70" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+    <div class="flex justify-between">
+        <div class="w-70 flex">
+            <h2>Papelera</h2>
+            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+        </div>
+
         <button class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()">Vaciar Papelera</button>
     </div>
 
-    <!-- Listado de archivos e información -->
-    <div class="flex justify-between mt4 h-75">
-        <div class="w-70 bg-light align-content-center">
-            <cdk-virtual-scroll-viewport itemSize='5' class="h-100">
-                <div class="pt2 pb2" *cdkVirtualFor="let dat of dataFiltered" (click)="itemPressed(dat)">
-                    <div id="file{{dat.clientId}}" class="pl2" (mouseover)="showPapperBinButton(dat.id)" (mouseover)="showRecoverButton(dat.id)" (mouseover)="showDownloadButton(dat.id)" (mouseout)="hidePapperBinButton(dat.id)"  (mouseout)="hideRecoverButton(dat.id)" (mouseout)="hideDownloadButton(dat.id)" style="border-bottom: 1px solid #c1c1c1;">
-                        <p style="display: inline-block;">
-                            <span id="fileName" style="min-width: 200px;">{{dat.name}}</span>
-                            <!--<span id="dateText" style="margin-left: 150px; font-size: 13px;">Fecha de modificación: <span id="modificationDate" style="font-style: italic; color: #9E9E9E;">01/01/2000</span></span>-->
-                        </p>
-                        <button id="downloadButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="downloadFile(dat)"><!--<a style="text-decoration: none;" target="_blank" href="../../../assets/ShareBin_Logo.png">Download</a>-->
-                            Download 
-                        </button>
-                        <button id="papperBinButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="deletedFile(dat.id)">
-                            Deleted
-                        </button>
-                        <button id="recoverButton-{{dat.id}}" class="btn btn-outline-primary btn-sm" style="display:none;float:right;" (click)="move2Home(dat)">
-                            Recuperar
-                        </button>
-                    </div>
-                </div>
-            </cdk-virtual-scroll-viewport>
+    <!-- mensajes alertas sobre fichero recuperado y fichero borrado.-->
+    <div id="fileMove2Home" class="alert alert-success w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3; opacity: 0.85;" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
+            
+            El fichero ha sido recuperado con éxito.
         </div>
-        <div class="w-25 flex flex-column justify-between">
-            <div>
-                <div>Archivo seleccionado</div>
-                <div class="line-breaker mb3"></div>
+        <div id="fileDeletedFile" class="alert alert-info w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3; opacity: 0.85" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
+            
+            El fichero ha sido borrado permanentemente.
+    </div>
+
+    <table class="table table-hover" id="itemsTable">
+            <thead>
+              <tr>
+                <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
+                <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
+                <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
+                (click)="itemPressed(dat); fileSelected('file' + dat.id)"
+                (mouseover)="hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showRecoverButton(dat.id); hideAndSeekService.showDownloadButton(dat.id)"
+                (mouseout)="hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideRecoverButton(dat.id); hideAndSeekService.hideDownloadButton(dat.id)">
+                    <td id="fileName"> {{ dat.name }}</td>
+                    <td id="fileCreateDate"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileDownload">
+                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
+                            <img src="../../../assets/icons/download.svg" width="24" alt="descargar">
+                        </button>
+                    </td>
+                    <td id="fileRecover">
+                        <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
+                            <img src="../../../assets/icons/recoverBin.svg" width="24" alt="recuperar">
+                        </button>
+                    </td>
+                    <td id="fileDelete">
+                        <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
+                            <img src="../../../assets/icons/bin-black.svg" width="24" alt="borrar">
+                        </button>
+                    </td>
+                    
+                <tr>
+            </tbody>
+          </table>
+
+         <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
+            <div id="dataEditionPanelContent">
+                <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
+                <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
 
                 <div class="w-100 mb3">
-                    <label for="itemName" class="w-100">Nombre</label>
-                    <input #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                    <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
                 </div>
                 <div class="w-100 mb2">
-                    <label for="itemDescription" class="w-100">Descripción</label>
-                    <textarea #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                    <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
                 </div>
                 <div class="w-100 mb2">
-                    <div>Metadatos</div>
+                    <div id="dataEditionPanelMetadataTag">Metadatos</div>
                     <div class="flex flex-wrap">
                         <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
                             <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
@@ -58,6 +81,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+        </div>    
+   
 </div>
