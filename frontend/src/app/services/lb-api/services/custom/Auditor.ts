@@ -9,16 +9,15 @@ import { LoopBackFilter,  } from '../../models/BaseModels';
 import { ErrorHandler } from '../core/error.service';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Metadata } from '../../models/Metadata';
+import { Auditor } from '../../models/Auditor';
 import { SocketConnection } from '../../sockets/socket.connections';
-import { Document } from '../../models/Document';
 
 
 /**
- * Api services for the `Metadata` model.
+ * Api services for the `Auditor` model.
  */
 @Injectable()
-export class MetadataApi extends BaseLoopBackApi {
+export class AuditorApi extends BaseLoopBackApi {
 
   constructor(
     @Inject(HttpClient) protected http: HttpClient,
@@ -28,36 +27,6 @@ export class MetadataApi extends BaseLoopBackApi {
     @Optional() @Inject(ErrorHandler) protected errorHandler: ErrorHandler
   ) {
     super(http,  connection,  models, auth, errorHandler);
-  }
-
-  /**
-   * Capta la relación belongsTo document.
-   *
-   * @param {any} id Metadata id
-   *
-   * @param {boolean} refresh 
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * <em>
-   * (The remote method definition does not provide any description.
-   * This usually means the response is a `Metadata` object.)
-   * </em>
-   */
-  public getDocument(id: any, refresh: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "GET";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/metadata/:id/document";
-    let _routeParams: any = {
-      id: id
-    };
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    if (typeof refresh !== 'undefined' && refresh !== null) _urlParams.refresh = refresh;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
   }
 
   /**
@@ -73,13 +42,13 @@ export class MetadataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `Metadata` object.)
+   * This usually means the response is a `Auditor` object.)
    * </em>
    */
   public patchOrCreate(data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/metadata";
+    "/Auditors";
     let _routeParams: any = {};
     let _postBody: any = {
       data: data
@@ -90,34 +59,9 @@ export class MetadataApi extends BaseLoopBackApi {
   }
 
   /**
-   * Delete all matching records.
-   *
-   * @param {object} where filter.where object
-   *
-   * @param {object} options 
-   *
-   * @returns {object} An empty reference that will be
-   *   populated with the actual data once the response is returned
-   *   from the server.
-   *
-   * The number of instances deleted
-   */
-  public destroyAll(where: any = {}, customHeaders?: Function): Observable<any> {
-    let _method: string = "DELETE";
-    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/metadata";
-    let _routeParams: any = {};
-    let _postBody: any = {};
-    let _urlParams: any = {};
-    if (typeof where !== 'undefined' && where !== null) _urlParams.where = where;
-    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
-    return result;
-  }
-
-  /**
    * Patch attributes for a model instance and persist it into the data source.
    *
-   * @param {any} id Metadata id
+   * @param {any} id Auditor id
    *
    * @param {object} data Request data.
    *
@@ -129,13 +73,13 @@ export class MetadataApi extends BaseLoopBackApi {
    *
    * <em>
    * (The remote method definition does not provide any description.
-   * This usually means the response is a `Metadata` object.)
+   * This usually means the response is a `Auditor` object.)
    * </em>
    */
   public patchAttributes(id: any, data: any = {}, customHeaders?: Function): Observable<any> {
     let _method: string = "PATCH";
     let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
-    "/metadata/:id";
+    "/Auditors/:id";
     let _routeParams: any = {
       id: id
     };
@@ -149,9 +93,9 @@ export class MetadataApi extends BaseLoopBackApi {
 
   /**
    * The name of the model represented by this $resource,
-   * i.e. `Metadata`.
+   * i.e. `Auditor`.
    */
   public getModelName() {
-    return "Metadata";
+    return "Auditor";
   }
 }
