@@ -53,6 +53,7 @@ import { MetadataApi } from './services/custom/Metadata';
 import { EnterpriseApi } from './services/custom/Enterprise';
 import { FolderApi } from './services/custom/Folder';
 import { ClientApi } from './services/custom/Client';
+import { AuditorApi } from './services/custom/Auditor';
 /**
 * @module SDKBrowserModule
 * @description
@@ -88,6 +89,7 @@ export class SDKBrowserModule {
         EnterpriseApi,
         FolderApi,
         ClientApi,
+        AuditorApi,
         internalStorageProvider,
         { provide: SDKStorage, useClass: StorageBrowser },
         { provide: SocketDriver, useClass: SocketBrowser }
