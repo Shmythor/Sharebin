@@ -77,7 +77,8 @@ export class Client implements ClientInterface {
         },
         "createDate": {
           name: 'createDate',
-          type: 'Date'
+          type: 'Date',
+          default: new Date(0)
         },
         "theme": {
           name: 'theme',
