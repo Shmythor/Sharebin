@@ -33,8 +33,18 @@
   "session": {},
   "auth": {},
   "parse": {
-    "body-parser#json": { "params": { "strict": false, "limit": "20mb"} },
-    "body-parser#urlencoded": {"params": { "extended": true, "limit": "20mb" }}
+    "body-parser#json": {
+      "params": {
+        "strict": false,
+        "limit": "20mb"
+      }
+    },
+    "body-parser#urlencoded": {
+      "params": {
+        "extended": true,
+        "limit": "20mb"
+      }
+    }
   },
   "routes": {
     "loopback#rest": {

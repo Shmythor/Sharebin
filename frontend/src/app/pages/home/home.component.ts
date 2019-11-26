@@ -254,8 +254,8 @@ export class HomeComponent implements OnInit {
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.replaceOrCreate( {id: this.data[index].id,
-        name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
+      this.docapi.patchAttributes(this.data[index].id, 
+        { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
           (no) => { console.log('mismuertos'); },
           (err) => {console.log('me cago en', err); }
@@ -271,26 +271,6 @@ export class HomeComponent implements OnInit {
     }
     this.showsaveChangeMessage();
     return;
-  }
-
-  postMetadata(metadata: any): Observable<HttpEvent<any>> {
-
-    const endpoint = 'http://localhost:3000/api/metadata';
-
-    const params = new HttpParams();
-    const headers = new HttpHeaders();
-
-    headers.append('Content-Type', 'application/json');
-
-    const options = {
-      params,
-      reportProgress: true,
-      headers
-    };
-
-    const req = new HttpRequest('POST', endpoint, metadata, options);
-
-    return this.http.request(req);
   }
 
   newMetadata() {
@@ -333,9 +313,7 @@ export class HomeComponent implements OnInit {
 
   move2PapperBin(doc: any ) {
       /* update database */
-      this.docapi.replaceOrCreate( {id: doc.id,
-        name: doc.name, description: doc.description, path: doc.path,
-        clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: true}).subscribe(
+      this.docapi.patchAttributes(doc.id, {isDeleted: true}).subscribe(
           (no) => {
             this.itemSelected = {id: '', name: '', description: '', metadatas: []};
             this.hideAndSeekService.showFileMove2BinMessage();
