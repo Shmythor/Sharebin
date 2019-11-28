@@ -33,6 +33,7 @@
     <table class="table table-hover" id="itemsTable">
             <thead>
               <tr>
+                <th style="width: 70px;"></th>
                 <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
                 <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
                 <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
@@ -44,14 +45,20 @@
             <tbody>
                 <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
                 (click)="itemPressed($event, dat); fileSelected('file' + dat.id)"
-                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id)"
-                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id)">
+                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id); hideAndSeekService.showDownloadFav(dat.id)"
+                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id); hideAndSeekService.hideDownloadFav(dat.id) ">
+                    <td id="favourite" ng-switch="dat.isFavourite" title="favourite">
+                        <button  id="favouriteButton-{{dat.id}}" class="file-button ml2 mr2" >
+                            <img  id="favouriteButtonIcon" src="../../../assets/icons/star.svg" width="24" title="Favorito" alt="fav"(click)="addFavourite(dat)">
+                            <img  id="favouriteButtonIconYellow" src="../../../assets/icons/star-yellow.png" width="24" title="Favorito" alt="fav" (click)="removeFavourite(dat)" style="display: none">
+                        </button>
+                    </td>
                     <td id="fileName" title="Nombre"> {{ dat.name }}</td>
                     <td id="fileCreateDate" title="Fecha de creación"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileUpdateDate" title="Fecha de modificación"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="15" title="Descargar" alt="descargar">
+                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="descargar">
                         </button>
                     </td>
                     <td id="fileShare">

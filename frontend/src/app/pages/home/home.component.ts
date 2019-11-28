@@ -377,4 +377,41 @@ export class HomeComponent implements OnInit {
       document.getElementById('confirmChange').style.display = 'none';
     }, 2000);
   }
+
+  addFavourite(doc: any){
+    this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
+      (no) => {
+        this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+        //this.hideAndSeekService.showFileMove2BinMessage();
+        this.changeStar2Yellow();
+        this.getUserItemList();
+        // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
+       },
+      (err) => {console.log('me cago en', err); }
+
+  );
+
+  }
+
+  changeStar2Yellow(){
+    document.getElementById('favouriteButtonIcon').style.display = 'none';
+    document.getElementById('favouriteButtonIconYellow').style.display = 'block';
+  }
+
+  removeFavorite(doc: any){
+    this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
+      (no) => {
+        this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+        //this.hideAndSeekService.showFileMove2BinMessage();
+        this.changeStar2White();
+        this.getUserItemList();
+        // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
+       },
+      (err) => {console.log('me cago en', err); }
+  );
+  }
+  changeStar2White(){
+    document.getElementById('favouriteButtonIcon').style.display = 'block';
+    document.getElementById('favouriteButtonIconYellow').style.display = 'none';
+  }
 }
