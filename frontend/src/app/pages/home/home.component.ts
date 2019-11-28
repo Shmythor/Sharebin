@@ -65,11 +65,23 @@ export class HomeComponent implements OnInit {
   }
 
   editionPanelVisibility(event) {
-    const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
-    const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
-    const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    let searchbarClicked = false, filesClicked = false, editionPanelClicked = false;
+    let editionPanelVisible = false;
 
-    if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+    if(document.getElementById('searchbarContainer') != null){
+      searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    }
+
+    if(document.getElementById('itemsTable') != null){
+      filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    }
+    
+    if(document.getElementById('dataEditionPanel') != null){
+      editionPanelVisible = document.getElementById('dataEditionPanel').style.display == 'block';
+      editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    }
+
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'none';
     }
