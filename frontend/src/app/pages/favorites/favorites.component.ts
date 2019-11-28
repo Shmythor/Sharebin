@@ -168,7 +168,7 @@ getUserItemList() {
   const userId = localStorage.getItem('currentUser');
   const filter = {
     order: this.dataOrder,
-    where: { clientId: userId, isDeleted: false},
+    where: { clientId: userId, isDeleted: false, isFavourite: true},
     include: 'metadatas',
   };
 
