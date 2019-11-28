@@ -16,17 +16,16 @@ module.exports = function (Document) {
   });
   Document.observe('before save', function createAuditorsAfterModify(ctx, next) {
     if (ctx.isNewInstance) return next();
-
       ModifCheckParams.forEach((field) => {
 
-        if ((field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
+        if (ctx.data !== null && (field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
           Document.createAuditorDocument(ctx.currentInstance.id, field, ctx.data[field], ctx.currentInstance[field])
           .then((auditor) => {
             console.log("SE HA CREADO AUDITOR");
           })
           .catch(err => console.log(err));
       })
-    
+
     next();
   });
 
@@ -151,6 +150,6 @@ module.exports = function (Document) {
 
         next();
       });
-      
+
 
 };
