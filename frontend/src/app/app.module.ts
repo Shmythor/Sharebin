@@ -33,6 +33,7 @@ import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/sha
 import { GridModule } from '@syncfusion/ej2-angular-grids';
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
 
 
 @NgModule({
@@ -51,7 +52,8 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     BinComponent,
     VentanaalertComponent,
     ShareURLPopupComponent,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    FavoritesComponent
   ],
   entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
