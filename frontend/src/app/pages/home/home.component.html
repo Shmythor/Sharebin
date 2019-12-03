@@ -49,8 +49,8 @@
                 (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id); hideAndSeekService.hideDownloadFav(dat.id) ">
                     <td id="favourite" ng-switch="dat.isFavourite" title="favourite">
                         <button  id="favouriteButton-{{dat.id}}" class="file-button ml2 mr2" >
-                            <img  id="favouriteButtonIcon" src="../../../assets/icons/star.svg" width="24" title="Favorito" alt="fav"(click)="addFavourite(dat)">
-                            <img  id="favouriteButtonIconYellow" src="../../../assets/icons/star-yellow.png" width="24" title="Favorito" alt="fav" (click)="removeFavourite(dat)" style="display: none">
+                            <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)  ">
+                           <!-- <img  id="favouriteButtonIconYellow" src="../../../assets/icons/star-yellow.png" width="24" title="Favorito" alt="fav" (click)="removeFavourite(dat)" style="display: none">-->
                         </button>
                     </td>
                     <td id="fileName" title="Nombre"> {{ dat.name }}</td>
