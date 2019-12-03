@@ -14,6 +14,13 @@ export class HideAndSeekService {
   public hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'none';
   }
+  public showDownloadFav(buttonId: any) {
+    document.getElementById('favouriteButton-' + buttonId).style.display = 'block';
+  }
+
+  public hideDownloadFav(buttonId: any) {
+    document.getElementById('favouriteButton-' + buttonId).style.display = 'none';
+  }
 
   public showPapperBinButton(buttonId: any) {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'block';

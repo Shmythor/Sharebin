@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'themes', component: MaincontainerComponent, data: {load: 'themes'}, canActivate : [LoginService]},
   { path: 'audit', component: MaincontainerComponent, data: {load: 'audit'}, canActivate : [LoginService]},
   { path: 'bin', component: MaincontainerComponent, data: {load: 'bin'}, canActivate : [LoginService]},
+  { path: 'favorites', component: MaincontainerComponent, data: {load: 'favorites'}, canActivate : [LoginService]},
   { path: 'login', component: LoginComponent },
   { path: '**', pathMatch: 'full', redirectTo: 'login' }
 ];
