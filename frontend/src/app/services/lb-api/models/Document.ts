@@ -1,7 +1,8 @@
 /* tslint:disable */
 import {
   Metadata,
-  Client
+  Client,
+  Auditor
 } from '../index';
 
 declare var Object: any;
@@ -15,11 +16,13 @@ export interface DocumentInterface {
   "size": number;
   "type": string;
   "isDeleted": boolean;
+  "isFavourite": boolean;
   "urlToShare"?: string;
   "id"?: any;
   "clientId"?: any;
   metadatas?: Metadata[];
   client?: Client;
+  auditors?: Auditor[];
 }
 
 export class Document implements DocumentInterface {
@@ -32,11 +35,13 @@ export class Document implements DocumentInterface {
   "size": number;
   "type": string;
   "isDeleted": boolean;
+  "isFavourite": boolean;
   "urlToShare": string;
   "id": any;
   "clientId": any;
   metadatas: Metadata[];
   client: Client;
+  auditors: Auditor[];
   constructor(data?: DocumentInterface) {
     Object.assign(this, data);
   }
@@ -109,6 +114,11 @@ export class Document implements DocumentInterface {
           type: 'boolean',
           default: false
         },
+        "isFavourite": {
+          name: 'isFavourite',
+          type: 'boolean',
+          default: false
+        },
         "urlToShare": {
           name: 'urlToShare',
           type: 'string'
@@ -138,6 +148,14 @@ export class Document implements DocumentInterface {
           relationType: 'belongsTo',
                   keyFrom: 'clientId',
           keyTo: 'id'
+        },
+        auditors: {
+          name: 'auditors',
+          type: 'Auditor[]',
+          model: 'Auditor',
+          relationType: 'hasMany',
+                  keyFrom: 'id',
+          keyTo: 'documentId'
         },
       }
     }

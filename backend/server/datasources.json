@@ -1,25 +1,25 @@
 {
-    "db": {
-        "name": "db",
-        "connector": "memory"
-    },
-    "sharebin": {
-        "host": "localhost",
-        "port": 27017,
-        "url": "",
-        "database": "sharebindb",
-        "password": "",
-        "name": "sharebin",
-        "user": "",
-        "useNewUrlParser": true,
-        "connector": "mongodb"
-    },
-    "localfiles": {
-        "name": "localfiles",
-        "nameConflict": "makeUnique",
-        "connector": "loopback-component-storage",
-        "provider": "filesystem",
-        "root": "./server/storage",
-        "maxFileSize": "20586660"
-    }
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "sharebin": {
+    "host": "localhost",
+    "port": 27017,
+    "url": "",
+    "database": "sharebindb",
+    "password": "",
+    "name": "sharebin",
+    "user": "",
+    "useNewUrlParser": true,
+    "connector": "mongodb"
+  },
+  "localfiles": {
+    "name": "localfiles",
+    "nameConflict": "makeUnique",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": ".",
+    "maxFileSize": "20586660"
+  }
 }

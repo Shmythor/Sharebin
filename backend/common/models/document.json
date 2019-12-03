@@ -44,6 +44,11 @@
       "required": true,
       "default": false
     },
+    "isFavourite": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
     "urlToShare": {
       "type": "string",
       "required": false
@@ -51,6 +56,11 @@
   },
   "validations": [],
   "relations": {
+    "auditors": {
+      "type": "hasMany",
+      "model": "Auditor",
+      "foreignKey": ""
+    },
     "metadatas": {
       "type": "hasMany",
       "model": "Metadata",

@@ -1,18 +1,10 @@
-<div class="w-100 h-100 row">
-    <app-navbar class="col-3 h-100"></app-navbar>
+<div class="flex vh-100">
+    <app-navbar class="maincontainer-navbar"></app-navbar>
 
-    <span class="col-9" [ngSwitch]="componentToLoad">
-        <div *ngSwitchCase="'home'" class="container w-100 pt5 pb5 vh-100">
-            <app-home></app-home>
-        </div>
-        <div *ngSwitchCase="'themes'" class="container w-100 pt-5">
-            <app-themes></app-themes>
-        </div>
-        <div *ngSwitchCase="'bin'" class="container w-100 pt-5">
-            <app-bin></app-bin>
-        </div>
-        <div *ngSwitchDefault class="container w-100 pt5 pb5 vh-100"> 
-            <app-home></app-home>
-        </div>
+    <span class="maincontainer-content" [ngSwitch]="componentToLoad">        
+        <app-home *ngSwitchCase="'home'" class="container"></app-home>
+        <app-themes *ngSwitchCase="'themes'" class="container"></app-themes>
+        <app-bin *ngSwitchCase="'bin'" class="container"></app-bin>
+        <app-home *ngSwitchDefault class="container"></app-home>        
     </span>
 </div>

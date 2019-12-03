@@ -90,5 +90,9 @@
         }
       }
     }
+  },
+  "Auditor": {
+    "dataSource": "sharebin",
+    "public": true
   }
 }

@@ -292,9 +292,7 @@ export class BinComponent implements OnInit {
 
   move2Home(doc: any ) {
     /* update database */
-    this.docapi.replaceOrCreate( {id: doc.id,
-      name: doc.name, description: doc.description, path: doc.path,
-      clientId: doc.clientId, type: doc.type, size: doc.size, isDeleted: false}).subscribe(
+    this.docapi.patchAttributes(doc.id, {isDeleted: false}).subscribe(
         (no) => {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileMove2HomeMessage();
@@ -318,11 +316,11 @@ deletedFile(id: any ) {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileDeletedFileMessage();
           setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 2500);
+          this.getUserItemList();
         },
         (err) => { console.log('me cago en', err); }
 
       );
-      this.getUserItemList();
     }
   })
 
