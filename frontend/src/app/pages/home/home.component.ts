@@ -9,6 +9,8 @@ import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
 import { testData } from './datasource';
+import { DialogService } from 'src/app/shared/dialog.service';
+import {ComponentCanDeactivate} from 'src/app/shared/component-can-deactivate';
 
 @Component({
   selector: 'app-home',
@@ -38,11 +40,12 @@ export class HomeComponent implements OnInit {
   tempMetadata: any;
   searchValue: string;
   hoverIndex: number;
+  lastDocumentSelected: any;
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService) {
+             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -52,10 +55,25 @@ export class HomeComponent implements OnInit {
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
+    this.lastDocumentSelected = this.itemSelected;
 
     document.addEventListener('click', (event) => {
-      // Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
+      // listado de fichero o buscador
       this.editionPanelVisibility(event);
+      this.notSavedChanges();
+
+      /**
+       * Usando el método de Shaheer, cuando se detecte un click sobre un documento
+       * guardar este en una variable global, de tal forma que pueda acceder a sus campos
+       * Pero tener cuidado, porque el usuario puede clickar (habiendo hecho cambios) sobre otro documento
+       * y no querremos en este caso sobreescribir lasDocumentSelected
+       * 
+       * Si cliclo en algo que no sea fileSelected, entonces comparo con this.itemSelected lo de la foto
+       * y si es en un file entonces me voy al método del item pressed y miro si se han modificado los datos
+       * 
+       * En su defecto, comparo con la base de datos
+       */
     });
   }
 
@@ -257,15 +275,15 @@ export class HomeComponent implements OnInit {
       this.docapi.patchAttributes(this.data[index].id, 
         { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
+          (no) => { console.log('Nothing'); },
+          (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
       this.tempMetadata.forEach((elem) => {
         console.log(elem);
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
+          (no) => {console.log('Nothing'); },
+          (err) => {console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
@@ -280,10 +298,175 @@ export class HomeComponent implements OnInit {
 
   updateMetadataKey(event: any, id: any) {
     this.tempMetadata[id].key = event.target.value;
+
   }
   updateMetadataValue(event: any, id: any) {
     this.tempMetadata[id].value = event.target.value;
   }
+
+  notSavedChanges() {
+    let isSaved = this.checkIfUnsavedDocuments();
+    console.log("is saved?: ", isSaved);
+    if(!isSaved) {
+      // Open confirmation dialog 
+      const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+      // this.dialogService.openConfirmDialog(msg)
+      // .afterClosed().subscribe(res =>{
+      //   if(res){
+      //     // Accepted. Save changes
+      //     this.saveChanges();
+      //   }
+      // })  
+    }
+  }
+
+  // Returns true if the user saved last changes
+  checkIfUnsavedDocuments() {
+    // cuando en un documento guardar el una variable global el lastitemselected (???)
+    const lastItemSelected = this.itemSelected;
+    console.log('Last item selected: ', lastItemSelected);
+    const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
+    console.log('Index: ', index);
+    let docID = this.data[index].id;
+    console.log('Document ID: ', docID);
+    
+    // Local info 
+    let localName = this.data[index].name
+    let localDescription = this.data[index].description 
+    let localMetadata = this.data[index].metadatas
+    console.log('local name: ', localName,
+    '\nlocal description: ', localDescription,
+    '\nlocal metadata: ', localMetadata,
+    );
+
+    // Variables to store db info
+    let dbName; let dbDescription; let dbMetadata;
+
+    // Tengo que hacer esperas a estos subscribes, 
+    // porque ocurren después de que compruebe en el if
+
+    // https://stackoverflow.com/questions/50951779/angular-2-wait-for-subscribe-to-finish-to-update-access-variable
+
+    // Get document db name
+    this.getDocByID(docID).then((doc) => {
+      dbName = doc.name;
+      dbDescription = doc.description;
+      // dbMetadata = doc.metadata
+      console.log(`Got db name for ${docID}: ${dbName}`);
+      console.log(`Got db Description for ${docID}: ${dbDescription}`);
+      return this.getDocMetadataByID(docID);
+    }).then((md) => {
+      dbMetadata = md
+      console.log(`Got db Metadata for ${docID}: ${dbMetadata}`);
+    })
+    // .then((doc) => {
+    //   dbDescription = desc;
+    //   console.log(`Got db description for ${docID}: ${dbDescription}`);
+    //   return this.getDocByID(docID);
+    // })
+    // .then((doc) => {
+    //   dbMetadata = doc
+    //   console.log(`Got db doc for ${docID}: ${dbMetadata}`);
+    // })
+    .catch((err) => {
+      console.log("An error ocurred at getDocDBName catch: ", err);
+    })
+
+    console.log("Name or desciption or metadata changed");
+    console.log("localName != dbName ", localName != dbName);
+    console.log("localDescription != dbDescription ", localDescription != dbDescription);
+    console.log("localMetadata.length != dbMetadata.length ", localMetadata.length != dbMetadata.length);
+
+    if(localName != dbName 
+      || localDescription != dbDescription 
+      || localMetadata.length != dbMetadata.length) 
+    {
+      return false;
+    } else {
+      console.log("Lets see if metadata changed");
+      for(let i = 0; i < dbMetadata; i++) {
+        if(localMetadata[i].key   != dbMetadata[i].key)   { return false; }
+        if(localMetadata[i].value != dbMetadata[i].value) { return false; }
+      }
+      console.log("Returning true");
+      return true;
+    }
+  }
+
+  // getDocDBDescription(docID) {
+  //   return new Promise((resolve, reject) => {
+  //     try {
+  //       this.docapi.findById(docID, null ,(err, doc) => {
+  //         if(err) {
+  //           console.log("An error ocurred at getDocDBName: ", err);
+  //           reject()
+  //         } else {
+  //           let dbDescription = doc.description;
+  //           console.log("Found name: ", dbDescription);
+  //           resolve(dbDescription)
+  //         }
+  //       })
+  //     } catch (err) {
+  //       console.log("An error ocurred at getDocDBDescription: ", err);
+  //       reject(err)
+  //     }
+  //   })
+  // }
+
+  getDocByID(docID) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.docapi.findById(docID).subscribe((doc) => {
+          // if(err) {
+          //   console.log("An error ocurred at getDocDBName INSIDE: ", err);
+          //   reject()
+          // } else {
+            console.log("Found doc by if (promise): ", doc);
+            resolve(doc)
+          // }
+        });
+      } catch (err) {
+        console.log("An error ocurred at getDocDBName CATCH: ", err);
+        reject(err)
+      }
+    })
+  }
+
+  getDocMetadataByID(docID) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.docapi.getMetadatas(docID).subscribe((metadata) => {
+          console.log("Found metadata by if (promise): ", metadata);
+          resolve(metadata)
+        });
+      } catch (err) {
+        console.log("An error ocurred at getDocDBName CATCH: ", err);
+        reject(err)
+      }
+    })
+  }
+
+  
+
+  // getDocDBMetadata(docID) {
+  //   return new Promise((resolve, reject) => {
+  //     try {
+  //       this.docapi.findById(docID, null ,(err, doc) => {
+  //         if(err) {
+  //           console.log("An error ocurred at getDocDBName: ", err);
+  //           reject()
+  //         } else {
+  //           let metadata = doc.metadata;
+  //           console.log("Found name: ", metadata);
+  //           resolve(metadata)
+  //         }
+  //       })
+  //     } catch (err) {
+  //       console.log("An error ocurred at getDocDBDoc: ", err);
+  //       reject(err)
+  //     }
+  //   })
+  // }
 
   loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
