@@ -19,7 +19,7 @@ export class SearchbarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-
+    
   }
 
   filterBy(filter: string) {
@@ -37,5 +37,7 @@ export class SearchbarComponent implements OnInit {
 
   switchFilters() {
     this.expandFilters = !this.expandFilters;
-  }
+  }  
 }
+
+

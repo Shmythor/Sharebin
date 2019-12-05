@@ -1,6 +1,6 @@
-<div class="w-100 h-100 bg-light flex items-center justify-between searchbar-bg" id="searchbarContainer">
+<div class="flex w-100 h-100 items-center justify-between searchbar-bg" id="searchbarContainer">
     <i class="icon ion-md-search pl2"></i>
-    <input class="w-100 h-100 pl2 searchbar-bg" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
+    <input class="h-100 pl2 searchbar-input" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
     <div *ngIf="expandFilters" class="flex justify-around">
         <button class="ma1" [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" (click)="filterBy('name')">Nombre</button>
@@ -9,7 +9,7 @@
     </div>
 
     <div class="black" (click)="switchFilters()">
-        <img *ngIf="!expandFilters" id="searchbar-expand" src="../../../../assets/icons/expand.svg" class="expand-icon-opened"/>
-        <img *ngIf="expandFilters" id="searchbar-expand" src="../../../../assets/icons/expand.svg" class="expand-icon-closed"/>
+        <i *ngIf="!expandFilters" class="icon ion-ios-funnel filter-icon"></i>        
+        <i *ngIf="expandFilters" class="icon ion-ios-funnel filter-icon gray"></i>        
     </div>
 </div>

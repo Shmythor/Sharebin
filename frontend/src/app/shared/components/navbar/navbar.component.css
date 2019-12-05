@@ -20,106 +20,20 @@
     display: inline-block;
 }
 
- /* Extra small devices (phones, 600px and down) */
- @media only screen and (max-width: 600px) {
-    .navbar-logo {
-        width: 48px;
-        margin: 0 auto 1em;
-    }
+.navbar-logo {
+    width: 128px;
+    height: auto;
+    margin: 0 auto 1em;
+}
 
-    .navbar-item-text {
-        display: none;
-    }
+.navbar-item-text {
+    display: block;
+}    
 
-    .navbar-logout-text {
-        display: none;
-     }
- 
-     .navbar-logout-icon {
-         display: block;
-     }
- }
+.navbar-logout-text {
+    display: block;
+}
 
- /* Small devices (portrait tablets and large phones, 600px and up) */
- @media only screen and (min-width: 600px) {
-    .navbar-logo {
-        width: 64px;
-        height: auto;
-        margin: 0 auto 1em;
-    }
-
-    .navbar-item-text {
-        display: none;
-    }
-
-    .navbar-logout-text {
-       display: none;
-    }
- 
-    .navbar-logout-icon {
-       display: block;
-    }
- }
- 
- /* Medium devices (landscape tablets, 768px and up) */
- @media only screen and (min-width: 768px) {
-    .navbar-logo {
-        width: 72px;
-        height: auto;
-        margin: 0 auto 1em;
-    }
-
-    .navbar-item-text {
-        display: none;
-    }
-
-    .navbar-logout-text {
-       display: none;
-    }
- 
-    .navbar-logout-icon {
-        display: block;
-    }
- }
- 
- /* Large devices (laptops/desktops, 992px and up) */
- @media only screen and (min-width: 992px) {
-    .navbar-logo {
-        width: 96px;
-        height: auto;
-        margin: 0 auto 1em;
-    }
-
-    .navbar-item-text {
-        display: none;
-    }
-
-    .navbar-logout-text {
-       display: none;
-    }
-
-    .navbar-logout-icon {
-        display: block;
-    }
- }
- 
- /* Extra large devices (large laptops and desktops, 1200px and up) */
- @media only screen and (min-width: 1200px) {
-    .navbar-logo {
-        width: 128px;
-        height: auto;
-        margin: 0 auto 1em;
-    }
-
-    .navbar-item-text {
-        display: block;
-    }    
-
-    .navbar-logout-text {
-        display: block;
-    }
- 
-    .navbar-logout-icon {
-        display: none;
-    }
-} 
+.navbar-logout-icon {
+    display: none;
+}
