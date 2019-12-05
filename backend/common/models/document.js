@@ -16,17 +16,16 @@ module.exports = function (Document) {
   });
   Document.observe('before save', function createAuditorsAfterModify(ctx, next) {
     if (ctx.isNewInstance) return next();
-
       ModifCheckParams.forEach((field) => {
 
-        if ((field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
+        if (ctx.data !== undefined && (field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
           Document.createAuditorDocument(ctx.currentInstance.id, field, ctx.data[field], ctx.currentInstance[field])
           .then((auditor) => {
             console.log("SE HA CREADO AUDITOR");
           })
           .catch(err => console.log(err));
       })
-    
+
     next();
   });
 
@@ -72,13 +71,17 @@ module.exports = function (Document) {
       }
     }).then((url) => cb(null, url))
       .catch(err => cb(err));
-  }
+  };
 
   Document.downloadByLink = function(req, res, url, cb){
     Document.findOne({where :{urlToShare: url}}).then((document)=>{
       return Document.download(req,res,document.id, cb);
     }).catch(err => cb(err))
-  }
+  };
+
+  Document.deleteMetadata = function(documentId, key, value, cb){
+    Document.findById(id).then
+  };
 
   Document.remoteMethod('download', {
     description: "Downloads the document with the specified Id",
@@ -151,6 +154,6 @@ module.exports = function (Document) {
 
         next();
       });
-      
+
 
 };

@@ -7,7 +7,6 @@
 @import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
-
 .list-container {
     height: 100%;
 }
@@ -28,7 +27,7 @@
     color: #767373;
     width: 64px;
     min-width: 64px;
-    max-width: 256px;
+    max-width: 256x;
 }
 
 .metadataNew {
@@ -48,12 +47,13 @@
     padding-bottom: 0;
 }
 
-.pl2 > img, .pl2 > button {
+.pl2>img,
+.pl2>button {
     margin: 0 10px;
 }
 
 .selectedFile {
-    background-color: rgba(0,0,0,.075);
+    background-color: rgba(0, 0, 0, .075);
 }
 
 .line-breaker {
@@ -77,10 +77,14 @@
     border-radius: 4px;
 }
 
-#nameColumn, #createDateColumn, #updateDateColumn {
+#nameColumn,
+#createDateColumn,
+#updateDateColumn {
     cursor: pointer;
 }
 
-#nameColumn:hover, #createDateColumn:hover, #updateDateColumn:hover {
-    background-color: rgba(0,0,0,.075);
+#nameColumn:hover,
+#createDateColumn:hover,
+#updateDateColumn:hover {
+    background-color: rgba(0, 0, 0, .075);
 }
