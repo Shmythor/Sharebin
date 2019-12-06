@@ -36,6 +36,8 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 
 import {NavbarComponent} from './shared/components/navbar/navbar.component';
 import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
+import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
+import { ItemlistComponent } from './shared/components/itemlist/itemlist.component';
 
 
 @NgModule({
@@ -55,7 +57,9 @@ import {SearchbarComponent} from './shared/components/searchbar/searchbar.compon
     VentanaalertComponent,
     ShareURLPopupComponent,
     MatConfirmDialogComponent,
-    FavoritesComponent
+    FavoritesComponent,
+    ThemeItemComponent,
+    ItemlistComponent
   ],
   entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
