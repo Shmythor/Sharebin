@@ -73,14 +73,8 @@
                 <tr>
             </tbody>
           </table>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination pg-blue">
-              <li class="page-item"><a class="page-link" id="anterior">Previous</a></li>
-              <li class="page-item"><a class="page-link" id="siguiente">Next</a></li>
-            </ul>
-          </nav>
 
-          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
+          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;right: 0;">
             <div id="dataEditionPanelContent">
                 <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
                 <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
@@ -108,5 +102,12 @@
                     <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
                 </div>
             </div>
-        </div>    
+        </div> 
+
+        <nav aria-label="Page navigation example" style="float: left;">
+            <ul class="pagination pg-blue">
+              <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()" disabled>Previous</button></li>
+              <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()" disabled>Next</button></li>
+            </ul>
+          </nav>   
 </div>

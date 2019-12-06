@@ -45,7 +45,7 @@ export class HomeComponent implements OnInit {
   currentPos: number = 0;
   total: number = 0;
 
-  perPage: number = 2;
+  perPage: number = 5;
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
@@ -61,9 +61,6 @@ export class HomeComponent implements OnInit {
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
 
-    this.anterior = document.getElementById("anterior");
-    this.siguiente = document.getElementById("siguiente");
-
     this.docapi.count().subscribe(docCount => {
       this.total = docCount.count;
     }, err => { console.log('docCount ERROR: ', err); });
@@ -76,6 +73,8 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.datos = testData;
+    this.anterior = document.getElementById("anterior");
+    this.siguiente = document.getElementById("siguiente");
     this.getUserItemList();
   }
 
@@ -193,8 +192,8 @@ export class HomeComponent implements OnInit {
 
   getUserItemList() {
     //first, disable both
-	  this.anterior.attr('disabled','disabled');
-    this.siguiente.attr('disabled','disabled');
+	  this.anterior.setAttribute('disabled','disabled');
+    this.siguiente.setAttribute('disabled','disabled');
   
     const userId = localStorage.getItem('currentUser');
     const filter = {
@@ -208,13 +207,13 @@ export class HomeComponent implements OnInit {
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
+
+      if(this.currentPos > 0) this.anterior.removeAttribute("disabled");
+		  if(this.currentPos + this.perPage < this.total) this.siguiente.removeAttribute("disabled");
       // console.log('ngOnInit findById data: ', docList);
     }, (error) => {
       console.log('Wtf dude', error);
     });
-
-    if(this.currentPos > 0) this.anterior.removeAttr('disabled');
-		if(this.currentPos + this.perPage < this.total) this.siguiente.removeAttr('disabled');
   }
 
   getFilter(filter: string) {
