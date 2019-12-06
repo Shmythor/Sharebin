@@ -1,23 +1,10 @@
-<div class="col-md-12">
-    <div id="confirmDeleted" class="alert alert-danger" role="alert" style="display:none;">
-        Se han borrado todos los elementos
-    </div>
-    <h3>Vaciando la Papelera</h3>
-</div>
-
-<div class="flex justify-center">
-    <img src="/assets/icons/delete-bin.svg" />
-</div>
-
-<div class="col-md-12 mb2">
-    <!--<h3>Subir Archivos</h3>-->
-    
-    <div class="flex justify-center">
-        <button type="button" class="btn btn-success ma3" (click)="deleteAllElement()">        
-            <span class="glyphicon glyphicon-upload"></span> Comfirmar borrado
-        </button>
-    </div>
-
-    
-
+<div>
+    <div class= "content-container">
+        <!--<mat-icon id= "close-icon">close</mat-icon>-->
+        <span class= "content-span full-width">
+            ¿Quieres eliminar todos fichero definitivamente? No podrás recuperarlo.
+        </span>
+    </div> 
+    <button mat-flat-button id= "no-button"  (click)="closeDialog()" >Cancelar</button>
+    <button mat-flat-button id= "yes-button" (click)="deleteAllElement()" >Aceptar</button>
 </div>

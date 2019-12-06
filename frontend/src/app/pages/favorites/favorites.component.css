@@ -27,7 +27,7 @@
     color: #767373;
     width: 64px;
     min-width: 64px;
-    max-width: 256x;
+    max-width: 256px;
 }
 
 .metadataNew {
@@ -67,6 +67,12 @@
     float: right;
     background-color: transparent;
     display: none;
+    border: none;
+}
+
+.file-button-favourite {
+    float: right;
+    background-color: transparent;
     border: none;
 }
 
