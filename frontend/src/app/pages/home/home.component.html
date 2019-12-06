@@ -44,12 +44,11 @@
             <tbody>
                 <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
                 (click)="itemPressed($event, dat); fileSelected('file' + dat.id)"
-                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id); hideAndSeekService.showDownloadFav(dat.id)"
-                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id); hideAndSeekService.hideDownloadFav(dat.id) ">
+                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id);"
+                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id);">
                     <td id="favourite" ng-switch="dat.isFavourite" title="favourite">
-                        <button  id="favouriteButton-{{dat.id}}" class="file-button ml2 mr2" >
-                            <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)  ">
-                           <!-- <img  id="favouriteButtonIconYellow" src="../../../assets/icons/star-yellow.png" width="24" title="Favorito" alt="fav" (click)="removeFavourite(dat)" style="display: none">-->
+                        <button  id="favouriteButton-{{dat.id}}" class="file-button-favourite ml2 mr2" >
+                            <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)">
                         </button>
                     </td>
                     <td id="fileName" title="Nombre"> {{ dat.name }}</td>
