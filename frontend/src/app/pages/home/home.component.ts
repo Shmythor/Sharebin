@@ -17,8 +17,6 @@ export class HomeComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
 
-  public datos: Object[];
-
   /*
     filters[0]: name
     filters[1]: description
