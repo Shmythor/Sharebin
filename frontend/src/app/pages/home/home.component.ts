@@ -273,8 +273,10 @@ export class HomeComponent implements OnInit {
     const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
     const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
     const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
+    const isFavourite = (event.target as HTMLElement).id == 'FavouriteButtonIcon';
+
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
-    if (!isDownload && !isShare && !isDelete) {
+    if (!isDownload && !isShare && !isDelete! && isFavourite) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'block';
 
@@ -427,7 +429,7 @@ export class HomeComponent implements OnInit {
     if(doc.isFavourite== true){
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
-          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
         (err) => {console.log('me cago en', err); }
@@ -435,7 +437,7 @@ export class HomeComponent implements OnInit {
     }else{
       this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
         (no) => {
-          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
         (err) => { console.log('me cago en', err); }  
