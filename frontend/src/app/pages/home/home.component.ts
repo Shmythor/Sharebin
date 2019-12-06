@@ -397,9 +397,8 @@ export class HomeComponent implements OnInit {
     );
     }
   }
-
-
+  
   deleteMetadata(id: any) { 
-    console.log(id);
+    this.metadata.splice(id, 1);
   }
 }
