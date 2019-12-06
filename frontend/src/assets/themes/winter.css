@@ -36,6 +36,7 @@ body {
     background: linear-gradient(315deg, #b8c6db 0%, #b8c6db 74%) !important; 
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
 div {
     color: var(--dark-shades)
 }

@@ -1,10 +1,10 @@
-<div class="flex vh-100">
+<div class="flex h-100" >
     <app-navbar class="maincontainer-navbar"></app-navbar>
 
     <span class="maincontainer-content" [ngSwitch]="componentToLoad">        
-        <app-home *ngSwitchCase="'home'" class="container"></app-home>
-        <app-themes *ngSwitchCase="'themes'" class="container"></app-themes>
-        <app-bin *ngSwitchCase="'bin'" class="container"></app-bin>
-        <app-home *ngSwitchDefault class="container"></app-home>        
+        <app-home *ngSwitchCase="'home'" class=""></app-home>
+        <app-themes *ngSwitchCase="'themes'" class=""></app-themes>
+        <app-bin *ngSwitchCase="'bin'" class=""></app-bin>
+        <app-home *ngSwitchDefault class=""></app-home>        
     </span>
 </div>

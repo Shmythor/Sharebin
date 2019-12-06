@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ThemesService } from '../../services/themes.service';
 
 @Component({
   selector: 'app-themes',
@@ -8,12 +7,8 @@ import { ThemesService } from '../../services/themes.service';
 })
 export class ThemesComponent implements OnInit {
 
-  constructor(private themesService: ThemesService) { }
+  constructor() { }
 
   ngOnInit() {
-  }
-
-  switchTheme(newTheme: string) {
-    this.themesService.switchTheme(newTheme);
-  }
+  }  
 }

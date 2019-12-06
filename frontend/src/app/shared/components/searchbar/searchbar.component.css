@@ -54,7 +54,6 @@
 }
 
 .searchbar-input {
-    background: rgba(243, 243, 243, 0.4);
     border: none;
     box-sizing: border-box;
     border-radius: 4px;
@@ -71,4 +70,8 @@
 .filter-icon {
     margin-left: 8px;
     margin-right: 8px;
+}
+
+.searchbar-bg {
+    background: #fbfcfb !important;
 }
