@@ -393,9 +393,13 @@ export class HomeComponent implements OnInit {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
-        (err) => {console.log('me cago en', err); }
-  
+        (err) => { console.log('me cago en', err); }  
     );
     }
+  }
+
+
+  deleteMetadata(id: any) { 
+    console.log(id);
   }
 }
