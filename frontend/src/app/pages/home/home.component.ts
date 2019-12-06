@@ -228,10 +228,10 @@ export class HomeComponent implements OnInit {
     const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
     const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
     const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
-    const isFavourite = (event.target as HTMLElement).id == 'FavouriteButtonIcon';
+    const isFavourite = (event.target as HTMLElement).id == 'favouriteButtonIcon';
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
-    if (!isDownload && !isShare && !isDelete! && isFavourite) {
+    if (!isDownload && !isShare && !isDelete && !isFavourite) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'block';
 
