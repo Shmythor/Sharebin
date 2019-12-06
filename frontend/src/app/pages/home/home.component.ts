@@ -8,8 +8,6 @@ import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
-import { testData } from './datasource';
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,8 +16,6 @@ import { testData } from './datasource';
 export class HomeComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
-
-  public datos: Object[];
 
   /*
     filters[0]: name
@@ -60,7 +56,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.datos = testData;
     this.getUserItemList();
   }
 
@@ -225,11 +220,13 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(event: any, data: any) {
-    const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
-    const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
-    const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
+    const isDownload = (event.target as HTMLElement).id === 'downloadButtonIcon';
+    const isShare = (event.target as HTMLElement).id === 'shareButtonIcon';
+    const isDelete = (event.target as HTMLElement).id === 'deleteButtonIcon';
+    const isFavourite = (event.target as HTMLElement).id === 'FavouriteButtonIcon';
+
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
-    if (!isDownload && !isShare && !isDelete) {
+    if (!isDownload && !isShare && !isDelete && !isFavourite) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'block';
 
@@ -378,27 +375,27 @@ export class HomeComponent implements OnInit {
     }, 2000);
   }
 
-  Favourite(doc: any){
-    if(doc.isFavourite== true){
+  Favourite(doc: any) {
+    if (doc.isFavourite){
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
-          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
         (err) => {console.log('me cago en', err); }
     );
-    }else{
+    } else {
       this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
         (no) => {
-          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
-        (err) => { console.log('me cago en', err); }  
+        (err) => { console.log('me cago en', err); }
     );
     }
   }
-  
-  deleteMetadata(id: any) { 
-    this.metadata.splice(id, 1);
+
+  deleteMetadata(id: any) {
+    this.tempMetadata.splice(id, 1);
   }
 }

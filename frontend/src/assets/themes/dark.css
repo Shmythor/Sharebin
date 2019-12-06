@@ -1,6 +1,6 @@
 html,
 body {
-    --light-shades: #F0EFEA;
+    --light-shades: #FBFCFB;
     --light-accent: rgb(216, 216, 216);
     --main-brand-color: #28313b;
     --dark-accent: #485461;
@@ -34,7 +34,7 @@ body {
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */  
 }
 
-.searchbar-bg, input, textarea, .custom-input-container, .metadataNew, .list-item {
+.searchbar-bg, .custom-input-container, .metadataNew, .list-item {
     background: var(--light-shades) !important;
     color: var(--dark-shades);
 }

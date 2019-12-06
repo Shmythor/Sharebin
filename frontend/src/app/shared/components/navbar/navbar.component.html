@@ -1,22 +1,24 @@
-<div class="navbar-bg h-100 w-100 d-flex flex-column pa4">
+<div class="flex flex-column pa4 h-100 navbar-bg">
     <img src="../../../assets/logo.png" title="ShareBin" class="navbar-logo" id="navbar-logo">
     <button class="row navbar-element flex items-center" (click)="select('home')">
-        <img class="navbar-item-icon" src="../../../assets/icons/home.svg" alt="home icon" id="navbar-icon-home">
-        <div class="ml2 navbar-item-text">Inicio</div>
+        <img src="../../../assets/icons/home.svg" width="32" alt="home icon" id="navbar-icon-home">
+        <div class="ml2">Inicio</div>
     </button>
-    
+
     <button class="row navbar-element flex items-center" (click)="select('bin')">
-        <img class="navbar-item-icon" src="../../../assets/icons/bin.svg" alt="bin icon" id="navbar-icon-bin">
-        <div class="ml2 navbar-item-text">Papelera</div>
+        <img src="../../../assets/icons/bin.svg" width="32" alt="bin icon" id="navbar-icon-bin">
+        <div class="ml2">Papelera</div>
     </button>
 
     <button class="row navbar-element flex items-center" (click)="select('themes')">
-        <img class="navbar-item-icon" src="../../../assets/icons/themes.svg" alt="themes icon" id="navbar-icon-themes">
-        <div class="ml2 navbar-item-text">Temas</div>
+        <img src="../../../assets/icons/themes.svg" width="32" alt="themes icon" id="navbar-icon-themes">
+        <div class="ml2">Temas</div>
     </button>
 
-    <button class="btn btn-danger btn-sm navbar-logout" (click)="logOut()" id="navbar-logout">
-        <div class="navbar-logout-text">Cerrar Sesión</div>
-        <img class="navbar-logout-icon" src="../../../assets/icons/power.svg">        
+    <button class="row navbar-element flex items-center" (click)="select('favorites')">
+        <img src="../../../assets/icons/estrella.png" width="32" alt="themes icon" id="navbar-icon-themes">
+        <div class="ml2">Favoritos</div>
     </button>
+
+    <button class="btn btn-danger btn-sm" (click)="logOut()" style="margin-top: 1em;" id="navbar-logout">Cerrar Sesión</button>
 </div>
