@@ -423,4 +423,29 @@ export class HomeComponent implements OnInit {
       document.getElementById('confirmChange').style.display = 'none';
     }, 2000);
   }
+
+  Favourite(doc: any){
+    if(doc.isFavourite== true){
+      this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
+        (no) => {
+          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          this.getUserItemList();
+        },
+        (err) => {console.log('me cago en', err); }
+    );
+    }else{
+      this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
+        (no) => {
+          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          this.getUserItemList();
+        },
+        (err) => { console.log('me cago en', err); }  
+    );
+    }
+  }
+
+
+  deleteMetadata(id: any) { 
+    console.log(id);
+  }
 }

@@ -6,7 +6,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './pages/login/login.component';
 import {HomeComponent} from './pages/home/home.component';
-import {NavbarComponent} from './shared/navbar/navbar.component';
+
 import {MaincontainerComponent} from './pages/maincontainer/maincontainer.component';
 import {MetadataComponent} from './pages/metadata/metadata.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -15,7 +15,6 @@ import {VentanaemergComponent} from './pages/home/components/ventanaemerg/ventan
 import {ModalModule} from '../app/shared/_modal';
 
 import {ScrollingModule} from '@angular/cdk/scrolling';
-import {SearchbarComponent} from './pages/home/components/searchbar/searchbar.component';
 import {UploadFilesComponent} from './pages/home/components/upload-files/upload-files.component';
 // Providers to use LoopBack Services
 import {ClientApi, DocumentApi, EnterpriseApi, MetadataApi, SDKModels} from './services/lb-api/services/index';
@@ -33,6 +32,10 @@ import {ShareURLPopupComponent} from './pages/home/components/share-urlpopup/sha
 import { GridModule } from '@syncfusion/ej2-angular-grids';
 import { PageService, SortService, FilterService, GroupService } from '@syncfusion/ej2-angular-grids';
 import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dialog.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+
+import {NavbarComponent} from './shared/components/navbar/navbar.component';
+import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
 
 
 @NgModule({
@@ -51,7 +54,8 @@ import { MatConfirmDialogComponent } from './mat-confirm-dialog/mat-confirm-dial
     BinComponent,
     VentanaalertComponent,
     ShareURLPopupComponent,
-    MatConfirmDialogComponent
+    MatConfirmDialogComponent,
+    FavoritesComponent
   ],
   entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
