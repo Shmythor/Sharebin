@@ -8,8 +8,6 @@ import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
-import { testData } from '../home/datasource';
-
 
 @Component({
   selector: 'app-favorites',
@@ -19,8 +17,6 @@ import { testData } from '../home/datasource';
 export class FavoritesComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
-
-  public datos: Object[];
 
   /*
     filters[0]: name
@@ -60,7 +56,6 @@ export class FavoritesComponent implements OnInit {
     }
 
   ngOnInit() {
-    this.datos = testData;
     this.getUserItemList();
   }
 

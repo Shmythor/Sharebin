@@ -8,8 +8,6 @@ import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
-import { testData } from './datasource';
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -18,8 +16,6 @@ import { testData } from './datasource';
 export class HomeComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
-
-  public datos: Object[];
 
   /*
     filters[0]: name
@@ -60,7 +56,6 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.datos = testData;
     this.getUserItemList();
   }
 
@@ -384,7 +379,7 @@ export class HomeComponent implements OnInit {
     if (doc.isFavourite){
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
-          //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
         (err) => {console.log('me cago en', err); }
@@ -392,7 +387,7 @@ export class HomeComponent implements OnInit {
     } else {
       this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
         (no) => {
-          //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
         (err) => { console.log('me cago en', err); }

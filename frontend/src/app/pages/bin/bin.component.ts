@@ -6,8 +6,6 @@ import { VentanaalertComponent } from 'src/app/pages/bin/ventanaalert/ventanaale
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
-
-import { testData } from '../home/datasource';
 import { DialogService } from 'src/app/shared/dialog.service';
 
 @Component({
@@ -19,8 +17,6 @@ import { DialogService } from 'src/app/shared/dialog.service';
 export class BinComponent implements OnInit {
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
-
-  public datos: Object[];
 
   /*
     filters[0]: name
@@ -64,7 +60,6 @@ export class BinComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.datos = testData;
     this.getUserItemList();
   }
 
