@@ -6,8 +6,7 @@ body {
     --dark-accent: rgb(7, 56, 134);
     --dark-shades: #16151F;
 
-    background: var(--light-shades) !important;
-   
+    background: var(--light-shades) !important;   
 }
 
 .btn-primary, .buttonActivated {
@@ -24,7 +23,6 @@ body {
     background: var(--dark-accent) !important;
     border: none !important;
 }
-
 
 .navbar-bg {
     background: var(--main-brand-color) !important;
