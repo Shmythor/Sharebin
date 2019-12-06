@@ -29,7 +29,7 @@
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
+                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2 pointer"
                 (click)="itemPressed(dat); fileSelected('file' + dat.id)"
                 (mouseover)="hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showRecoverButton(dat.id); hideAndSeekService.showDownloadButton(dat.id)"
                 (mouseout)="hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideRecoverButton(dat.id); hideAndSeekService.hideDownloadButton(dat.id)">
