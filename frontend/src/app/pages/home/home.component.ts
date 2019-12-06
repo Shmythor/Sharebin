@@ -225,10 +225,10 @@ export class HomeComponent implements OnInit {
   }
 
   itemPressed(event: any, data: any) {
-    const isDownload = (event.target as HTMLElement).id == 'downloadButtonIcon';
-    const isShare = (event.target as HTMLElement).id == 'shareButtonIcon';
-    const isDelete = (event.target as HTMLElement).id == 'deleteButtonIcon';
-    const isFavourite = (event.target as HTMLElement).id == 'FavouriteButtonIcon';
+    const isDownload = (event.target as HTMLElement).id === 'downloadButtonIcon';
+    const isShare = (event.target as HTMLElement).id === 'shareButtonIcon';
+    const isDelete = (event.target as HTMLElement).id === 'deleteButtonIcon';
+    const isFavourite = (event.target as HTMLElement).id === 'FavouriteButtonIcon';
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete! && isFavourite) {
@@ -381,7 +381,7 @@ export class HomeComponent implements OnInit {
   }
 
   Favourite(doc: any){
-    if(doc.isFavourite== true){
+    if (doc.isFavourite){
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
           //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
@@ -389,7 +389,7 @@ export class HomeComponent implements OnInit {
         },
         (err) => {console.log('me cago en', err); }
     );
-    }else{
+    } else {
       this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
         (no) => {
           //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
