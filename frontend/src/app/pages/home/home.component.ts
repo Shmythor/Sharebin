@@ -231,7 +231,7 @@ export class HomeComponent implements OnInit {
     const isFavourite = (event.target as HTMLElement).id === 'FavouriteButtonIcon';
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
-    if (!isDownload && !isShare && !isDelete! && isFavourite) {
+    if (!isDownload && !isShare && !isDelete && !isFavourite) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'block';
 
@@ -380,7 +380,7 @@ export class HomeComponent implements OnInit {
     }, 2000);
   }
 
-  Favourite(doc: any){
+  Favourite(doc: any) {
     if (doc.isFavourite){
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
@@ -395,12 +395,12 @@ export class HomeComponent implements OnInit {
           //this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
-        (err) => { console.log('me cago en', err); }  
+        (err) => { console.log('me cago en', err); }
     );
     }
   }
-  
-  deleteMetadata(id: any) { 
+
+  deleteMetadata(id: any) {
     this.metadata.splice(id, 1);
   }
 }
