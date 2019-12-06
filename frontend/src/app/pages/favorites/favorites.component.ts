@@ -397,4 +397,11 @@ export class FavoritesComponent implements OnInit {
     );
     }
   }
+
+  /* Bugs encontrados */
+  // 1. Cierra la ventana de información inesperadamente
+  // 2. Borra los metadatos sin esperar confirmación del usuario
+  deleteMetadata(id: any) {
+    this.tempMetadata.splice(id, 1);
+  }
 }

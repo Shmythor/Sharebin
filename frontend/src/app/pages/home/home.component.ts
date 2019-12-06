@@ -401,6 +401,6 @@ export class HomeComponent implements OnInit {
   }
 
   deleteMetadata(id: any) {
-    this.metadata.splice(id, 1);
+    this.tempMetadata.splice(id, 1);
   }
 }
