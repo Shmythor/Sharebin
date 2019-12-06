@@ -39,6 +39,14 @@ export class HomeComponent implements OnInit {
   searchValue: string;
   hoverIndex: number;
 
+  anterior: any;
+  siguiente: any;
+
+  currentPos: number = 0;
+  total: number = 0;
+
+  perPage: number = 2;
+
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
@@ -52,6 +60,13 @@ export class HomeComponent implements OnInit {
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
+
+    this.anterior = document.getElementById("anterior");
+    this.siguiente = document.getElementById("siguiente");
+
+    this.docapi.count().subscribe(docCount => {
+      this.total = docCount.count;
+    }, err => { console.log('docCount ERROR: ', err); });
 
     document.addEventListener('click', (event) => {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
@@ -177,8 +192,14 @@ export class HomeComponent implements OnInit {
   }
 
   getUserItemList() {
+    //first, disable both
+	  this.anterior.attr('disabled','disabled');
+    this.siguiente.attr('disabled','disabled');
+  
     const userId = localStorage.getItem('currentUser');
     const filter = {
+      limit: this.perPage,
+      skip: this.currentPos,
       order: this.dataOrder,
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
@@ -191,6 +212,9 @@ export class HomeComponent implements OnInit {
     }, (error) => {
       console.log('Wtf dude', error);
     });
+
+    if(this.currentPos > 0) this.anterior.removeAttr('disabled');
+		if(this.currentPos + this.perPage < this.total) this.siguiente.removeAttr('disabled');
   }
 
   getFilter(filter: string) {
@@ -201,6 +225,16 @@ export class HomeComponent implements OnInit {
     }
 
     this.getSearch(this.searchValue);
+  }
+
+  pagAnterior() {
+    this.currentPos -= this.perPage;
+    this.getUserItemList();	
+  }
+  
+  pagSiguiente() {
+    this.currentPos += this.perPage;
+    this.getUserItemList();	
   }
 
   getDocIDbyName(name: string) {
