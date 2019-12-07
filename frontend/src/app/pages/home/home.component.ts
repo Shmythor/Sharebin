@@ -105,8 +105,12 @@ export class HomeComponent implements OnInit {
   }
 
   detectChange($event){
-    console.log($event);
-    this.openConfirmationDialog();
+    // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
+    // con lo que solo lo haremos si el evento no ha sido en ese botón
+    if($event.explicitOriginalTarget.data != "Guardar cambios" && $event.explicitOriginalTarget.id != "dataEditionPanelSaveChanges") {
+      const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+      this.openConfirmationDialog(msg);
+    }
   }
 
   editionPanelVisibility(event) {
@@ -398,15 +402,14 @@ export class HomeComponent implements OnInit {
   }
 
   // Opens confirmation dialog when you have not saved changes 
-  openConfirmationDialog() {
-    const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+  openConfirmationDialog(msg) {
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res =>{
       if(res){ 
         // Accepted. Save changes
         this.saveChanges();
       }
-    })  
+    });  
   }
 
   getDocDB(docID) {
@@ -554,6 +557,14 @@ export class HomeComponent implements OnInit {
   }
 
   deleteMetadata(id: any) {
-    this.tempMetadata.splice(id, 1);
+    const msg = "¿Estás seguro de querer eliminar este metadato?"
+    this.dialogService.openConfirmDialog(msg)
+    .afterClosed().subscribe(res =>{
+      if(res){ 
+        // Accepted. Save changes
+        this.saveChanges();
+        this.tempMetadata.splice(id, 1);
+      }
+    }); 
   }
 }
