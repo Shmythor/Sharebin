@@ -94,3 +94,12 @@
 #updateDateColumn:hover {
     background-color: rgba(0, 0, 0, .075);
 }
+
+#paginationInfo{
+    float: left;
+    font-size: 12px;
+}
+
+.pagination li {
+    margin-right: 10px;
+}

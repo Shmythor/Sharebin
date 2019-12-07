@@ -1,6 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {MaterialModule} from './material/material.module'
+import { 
+  MatTabsModule
+ } from '@angular/material';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -71,7 +74,8 @@ import { ItemlistComponent } from './shared/components/itemlist/itemlist.compone
     ReactiveFormsModule,
     MaterialModule,
     ModalModule,
-    GridModule
+    GridModule,
+    MatTabsModule
   ],
   providers: [
     ClientApi,
