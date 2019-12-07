@@ -73,7 +73,51 @@
             </tbody>
           </table>
 
-          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;right: 0;">
+          <div style="width: 25%;margin-top: 2em; float: left; display: none;right: 0;" id="dataEditionPanel">
+          <mat-tab-group>
+                <mat-tab label="Datos">
+                        <div class="w-100 mb3">
+                                <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                                <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                            </div>
+                            <div class="w-100 mb2">
+                                <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                                <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                            </div>
+                </mat-tab>
+                <mat-tab label="Metadatos">
+                    <ul class="list">
+                        <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
+                            <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index">
+                                <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
+                                <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">          
+                                <br>
+                                <!--<li> {{item.key}} | {{item.value}} <i class="icon ion-md-close" (click)="deleteMetadata(id)"></i></li>-->
+                            </ng-container>
+                        </cdk-virtual-scroll-viewport>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
+                    </ul>
+                </mat-tab>
+                <mat-tab label="Histórico">
+                    <ul class="list">
+                        <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
+                            <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index">
+                                <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
+                                <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">          
+                                <br>
+                                <!--<li> {{item.key}} | {{item.value}} <i class="icon ion-md-close" (click)="deleteMetadata(id)"></i></li>-->
+                            </ng-container>
+                        </cdk-virtual-scroll-viewport>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
+                    </ul>
+                </mat-tab>
+            </mat-tab-group> 
+            <div class="tc">
+                <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+            </div>
+          </div>             
+
+          <!--<div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;right: 0;">
             <div id="dataEditionPanelContent">
                 <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
                 <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
@@ -101,15 +145,16 @@
                     <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
                 </div>
             </div>
-        </div> 
-
-        <nav aria-label="Page navigation example" style="float: left;">
-            <ul class="pagination pg-blue">
-                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
-                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
-                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
-                <li class="page-item" style="margin-right: 0;"><button type="button" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
-            </ul>
-            <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
-        </nav> 
+        </div>-->
+        <div id="paginationContainer" style="display: none;">
+            <nav aria-label="Page navigation example" style="float: left;width: 100%;">
+                <ul class="pagination pg-blue">
+                    <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                    <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
+                    <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
+                    <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
+                </ul>
+                <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
+            </nav>
+        </div>
 </div>
