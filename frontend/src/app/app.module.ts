@@ -1,9 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {MaterialModule} from './material/material.module'
-import { 
-  MatTabsModule
- } from '@angular/material';
+import {MatTabsModule} from '@angular/material';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -20,7 +20,7 @@ import {ModalModule} from '../app/shared/_modal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {UploadFilesComponent} from './pages/home/components/upload-files/upload-files.component';
 // Providers to use LoopBack Services
-import {ClientApi, DocumentApi, EnterpriseApi, MetadataApi, SDKModels} from './services/lb-api/services/index';
+import {ClientApi, DocumentApi, EnterpriseApi, MetadataApi, SDKModels, AuditorApi} from './services/lb-api/services/index';
 import {LoopBackAuth} from './services/lb-api/services/core/auth.service';
 import {InternalStorage} from './services/lb-api/storage/storage.swaps';
 
@@ -74,10 +74,13 @@ import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-i
     MaterialModule,
     ModalModule,
     GridModule,
-    MatTabsModule
+    MatTabsModule,
+    MatChipsModule,
+    MatIconModule
   ],
   providers: [
     ClientApi,
+    AuditorApi,
     SocketConnection,
     SocketDriver,
     DocumentApi,

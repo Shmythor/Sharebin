@@ -51,7 +51,7 @@
                             <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)">
                         </button>
                     </td>
-                    <td id="fileName" title="Nombre"> {{ dat.name }}</td>
+                    <td id="fileName" title="Nombre" style="font-size: 12px;"> {{ dat.name }}</td>
                     <td id="fileCreateDate" title="Fecha de creación" style="font-size: 12px;"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileUpdateDate" title="Fecha de modificación" style="font-size: 12px;"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
@@ -78,37 +78,45 @@
                 <mat-tab label="Datos">
                         <div class="w-100 mb3">
                                 <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
-                                <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                                <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" (change)="detectChange($event)" [value]="itemSelected.name" />
                             </div>
                             <div class="w-100 mb2">
                                 <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
-                                <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                                <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" (change)="detectChange($event)" rows='5'>{{itemSelected.description}}</textarea>
                             </div>
                 </mat-tab>
                 <mat-tab label="Metadatos">
                     <ul class="list">
-                        <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
+                            
+                        <cdk-virtual-scroll-viewport  style="height: 150px;overflow-x: hidden;margin-top: 5px;" itemSize="4" >
+                        <mat-chip-list>
                             <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index">
-                                <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
+                                <mat-chip color="primary" [selectable]="selectable" [removable]="removable" (removed)="remove()" selected>{{item.key}} : {{item.value}}
+                                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                                </mat-chip>
+                                <!--<input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
                                 <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">          
                                 <br>
-                                <!--<li> {{item.key}} | {{item.value}} <i class="icon ion-md-close" (click)="deleteMetadata(id)"></i></li>-->
+                                <li> {{item.key}} | {{item.value}} <i class="icon ion-md-close" (click)="deleteMetadata(id)"></i></li>-->
                             </ng-container>
+                        </mat-chip-list>
                         </cdk-virtual-scroll-viewport>
-                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
+                    
+                        <div>
+                            <input id="dataEditionPanelMetadata1" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput" (change)="detectChange($event)" >:
+                            <input id="dataEditionPanelMetadata2" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput" (change)="detectChange($event)">
+                        </div>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata();addMetadata();">Añadir... </div>
                     </ul>
                 </mat-tab>
                 <mat-tab label="Histórico">
                     <ul class="list">
                         <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
-                            <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index">
-                                <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
-                                <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">          
-                                <br>
-                                <!--<li> {{item.key}} | {{item.value}} <i class="icon ion-md-close" (click)="deleteMetadata(id)"></i></li>-->
+                            <ng-container *cdkVirtualFor="let audit of auditInfo; let id = index">
+                                <p>{{audit.modified_elem}}</p>
                             </ng-container>
-                        </cdk-virtual-scroll-viewport>
-                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
+                        </cdk-virtual-scroll-viewport>                        
+                        <div id="dataEditionPanelAudit" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="getAuditInfo()">Añadir... </div>
                     </ul>
                 </mat-tab>
             </mat-tab-group> 
@@ -124,16 +132,16 @@
 
                 <div class="w-100 mb3">
                     <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
-                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" (change)="detectChange($event)"/>
                 </div>
                 <div class="w-100 mb2">
                     <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
-                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5' (change)="detectChange($event)">{{itemSelected.description}}</textarea>
                 </div>
                 <div class="w-100 mb2">
                     <div id="dataEditionPanelMetadataTag">Metadatos</div>
                     <div class="flex flex-wrap">
-                        <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1 flex justify-between items-center">
+                        <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1 flex justify-between items-center" (change)="detectChange($event)">
                             <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
                             <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
                             <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id)"></i>
