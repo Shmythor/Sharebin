@@ -36,6 +36,18 @@ export class FavoritesComponent implements OnInit {
   searchValue: string;
   hoverIndex: number;
 
+  //Variables paginación
+  anterior: any;
+  siguiente: any;
+  primero: any;
+  ultimo: any;
+  currentPos: number = 0;
+  totalFiles: number = 0;
+  currentPage: number;
+  totalPages: number;
+  perPage: number = 10;
+  visibleDocs: number = this.perPage;
+
   constructor(private clientapi: ClientApi, private docapi: DocumentApi,
     public dialog: MatDialog, private http: HttpClient, private metapi: MetadataApi,
     private modalService: ModalService, public hideAndSeekService: HideAndSeekService) {
@@ -56,6 +68,11 @@ export class FavoritesComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.anterior = document.getElementById("anterior");
+    this.siguiente = document.getElementById("siguiente");
+    this.primero = document.getElementById("firstPage");
+    this.ultimo = document.getElementById("lastPage");
+
     this.getUserItemList();
   }
 
@@ -162,6 +179,8 @@ export class FavoritesComponent implements OnInit {
   getUserItemList() {
     const userId = localStorage.getItem('currentUser');
     const filter = {
+      limit: this.perPage,
+      skip: this.currentPos,
       order: this.dataOrder,
       where: { clientId: userId, isDeleted: false, isFavourite: true},
       include: 'metadatas',
@@ -171,9 +190,94 @@ export class FavoritesComponent implements OnInit {
       this.data = docList;
       this.dataFiltered = this.data;
       // console.log('ngOnInit findById data: ', docList);
+      this.updatePaginationInfo(docList.length);
     }, (error) => {
       console.log('Wtf dude', error);
     });
+  }
+
+  //Updates pagination pages text on clicks
+  updatePaginationInfo(docsView:number){
+    this.anterior.setAttribute("disabled","disabled");
+    this.siguiente.setAttribute("disabled","disabled");
+    this.primero.setAttribute("disabled","disabled");
+    this.ultimo.setAttribute("disabled","disabled");
+
+    //Guarda los documentos que están visibles
+    this.visibleDocs = docsView;
+
+    //Comprueba si ya no hay ficheros en la tabla
+    if(this.visibleDocs == 0){
+      //Si ya no hay más páginas, quita la paginación
+      if(this.anterior.hasAttribute("disabled")){
+        document.getElementById("paginationContainer").style.display = "none";
+        console.log("No hay documentos a mostrar!");
+        if(this.totalPages > 1){
+          this.pagAnterior();
+        }
+      }else{
+        //Si quedan páginas, vuelve a la anterior
+        this.pagAnterior();
+      }
+      return;
+    }
+
+    //Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
+    this.docapi.count({isDeleted: false, isFavourite: true}).subscribe(docCount => {
+      this.totalFiles = docCount.count;
+      //this.updatePaginationInfo();
+
+      //Cálculo de página actual y total de páginas
+      this.currentPage = Math.ceil(this.currentPos/this.perPage)+1;
+      this.totalPages = Math.ceil(this.totalFiles/this.perPage);
+
+      if(this.currentPos > 0){
+        this.anterior.removeAttribute("disabled");
+        this.primero.removeAttribute("disabled");
+      }
+		  if(this.currentPos + this.perPage < this.totalFiles){
+        this.siguiente.removeAttribute("disabled");
+        this.ultimo.removeAttribute("disabled");
+      } 
+
+      if(this.totalPages > 1){
+        document.getElementById("currentPage").innerHTML = ""+this.currentPage;
+        document.getElementById("totalPages").innerHTML = ""+this.totalPages;
+        document.getElementById("paginationContainer").style.display = "block";
+      }
+    }, err => { console.log('docCount ERROR: ', err); });
+    //console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
+
+    if(this.anterior.hasAttribute("disabled") 
+      && this.siguiente.hasAttribute("disabled") 
+      && this.primero.hasAttribute("disabled") 
+      && this.ultimo.hasAttribute("disabled")){
+        document.getElementById("paginationContainer").style.display = "none";
+    }
+  }
+
+  //Botón paginación de ir a la priemra página
+  firstPage(){
+    this.currentPos = 0;
+    this.getUserItemList();
+  }
+
+  //Botón paginación de ir a la última página
+  lastPage(){
+    this.currentPos = (this.perPage*this.totalPages)-this.perPage;
+    this.getUserItemList();
+  }
+
+  //Botón paginación de ir a la página anterior
+  pagAnterior() {
+    this.currentPos -= this.perPage;
+    this.getUserItemList();
+  }
+  
+  //Botón paginación de ir a la siguiente página
+  pagSiguiente() {
+    this.currentPos += this.perPage;
+    this.getUserItemList();	
   }
 
   getFilter(filter: string) {

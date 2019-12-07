@@ -146,15 +146,15 @@
                 </div>
             </div>
         </div>-->
-        <div>
-        <nav aria-label="Page navigation example" style="float: left;width: 100%;">
-            <ul class="pagination pg-blue">
-                <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
-                <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
-                <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
-                <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
-            </ul>
-            <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
-        </nav>
+        <div id="paginationContainer" style="display: none;">
+            <nav aria-label="Page navigation example" style="float: left;width: 100%;">
+                <ul class="pagination pg-blue">
+                    <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                    <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
+                    <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
+                    <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
+                </ul>
+                <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
+            </nav>
         </div>
 </div>
