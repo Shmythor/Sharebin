@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
+import { DocumentApi, ClientApi, MetadataApi, AuditorApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { ModalService } from '../../shared/_modal';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
@@ -15,6 +15,11 @@ import { AnonymousSubject } from 'rxjs/internal/Subject';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+
+  visible = true;
+  selectable = true;
+  removable = true;
+
   @ViewChild('textarea', {static: false}) textarea: ElementRef;
   @ViewChild('nameInput', {static: false}) nameInput: ElementRef;
 
@@ -33,6 +38,7 @@ export class HomeComponent implements OnInit {
   textAreaText: string;
   metadata: any;
   tempMetadata: any;
+  auditInfo: any;
   searchValue: string;
   hoverIndex: number;
 
@@ -45,17 +51,18 @@ export class HomeComponent implements OnInit {
   totalFiles: number = 0;
   currentPage: number;
   totalPages: number;
-  perPage: number = 10;
+  perPage: number = 5;
   visibleDocs: number = this.perPage;
 
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
              public hideAndSeekService: HideAndSeekService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
     this.tempMetadata = [];
+    this.auditInfo = [];
     this.hoverIndex = -1;
     this.dataOrder = '';
 
@@ -234,7 +241,7 @@ export class HomeComponent implements OnInit {
       //Si ya no hay más páginas, quita la paginación
       if(this.anterior.hasAttribute("disabled")){
         document.getElementById("paginationContainer").style.display = "none";
-        console.log("No hay documentos a mostrar!");
+        //console.log("No hay documentos a mostrar!");
         if(this.totalPages > 1){
           this.pagAnterior();
         }
@@ -354,6 +361,8 @@ export class HomeComponent implements OnInit {
       this.itemSelected = data;
       this.metadata = this.itemSelected.metadatas;
       this.tempMetadata = this.itemSelected.metadatas;
+      this.getAuditInfo();
+      //console.log(this.auditInfo);
 
       this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
     }
@@ -388,6 +397,27 @@ export class HomeComponent implements OnInit {
     }
     this.showsaveChangeMessage();
     return;
+  }
+
+  addMetadata() {
+    this.tempMetadata.push({
+      key: (document.getElementById("clave") as HTMLInputElement).value, 
+      value: (document.getElementById("valor") as HTMLInputElement).value, 
+      documentId: this.itemSelected.id
+    });
+  }
+
+  remove(){
+    console.log("Borrar");
+  }
+
+  getAuditInfo(){
+    const filter = {
+      where: { documentId: this.itemSelected.id}
+    };
+    this.auditapi.find(filter).subscribe(docAudit => {
+      this.auditInfo = docAudit;
+    }, err => { console.log('docCount ERROR: ', err); });
   }
 
   newMetadata() {
