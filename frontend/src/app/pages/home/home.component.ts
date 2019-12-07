@@ -67,13 +67,12 @@ export class HomeComponent implements OnInit {
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
-    this.lastDocumentSelected = this.itemSelected;
+    this.lastDocumentSelected = {id: '', name: '', description: '', metadatas: []};
 
     document.addEventListener('click', (event) => {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
       // listado de fichero o buscador
       this.editionPanelVisibility(event);
-      this.notSavedChanges();
 
       /**
        * Usando el método de Shaheer, cuando se detecte un click sobre un documento
@@ -122,20 +121,23 @@ export class HomeComponent implements OnInit {
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
 
+    // Si lo que clicamos es un documento de la lista
+    if(filesClicked) {
+      // si el ultimo documento seleccionado es el incial (no hemos clicado aún ninguno)
+      if(this.lastDocumentSelected.id == '') {
+        console.log("Es el primer documento que hemos clicado");
+        this.lastDocumentSelected = this.itemSelected;
+      } 
+      else if (this.lastDocumentSelected.id != '') { // si el último documento clickado no era el inicial
+        console.log("Ya hemos clicado de antes");
+        this.notSavedChanges();
+      }
+    } // Si no es un documento de la lista
+
     if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'none';
-      
-      // Si lo que clicamos es un documento de la lista
-    } else if(filesClicked) {
-      // si el ultimo documento seleccionado es el incial (no hemos clicado aún ninguno)
-      if(this.lastDocumentSelected == {id: '', name: '', description: '', metadatas: []}) {
-        console.log("Es el primer documento clicado en la lista");
-        this.lastDocumentSelected = this.itemSelected;
-      } else { // si el último documento clickado no era el inicial
-        this.checkIfUnsavedDocuments();
-      }
-    } // Si no es un documento de la lista
+    }
   }
 
   deleteSortIcons() {
@@ -404,218 +406,148 @@ export class HomeComponent implements OnInit {
   }
 
   notSavedChanges() {
-    let isSaved = this.checkIfUnsavedDocuments();
-    console.log("is saved?: ", isSaved);
-    if(!isSaved) {
-      // Open confirmation dialog 
-      const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
-      // this.dialogService.openConfirmDialog(msg)
-      // .afterClosed().subscribe(res =>{
-      //   if(res){
-      //     // Accepted. Save changes
-      //     this.saveChanges();
-      //   }
-      // })  
-    }
+    this.checkIfUnsavedDocuments().then((isSaved) => {
+      console.log("notSavedChanges: is saved?: ", isSaved);
+      if(!isSaved) {
+        // Open confirmation dialog 
+        const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+        // this.dialogService.openConfirmDialog(msg)
+        // .afterClosed().subscribe(res =>{
+        //   if(res){
+        //     // Accepted. Save changes
+        //     this.saveChanges();
+        //   }
+        // })  
+      }
+      console.log("notSavedChanges: Actualizando lastDocumentSelected a itemSelected");
+      this.lastDocumentSelected = this.itemSelected;
+    })
   }
 
   // Returns true if the user saved last changes
   // Gets info from last clicked document and compare it with itemSelected
-  async checkIfUnsavedDocuments() {
-    // To get last document info
-    console.log('Last item selected: ', this.lastDocumentSelected);
-    const lastDocIndex = this.data.findIndex((x) => x.id === this.lastDocumentSelected.id);
-    console.log('Index: ', lastDocIndex);
-    let lastDocID = this.data[lastDocIndex].id;
-    console.log('Document ID: ', lastDocID);
+  checkIfUnsavedDocuments() {
+    return new Promise((resolve, reject) => {
+      // To get last document info
+      console.log('Last item selected: ', this.lastDocumentSelected);
+      const lastDocIndex = this.data.findIndex((x) => x.id === this.lastDocumentSelected.id);
+      console.log('Index: ', lastDocIndex);
+      let lastDocID = this.data[lastDocIndex].id;
+      console.log('Document ID: ', lastDocID);
+      
+      // Last document info 
+      let lastDocName = this.data[lastDocIndex].name
+      let lastDocDescription = this.data[lastDocIndex].description 
+      let lastDocMetadata = this.data[lastDocIndex].metadatas
+  
+      console.log('last Doc name: ', lastDocName,
+      '\nlast Doc description: ', lastDocDescription,
+      '\nlast Doc metadata: ', lastDocMetadata,
+      );
+      
+      // To get current document info
+      console.log('Last item selected: ', this.itemSelected);
+      const currentIndex = lastDocIndex; //this.data.findIndex((x) => x.id === this.itemSelected.id);
+      console.log('Index: ', currentIndex);
+      let currentDocID = this.data[currentIndex].id;
+      console.log('Document ID: ', currentDocID);
+      
+      let currentName
+      let currentDescription
+      let currentMetadata
+
+      // Current document info 
+      this.getDocDB(lastDocID).then((doc) => {
+        currentName = doc.name;
+        currentDescription = doc.description;
+        
+
+        console.log('current Doc name: ', currentName,
+        '\ncurrent Doc description: ', currentDescription,
+        // '\ncurrent Doc metadata: ', currentMetadata,
+        );
+
+        return this.getDocMetadataByID(lastDocID);
+      })
+      .then((metadata) => {
+
+        currentMetadata = metadata;
+        console.log("Los metadatos de currentMetadata: ", currentMetadata);
+        // let currentDescription = this.textarea.nativeElement.value;
+        // let currentName = this.data[currentIndex].name
+        // let currentDescription = this.data[currentIndex].description 
+        // let currentMetadata = this.data[currentIndex].metadatas
     
-    // Last document info 
-    let lastDocName = this.data[lastDocIndex].name
-    let lastDocDescription = this.data[lastDocIndex].description 
-    let lastDocMetadata = this.data[lastDocIndex].metadatas
-
-    console.log('last Doc name: ', lastDocName,
-    '\nlast Doc description: ', lastDocDescription,
-    '\nlast Doc metadata: ', lastDocMetadata,
-    );
+        let nameChanged = lastDocName != currentName;
+        let descChanged = lastDocDescription != currentDescription;
     
-    // To get current document info
-    console.log('Last item selected: ', this.itemSelected);
-    const currentIndex = this.data.findIndex((x) => x.id === this.itemSelected.id);
-    console.log('Index: ', currentIndex);
-    let currentDocID = this.data[currentIndex].id;
-    console.log('Document ID: ', currentDocID);
-    
-    // Current document info 
-    let currentName = this.data[currentIndex].name
-    let currentDescription = this.data[currentIndex].description 
-    let currentMetadata = this.data[currentIndex].metadatas
+        if(nameChanged || descChanged) {
 
-    console.log('current Doc name: ', currentName,
-    '\ncurrent Doc description: ', currentDescription,
-    '\ncurrent Doc metadata: ', currentMetadata,
-    );
+            console.log('Pues algo ha cambiado, a ver qué era');
+            console.log('¿El nombre? ', nameChanged);
+            console.log('¿La descripción? ', descChanged);
+            resolve(true);
 
-    let nameChanged = lastDocName != currentName;
-    let descChanged = lastDocDescription != currentDescription;
-    let metdataChanged = lastDocMetadata.length != currentMetadata.length;
+        } else {
 
-    if(nameChanged || descChanged || metdataChanged) {
-        console.log('Pues algo ha cambiado, a ver qué era');
-        console.log('¿El nombre? ', nameChanged);
-        console.log('¿La descripción? ', descChanged);
-        console.log('¿La longitud de los metadatos? ', metdataChanged);
-    } else {
-      console.log('Parece que de lo general no hay cambios, a ver los metadatos en concreto');
-      for(let i = 0; i < lastDocMetadata.length; i++) {
-        let lm = lastDocMetadata[0];
-        let cm = currentMetadata[0];
-        if(lm.key != cm.key) {
-          console.log('Ha cambiado una key de ', lm.key, ' a ', cm.key);
+          console.log('Parece que de lo general no hay cambios, a ver los metadatos en concreto');
+          let metdataChanged = lastDocMetadata.length != currentMetadata.length;
+          
+          if(metdataChanged) {
+            console.log('Se ha modificado la cantidad de metadatos');
+            resolve(true);
+          } 
+          else {
+            // Lo de la DB y lo actual tienen la misma longitud
+            // pero se pordría haber modificado algo
+            for(let i = 0; i < lastDocMetadata.length; i++) {
+              let lm = lastDocMetadata[0];
+              let cm = currentMetadata[0];
+              if(lm.key != cm.key) {
+                console.log('Ha cambiado una key de ', lm.key, ' a ', cm.key);
+                resolve(true);
+              }
+              // falta mirar los valores
+            }
+
+          }
         }
-        // falta mirar los valores
-      }
-    }
-
-
-    // // Variables to store db info
-    // let dbName; let dbDescription; let dbMetadata;
-
-    // Tengo que hacer esperas a estos subscribes, 
-    // porque ocurren después de que compruebe en el if
-
-    // https://stackoverflow.com/questions/50951779/angular-2-wait-for-subscribe-to-finish-to-update-access-variable
-
-    // // Get document db name
-    // this.getDocByID(docID).then((doc) => {
-    //   dbName = doc.name;
-    //   dbDescription = doc.description;
-    //   // dbMetadata = doc.metadata
-    //   console.log(`Got db name for ${docID}: ${dbName}`);
-    //   console.log(`Got db Description for ${docID}: ${dbDescription}`);
-    //   return this.getDocMetadataByID(docID);
-    // }).then((md) => {
-    //   dbMetadata = md
-    //   console.log(`Got db Metadata for ${docID}: ${dbMetadata}`);
-    // })
-    // .catch((err) => {
-    //   console.log("An error ocurred at getDocDBName catch: ", err);
-    // })
-
-    // let arr = await this.getStuff(docID);
-    // dbName = arr[0];
-    // dbDescription = arr[1];
-    // dbMetadata = arr[2];
-
-    // console.log("Name or desciption or metadata changed");
-    // console.log("localName != dbName ", localName != dbName);
-    // console.log("localDescription != dbDescription ", localDescription != dbDescription);
-    // console.log("localMetadata.length != dbMetadata.length ", localMetadata.length != dbMetadata.length);
-
-    // if(localName != dbName 
-    //   || localDescription != dbDescription 
-    //   || localMetadata.length != dbMetadata.length) 
-    // {
-    //   return false;
-    // } else {
-    //   console.log("Lets see if metadata changed");
-    //   for(let i = 0; i < dbMetadata; i++) {
-    //     if(localMetadata[i].key   != dbMetadata[i].key)   { return false; }
-    //     if(localMetadata[i].value != dbMetadata[i].value) { return false; }
-    //   }
-    //   console.log("Returning true");
-    //   return true;
-    // }
+      });
+    })
   }
 
-  // getDocDBDescription(docID) {
-  //   return new Promise((resolve, reject) => {
-  //     try {
-  //       this.docapi.findById(docID, null ,(err, doc) => {
-  //         if(err) {
-  //           console.log("An error ocurred at getDocDBName: ", err);
-  //           reject()
-  //         } else {
-  //           let dbDescription = doc.description;
-  //           console.log("Found name: ", dbDescription);
-  //           resolve(dbDescription)
-  //         }
-  //       })
-  //     } catch (err) {
-  //       console.log("An error ocurred at getDocDBDescription: ", err);
-  //       reject(err)
-  //     }
-  //   })
-  // }
-
-
-  // getStuff(docID) {
-  //   let resArr = [];
-  //   // Get document db name
-  //   return new Promise((resolve, reject) => {
-  //     this.getDocByID(docID).then((doc) => {
-  //       resArr.push(doc.name);
-  //       resArr.push(doc.description);
-  //       console.log(`Got db name for ${docID}: ${resArr[0]}`);
-  //       console.log(`Got db Description for ${docID}: ${resArr[1]}`);
-  //       return this.getDocMetadataByID(docID);
-  //     }).then((md) => {
-  //       resArr.push(md);
-  //       console.log(`Got db Metadata for ${docID}: ${resArr[2]}`);
-  //     })
-  //     .catch((err) => {
-  //       console.log("An error ocurred at getDocDBName catch: ", err);
-  //     })
-  //   })
-  // }
-
-  // getDocByID(docID) {
-  //   return new Promise((resolve, reject) => {
-  //     try {
-  //       this.docapi.find({d: docID}).subscribe((docArray) => {
-  //       });
-  //     } catch (err) {
-  //       console.log("An error ocurred at getDocDBName CATCH: ", err);
-  //       reject(err)
-  //     }
-  //   })
-  // }
+  getDocDB(docID) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.docapi.findById(docID).subscribe({
+          next: (doc) => {console.log("Se ha encontrado el documento que buscabas: ", doc); resolve(doc)},
+          error: (err) => {reject(err)}
+        });       
+      } catch (err) {
+        console.log("An error ocurred at getDocDBDescription: ", err);
+        reject(err)
+      }
+    })
+  }
 
   getDocMetadataByID(docID) {
     return new Promise((resolve, reject) => {
       try {
-        this.docapi.getMetadatas(docID).subscribe((metadata) => {
-          console.log("Found metadata by getDocMetadataByID (promise): ", metadata);
-          resolve(metadata)
-        });
+        this.docapi.getMetadatas(docID).subscribe({
+          next: (metadata) => {console.log("Se han encontrado los metadatos: ", metadata); resolve(metadata)},
+          error: (err) => {reject(err)}
+        }
+          // (metadata) => {
+          // console.log("Found metadata by getDocMetadataByID (promise): ", metadata);
+          // resolve(metadata)
+          // }
+        );
       } catch (err) {
         console.log("An error ocurred at getDocDBName CATCH: ", err);
         reject(err)
       }
     })
   }
-
-  
-
-  // getDocDBMetadata(docID) {
-  //   return new Promise((resolve, reject) => {
-  //     try {
-  //       this.docapi.findById(docID, null ,(err, doc) => {
-  //         if(err) {
-  //           console.log("An error ocurred at getDocDBName: ", err);
-  //           reject()
-  //         } else {
-  //           let metadata = doc.metadata;
-  //           console.log("Found name: ", metadata);
-  //           resolve(metadata)
-  //         }
-  //       })
-  //     } catch (err) {
-  //       console.log("An error ocurred at getDocDBDoc: ", err);
-  //       reject(err)
-  //     }
-  //   })
-  // }
 
   loadUploadModal() {
     const dialogConfig = new MatDialogConfig();
