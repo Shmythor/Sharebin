@@ -40,7 +40,7 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 import {NavbarComponent} from './shared/components/navbar/navbar.component';
 import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
-import { ItemlistComponent } from './shared/components/itemlist/itemlist.component';
+
 
 
 @NgModule({
@@ -61,8 +61,7 @@ import { ItemlistComponent } from './shared/components/itemlist/itemlist.compone
     ShareURLPopupComponent,
     MatConfirmDialogComponent,
     FavoritesComponent,
-    ThemeItemComponent,
-    ItemlistComponent
+    ThemeItemComponent
   ],
   entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
