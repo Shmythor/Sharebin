@@ -40,17 +40,15 @@ export class HomeComponent implements OnInit {
   searchValue: string;
   hoverIndex: number;
 
+  //Variables paginación
   anterior: any;
   siguiente: any;
   primero: any;
   ultimo: any;
-
   currentPos: number = 0;
   totalFiles: number = 0;
-
   currentPage: number;
   totalPages: number;
-
   perPage: number = 5;
 
 
@@ -80,13 +78,14 @@ export class HomeComponent implements OnInit {
     this.primero = document.getElementById("firstPage");
     this.ultimo = document.getElementById("lastPage");
 
-    //Obtenemos el número total de documentos disponibles
+    //Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
     this.docapi.count().subscribe(docCount => {
       this.totalFiles = docCount.count;
 
       this.updatePaginationInfo();
     }, err => { console.log('docCount ERROR: ', err); });
 
+    //Rellenamos la tabla
     this.getUserItemList();
   }
 
@@ -131,11 +130,11 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'name ASC';
-      document.getElementById('nameColumn').innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'name DESC';
       document.getElementById('sortUpIcon').remove();
-      document.getElementById('nameColumn').innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
     } else {
       this.dataOrder = '';
       document.getElementById('sortDownIcon').remove();
@@ -151,13 +150,13 @@ export class HomeComponent implements OnInit {
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'createDate ASC';
       document.getElementById('createDateColumn').innerHTML +=
-      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'createDate DESC';
       document.getElementById('sortUpIcon').remove();
       document.getElementById('createDateColumn').innerHTML +=
-        '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+        '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
 
     } else {
       this.dataOrder = '';
@@ -174,13 +173,13 @@ export class HomeComponent implements OnInit {
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'updateDate ASC';
       document.getElementById('updateDateColumn').innerHTML +=
-      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'updateDate DESC';
       document.getElementById('sortUpIcon').remove();
       document.getElementById('updateDateColumn').innerHTML +=
-      '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+      '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
 
     } else {
       this.dataOrder = '';
@@ -254,24 +253,28 @@ export class HomeComponent implements OnInit {
     //console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
   }
 
+  //Botón paginación de ir a la priemra página
   firstPage(){
     this.currentPos = 0;
     this.getUserItemList();
     this.updatePaginationInfo();
   }
 
+  //Botón paginación de ir a la última página
   lastPage(){
     this.currentPos = (this.perPage*this.totalPages)-this.perPage;
     this.getUserItemList();
     this.updatePaginationInfo();
   }
 
+  //Botón paginación de ir a la página anterior
   pagAnterior() {
     this.currentPos -= this.perPage;
     this.getUserItemList();
     this.updatePaginationInfo();
   }
   
+  //Botón paginación de ir a la siguiente página
   pagSiguiente() {
     this.currentPos += this.perPage;
     this.getUserItemList();
@@ -460,6 +463,7 @@ export class HomeComponent implements OnInit {
 
     document.getElementById(file).classList.add('selectedFile');
   }
+
   showsaveChangeMessage() {
     document.getElementById('confirmChange').style.display = 'block';
     setTimeout(() => {
