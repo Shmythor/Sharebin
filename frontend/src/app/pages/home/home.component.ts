@@ -234,7 +234,7 @@ export class HomeComponent implements OnInit {
       //Si ya no hay más páginas, quita la paginación
       if(this.anterior.hasAttribute("disabled")){
         document.getElementById("paginationContainer").style.display = "none";
-        console.log("No hay documentos a mostrar!");
+        //console.log("No hay documentos a mostrar!");
         if(this.totalPages > 1){
           this.pagAnterior();
         }
