@@ -78,17 +78,17 @@
                 <mat-tab label="Datos">
                         <div class="w-100 mb3">
                                 <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
-                                <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                                <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" (change)="detectChange($event)" [value]="itemSelected.name" />
                             </div>
                             <div class="w-100 mb2">
                                 <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
-                                <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                                <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" (change)="detectChange($event)" rows='5'>{{itemSelected.description}}</textarea>
                             </div>
                 </mat-tab>
                 <mat-tab label="Metadatos">
                     <ul class="list">
                         <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
-                            <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index">
+                            <ng-container *cdkVirtualFor="let item of tempMetadata; let id = index" (change)="detectChange($event)">
                                 <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
                                 <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">          
                                 <br>

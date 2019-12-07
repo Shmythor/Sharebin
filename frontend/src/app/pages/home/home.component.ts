@@ -72,18 +72,6 @@ export class HomeComponent implements OnInit {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
       // listado de fichero o buscador
       this.editionPanelVisibility(event);
-
-      /**
-       * Usando el método de Shaheer, cuando se detecte un click sobre un documento
-       * guardar este en una variable global, de tal forma que pueda acceder a sus campos
-       * Pero tener cuidado, porque el usuario puede clickar (habiendo hecho cambios) sobre otro documento
-       * y no querremos en este caso sobreescribir lasDocumentSelected
-       * 
-       * Si cliclo en algo que no sea fileSelected, entonces comparo con this.itemSelected lo de la foto
-       * y si es en un file entonces me voy al método del item pressed y miro si se han modificado los datos
-       * 
-       * En su defecto, comparo con la base de datos
-       */
     });
   }
 
