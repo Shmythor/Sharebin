@@ -7,6 +7,7 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
+import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Component({
   selector: 'app-home',
@@ -35,6 +36,19 @@ export class HomeComponent implements OnInit {
   searchValue: string;
   hoverIndex: number;
 
+  anterior: any;
+  siguiente: any;
+  primero: any;
+  ultimo: any;
+
+  currentPos: number = 0;
+  totalFiles: number = 0;
+
+  currentPage: number;
+  totalPages: number;
+
+  perPage: number = 5;
+
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
@@ -56,15 +70,39 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.anterior = document.getElementById("anterior");
+    this.siguiente = document.getElementById("siguiente");
+    this.primero = document.getElementById("firstPage");
+    this.ultimo = document.getElementById("lastPage");
+
+    //Obtenemos el número total de documentos disponibles
+    this.docapi.count().subscribe(docCount => {
+      this.totalFiles = docCount.count;
+
+      this.updatePaginationInfo();
+    }, err => { console.log('docCount ERROR: ', err); });
+
     this.getUserItemList();
   }
 
   editionPanelVisibility(event) {
-    const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
-    const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
-    const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    let searchbarClicked = false, filesClicked = false, editionPanelClicked = false;
+    let editionPanelVisible = false;
 
-    if (!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+    if(document.getElementById('searchbarContainer') != null){
+      searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    }
+
+    if(document.getElementById('itemsTable') != null){
+      filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    }
+    
+    if(document.getElementById('dataEditionPanel') != null){
+      editionPanelVisible = document.getElementById('dataEditionPanel').style.display == 'block';
+      editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    }
+
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
       document.getElementById('dataEditionPanel').style.display = 'none';
     }
@@ -160,8 +198,15 @@ export class HomeComponent implements OnInit {
   }
 
   getUserItemList() {
+    this.anterior.setAttribute("disabled","disabled");
+    this.siguiente.setAttribute("disabled","disabled");
+    this.primero.setAttribute("disabled","disabled");
+    this.ultimo.setAttribute("disabled","disabled");
+
     const userId = localStorage.getItem('currentUser');
     const filter = {
+      limit: this.perPage,
+      skip: this.currentPos,
       order: this.dataOrder,
       where: { clientId: userId, isDeleted: false},
       include: 'metadatas',
@@ -170,7 +215,15 @@ export class HomeComponent implements OnInit {
     this.docapi.find(filter).subscribe((docList) => {
       this.data = docList;
       this.dataFiltered = this.data;
-      // console.log('ngOnInit findById data: ', docList);
+
+      if(this.currentPos > 0){
+        this.anterior.removeAttribute("disabled");
+        this.primero.removeAttribute("disabled");
+      }
+		  if(this.currentPos + this.perPage < this.totalFiles){
+        this.siguiente.removeAttribute("disabled");
+        this.ultimo.removeAttribute("disabled");
+      } 
     }, (error) => {
       console.log('Wtf dude', error);
     });
@@ -186,11 +239,44 @@ export class HomeComponent implements OnInit {
     this.getSearch(this.searchValue);
   }
 
+  //Updates pagination pages text on clicks
+  updatePaginationInfo(){
+    //Cálculo de página actual y total de páginas
+    this.currentPage = Math.ceil(this.currentPos/this.perPage)+1;
+    this.totalPages = Math.ceil(this.totalFiles/this.perPage);
+    document.getElementById("currentPage").innerHTML = ""+this.currentPage;
+    document.getElementById("totalPages").innerHTML = ""+this.totalPages;
+    //console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
+  }
+
+  firstPage(){
+    this.currentPos = 0;
+    this.getUserItemList();
+    this.updatePaginationInfo();
+  }
+
+  lastPage(){
+    this.currentPos = (this.perPage*this.totalPages)-this.perPage;
+    this.getUserItemList();
+    this.updatePaginationInfo();
+  }
+
+  pagAnterior() {
+    this.currentPos -= this.perPage;
+    this.getUserItemList();
+    this.updatePaginationInfo();
+  }
+  
+  pagSiguiente() {
+    this.currentPos += this.perPage;
+    this.getUserItemList();
+    this.updatePaginationInfo();	
+  }
+
   getDocIDbyName(name: string) {
     this.docapi.find().subscribe(docArray => {
       docArray.forEach(doc => {
         const docname = doc[0].name;
-        console.log(docname);
         if (docname === name) {
           return doc[0].id;
         }
@@ -227,7 +313,12 @@ export class HomeComponent implements OnInit {
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
+      let iconsCSS = "padding: 0;vertical-align: middle;";
+      
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
+      document.getElementById("fileShare").setAttribute("style", iconsCSS);
+      document.getElementById("fileDelete").setAttribute("style", iconsCSS);*/
       document.getElementById('dataEditionPanel').style.display = 'block';
 
       this.itemSelected = data;
@@ -259,7 +350,6 @@ export class HomeComponent implements OnInit {
       );
 
       this.tempMetadata.forEach((elem) => {
-        console.log(elem);
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
           (no) => {console.log('mismuertos'); },
           (err) => {console.log('me cago en', err); }
@@ -296,8 +386,6 @@ export class HomeComponent implements OnInit {
   downloadFile(document) {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
-
-    console.log(document);
     this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`,
       {responseType: 'arraybuffer', headers}).subscribe((data: any) => {
         const blob = new Blob([data], {type: document.type});

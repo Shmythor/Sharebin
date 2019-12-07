@@ -29,7 +29,7 @@
         <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
     </jw-modal>
 
-    <table class="table table-hover" id="itemsTable">
+    <table class="table table-hover" id="itemsTable" style="font-size: 14px;">
             <thead>
               <tr>
                 <th style="width: 70px;"></th>
@@ -52,11 +52,11 @@
                         </button>
                     </td>
                     <td id="fileName" title="Nombre"> {{ dat.name }}</td>
-                    <td id="fileCreateDate" title="Fecha de creación"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
-                    <td id="fileUpdateDate" title="Fecha de modificación"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileCreateDate" title="Fecha de creación" style="font-size: 12px;"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate" title="Fecha de modificación" style="font-size: 12px;"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="descargar">
+                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="15" title="Descargar" alt="descargar">
                         </button>
                     </td>
                     <td id="fileShare">
@@ -73,7 +73,7 @@
             </tbody>
           </table>
 
-          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
+          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;right: 0;">
             <div id="dataEditionPanelContent">
                 <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
                 <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
@@ -101,5 +101,15 @@
                     <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
                 </div>
             </div>
-        </div>   
+        </div> 
+
+        <nav aria-label="Page navigation example" style="float: left;">
+            <ul class="pagination pg-blue">
+                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
+                <li class="page-item"><button type="button" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
+                <li class="page-item" style="margin-right: 0;"><button type="button" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
+            </ul>
+            <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
+        </nav> 
 </div>
