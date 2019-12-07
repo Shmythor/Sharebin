@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({

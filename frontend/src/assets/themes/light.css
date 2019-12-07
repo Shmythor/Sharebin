@@ -24,8 +24,6 @@ body {
     border: none !important;
 }
 
-
-
 .navbar-bg {
     background: var(--main-brand-color) !important;
     /* fallback for old browsers */

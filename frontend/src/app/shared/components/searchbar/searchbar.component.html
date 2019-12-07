@@ -1,10 +1,15 @@
-<div class="w-100 h-100 bg-light flex items-center justify-between searchbar-bg" id="searchbarContainer">
+<div class="flex w-100 h-100 items-center justify-between searchbar-bg" id="searchbarContainer">
     <i class="icon ion-md-search pl2"></i>
-    <input class="w-100 h-100 pl2 searchbar-bg" style="border: none" placeholder="Buscar archivos según..." (keyup)="search($event)">
+    <input class="h-100 pl2 searchbar-input" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
-    <div class="flex justify-around">
+    <div *ngIf="expandFilters" class="flex justify-around">
         <button class="ma1" [ngClass]="{'buttonActivated': nameActivated, 'buttonDisabled': !nameActivated}" (click)="filterBy('name')">Nombre</button>
         <button class="ma1" [ngClass]="{'buttonActivated': descriptionActivated, 'buttonDisabled': !descriptionActivated}" (click)="filterBy('description')">Descripción</button>
         <button class="ma1" [ngClass]="{'buttonActivated': metadataActivated, 'buttonDisabled': !metadataActivated}" (click)="filterBy('metadata')">Metadatos</button>
+    </div>
+
+    <div class="black" (click)="switchFilters()">
+        <i *ngIf="!expandFilters" class="icon ion-ios-funnel filter-icon"></i>        
+        <i *ngIf="expandFilters" class="icon ion-ios-funnel filter-icon gray"></i>        
     </div>
 </div>

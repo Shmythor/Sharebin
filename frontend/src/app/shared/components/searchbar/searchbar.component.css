@@ -53,15 +53,25 @@
     border-color: #007bff;
 }
 
-.searchbar-bg {
-    background: rgba(243, 243, 243, 0.4);
-    border: 1px solid #7B68EE;
+.searchbar-input {
+    border: none;
     box-sizing: border-box;
     border-radius: 4px;
-    /* Buscar archivos según... */
+    width: auto;
+    
     font-family: Roboto;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
     color: rgba(0, 0, 0, 0.6);
+    margin-right: auto;
+}
+
+.filter-icon {
+    margin-left: 8px;
+    margin-right: 8px;
+}
+
+.searchbar-bg {
+    background: #fbfcfb !important;
 }
