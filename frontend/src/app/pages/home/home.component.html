@@ -103,8 +103,8 @@
                         </cdk-virtual-scroll-viewport>
                     
                         <div>
-                            <input id="dataEditionPanelMetadata1" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput">:
-                            <input id="dataEditionPanelMetadata2" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput">
+                            <input id="dataEditionPanelMetadata1" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput" (change)="detectChange($event)" >:
+                            <input id="dataEditionPanelMetadata2" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" class="metadataInput" (change)="detectChange($event)">
                         </div>
                         <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata();addMetadata();">Añadir... </div>
                     </ul>
