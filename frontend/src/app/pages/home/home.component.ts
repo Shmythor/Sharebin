@@ -104,6 +104,11 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
+  detectChange($event){
+    console.log($event);
+    this.openConfirmationDialog();
+  }
+
   editionPanelVisibility(event) {
     let searchbarClicked = false, filesClicked = false, editionPanelClicked = false;
     let editionPanelVisible = false;
@@ -120,19 +125,6 @@ export class HomeComponent implements OnInit {
       editionPanelVisible = document.getElementById('dataEditionPanel').style.display == 'block';
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
-
-    // Si lo que clicamos es un documento de la lista
-    if(filesClicked) {
-      // si el ultimo documento seleccionado es el incial (no hemos clicado aún ninguno)
-      if(this.lastDocumentSelected.id == '') {
-        console.log("Es el primer documento que hemos clicado");
-        this.lastDocumentSelected = this.itemSelected;
-      } 
-      else if (this.lastDocumentSelected.id != '') { // si el último documento clickado no era el inicial
-        console.log("Ya hemos clicado de antes");
-        this.notSavedChanges();
-      }
-    } // Si no es un documento de la lista
 
     if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
@@ -405,115 +397,16 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id].value = event.target.value;
   }
 
-  notSavedChanges() {
-    this.checkIfUnsavedDocuments().then((isSaved) => {
-      console.log("notSavedChanges: is saved?: ", isSaved);
-      if(!isSaved) {
-        // Open confirmation dialog 
-        const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
-        // this.dialogService.openConfirmDialog(msg)
-        // .afterClosed().subscribe(res =>{
-        //   if(res){
-        //     // Accepted. Save changes
-        //     this.saveChanges();
-        //   }
-        // })  
+  // Opens confirmation dialog when you have not saved changes 
+  openConfirmationDialog() {
+    const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+    this.dialogService.openConfirmDialog(msg)
+    .afterClosed().subscribe(res =>{
+      if(res){ 
+        // Accepted. Save changes
+        this.saveChanges();
       }
-      console.log("notSavedChanges: Actualizando lastDocumentSelected a itemSelected");
-      this.lastDocumentSelected = this.itemSelected;
-    })
-  }
-
-  // Returns true if the user saved last changes
-  // Gets info from last clicked document and compare it with itemSelected
-  checkIfUnsavedDocuments() {
-    return new Promise((resolve, reject) => {
-      // To get last document info
-      console.log('Last item selected: ', this.lastDocumentSelected);
-      const lastDocIndex = this.data.findIndex((x) => x.id === this.lastDocumentSelected.id);
-      console.log('Index: ', lastDocIndex);
-      let lastDocID = this.data[lastDocIndex].id;
-      console.log('Document ID: ', lastDocID);
-      
-      // Last document info 
-      let lastDocName = this.data[lastDocIndex].name
-      let lastDocDescription = this.data[lastDocIndex].description 
-      let lastDocMetadata = this.data[lastDocIndex].metadatas
-  
-      console.log('last Doc name: ', lastDocName,
-      '\nlast Doc description: ', lastDocDescription,
-      '\nlast Doc metadata: ', lastDocMetadata,
-      );
-      
-      // To get current document info
-      console.log('Last item selected: ', this.itemSelected);
-      const currentIndex = lastDocIndex; //this.data.findIndex((x) => x.id === this.itemSelected.id);
-      console.log('Index: ', currentIndex);
-      let currentDocID = this.data[currentIndex].id;
-      console.log('Document ID: ', currentDocID);
-      
-      let currentName
-      let currentDescription
-      let currentMetadata
-
-      // Current document info 
-      this.getDocDB(lastDocID).then((doc) => {
-        currentName = doc.name;
-        currentDescription = doc.description;
-        
-
-        console.log('current Doc name: ', currentName,
-        '\ncurrent Doc description: ', currentDescription,
-        // '\ncurrent Doc metadata: ', currentMetadata,
-        );
-
-        return this.getDocMetadataByID(lastDocID);
-      })
-      .then((metadata) => {
-
-        currentMetadata = metadata;
-        console.log("Los metadatos de currentMetadata: ", currentMetadata);
-        // let currentDescription = this.textarea.nativeElement.value;
-        // let currentName = this.data[currentIndex].name
-        // let currentDescription = this.data[currentIndex].description 
-        // let currentMetadata = this.data[currentIndex].metadatas
-    
-        let nameChanged = lastDocName != currentName;
-        let descChanged = lastDocDescription != currentDescription;
-    
-        if(nameChanged || descChanged) {
-
-            console.log('Pues algo ha cambiado, a ver qué era');
-            console.log('¿El nombre? ', nameChanged);
-            console.log('¿La descripción? ', descChanged);
-            resolve(true);
-
-        } else {
-
-          console.log('Parece que de lo general no hay cambios, a ver los metadatos en concreto');
-          let metdataChanged = lastDocMetadata.length != currentMetadata.length;
-          
-          if(metdataChanged) {
-            console.log('Se ha modificado la cantidad de metadatos');
-            resolve(true);
-          } 
-          else {
-            // Lo de la DB y lo actual tienen la misma longitud
-            // pero se pordría haber modificado algo
-            for(let i = 0; i < lastDocMetadata.length; i++) {
-              let lm = lastDocMetadata[0];
-              let cm = currentMetadata[0];
-              if(lm.key != cm.key) {
-                console.log('Ha cambiado una key de ', lm.key, ' a ', cm.key);
-                resolve(true);
-              }
-              // falta mirar los valores
-            }
-
-          }
-        }
-      });
-    })
+    })  
   }
 
   getDocDB(docID) {

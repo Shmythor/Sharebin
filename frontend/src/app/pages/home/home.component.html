@@ -80,11 +80,11 @@
 
                 <div class="w-100 mb3">
                     <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
-                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" (change)="detectChange($event)"/>
                 </div>
                 <div class="w-100 mb2">
                     <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
-                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5' (change)="detectChange($event)">{{itemSelected.description}}</textarea>
                 </div>
                 <div class="w-100 mb2">
                     <div id="dataEditionPanelMetadataTag">Metadatos</div>
