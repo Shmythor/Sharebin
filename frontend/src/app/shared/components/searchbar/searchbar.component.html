@@ -1,5 +1,5 @@
 <div class="flex w-100 h-100 items-center justify-between searchbar-bg" id="searchbarContainer">
-    <i class="icon ion-md-search pl2"></i>
+    <i class="icon ion-md-search pl2" style="position: absolute;"></i>
     <input class="h-100 pl2 searchbar-input" placeholder="Buscar archivos según..." (keyup)="search($event)">
 
     <div *ngIf="expandFilters" class="flex justify-around">

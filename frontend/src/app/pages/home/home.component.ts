@@ -41,18 +41,17 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
   lastDocumentSelected: any;
 
+  //Variables paginación
   anterior: any;
   siguiente: any;
   primero: any;
   ultimo: any;
-
   currentPos: number = 0;
   totalFiles: number = 0;
-
   currentPage: number;
   totalPages: number;
-
-  perPage: number = 5;
+  perPage: number = 10;
+  visibleDocs: number = this.perPage;
 
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
@@ -93,13 +92,6 @@ export class HomeComponent implements OnInit {
     this.siguiente = document.getElementById("siguiente");
     this.primero = document.getElementById("firstPage");
     this.ultimo = document.getElementById("lastPage");
-
-    //Obtenemos el número total de documentos disponibles
-    this.docapi.count().subscribe(docCount => {
-      this.totalFiles = docCount.count;
-
-      this.updatePaginationInfo();
-    }, err => { console.log('docCount ERROR: ', err); });
 
     this.getUserItemList();
   }
@@ -154,11 +146,11 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'name ASC';
-      document.getElementById('nameColumn').innerHTML += ' <img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'name DESC';
       document.getElementById('sortUpIcon').remove();
-      document.getElementById('nameColumn').innerHTML += ' <img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
     } else {
       this.dataOrder = '';
       document.getElementById('sortDownIcon').remove();
@@ -174,13 +166,13 @@ export class HomeComponent implements OnInit {
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'createDate ASC';
       document.getElementById('createDateColumn').innerHTML +=
-      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'createDate DESC';
       document.getElementById('sortUpIcon').remove();
       document.getElementById('createDateColumn').innerHTML +=
-        '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+        '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
 
     } else {
       this.dataOrder = '';
@@ -197,13 +189,13 @@ export class HomeComponent implements OnInit {
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'updateDate ASC';
       document.getElementById('updateDateColumn').innerHTML +=
-      '<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
 
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'updateDate DESC';
       document.getElementById('sortUpIcon').remove();
       document.getElementById('updateDateColumn').innerHTML +=
-      '<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+      '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
 
     } else {
       this.dataOrder = '';
@@ -226,11 +218,6 @@ export class HomeComponent implements OnInit {
   }
 
   getUserItemList() {
-    this.anterior.setAttribute("disabled","disabled");
-    this.siguiente.setAttribute("disabled","disabled");
-    this.primero.setAttribute("disabled","disabled");
-    this.ultimo.setAttribute("disabled","disabled");
-
     const userId = localStorage.getItem('currentUser');
     const filter = {
       limit: this.perPage,
@@ -244,14 +231,7 @@ export class HomeComponent implements OnInit {
       this.data = docList;
       this.dataFiltered = this.data;
 
-      if(this.currentPos > 0){
-        this.anterior.removeAttribute("disabled");
-        this.primero.removeAttribute("disabled");
-      }
-		  if(this.currentPos + this.perPage < this.totalFiles){
-        this.siguiente.removeAttribute("disabled");
-        this.ultimo.removeAttribute("disabled");
-      } 
+      this.updatePaginationInfo(docList.length);
     }, (error) => {
       console.log('Wtf dude', error);
     });
@@ -268,37 +248,87 @@ export class HomeComponent implements OnInit {
   }
 
   //Updates pagination pages text on clicks
-  updatePaginationInfo(){
-    //Cálculo de página actual y total de páginas
-    this.currentPage = Math.ceil(this.currentPos/this.perPage)+1;
-    this.totalPages = Math.ceil(this.totalFiles/this.perPage);
-    document.getElementById("currentPage").innerHTML = ""+this.currentPage;
-    document.getElementById("totalPages").innerHTML = ""+this.totalPages;
+  updatePaginationInfo(docsView:number){
+    this.anterior.setAttribute("disabled","disabled");
+    this.siguiente.setAttribute("disabled","disabled");
+    this.primero.setAttribute("disabled","disabled");
+    this.ultimo.setAttribute("disabled","disabled");
+
+    //Guarda los documentos que están visibles
+    this.visibleDocs = docsView;
+
+    //Comprueba si ya no hay ficheros en la tabla
+    if(this.visibleDocs == 0){
+      //Si ya no hay más páginas, quita la paginación
+      if(this.anterior.hasAttribute("disabled")){
+        document.getElementById("paginationContainer").style.display = "none";
+        console.log("No hay documentos a mostrar!");
+        if(this.totalPages > 1){
+          this.pagAnterior();
+        }
+      }else{
+        //Si quedan páginas, vuelve a la anterior
+        this.pagAnterior();
+      }
+      return;
+    }
+
+    //Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
+    this.docapi.count({isDeleted: false}).subscribe(docCount => {
+      this.totalFiles = docCount.count;
+      //this.updatePaginationInfo();
+
+      //Cálculo de página actual y total de páginas
+      this.currentPage = Math.ceil(this.currentPos/this.perPage)+1;
+      this.totalPages = Math.ceil(this.totalFiles/this.perPage);
+
+      if(this.currentPos > 0){
+        this.anterior.removeAttribute("disabled");
+        this.primero.removeAttribute("disabled");
+      }
+		  if(this.currentPos + this.perPage < this.totalFiles){
+        this.siguiente.removeAttribute("disabled");
+        this.ultimo.removeAttribute("disabled");
+      } 
+
+      if(this.totalPages > 1){
+        document.getElementById("currentPage").innerHTML = ""+this.currentPage;
+        document.getElementById("totalPages").innerHTML = ""+this.totalPages;
+        document.getElementById("paginationContainer").style.display = "block";
+      }
+    }, err => { console.log('docCount ERROR: ', err); });
     //console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
+
+    if(this.anterior.hasAttribute("disabled") 
+      && this.siguiente.hasAttribute("disabled") 
+      && this.primero.hasAttribute("disabled") 
+      && this.ultimo.hasAttribute("disabled")){
+        document.getElementById("paginationContainer").style.display = "none";
+    }
   }
 
+  //Botón paginación de ir a la priemra página
   firstPage(){
     this.currentPos = 0;
     this.getUserItemList();
-    this.updatePaginationInfo();
   }
 
+  //Botón paginación de ir a la última página
   lastPage(){
     this.currentPos = (this.perPage*this.totalPages)-this.perPage;
     this.getUserItemList();
-    this.updatePaginationInfo();
   }
 
+  //Botón paginación de ir a la página anterior
   pagAnterior() {
     this.currentPos -= this.perPage;
     this.getUserItemList();
-    this.updatePaginationInfo();
   }
   
+  //Botón paginación de ir a la siguiente página
   pagSiguiente() {
     this.currentPos += this.perPage;
-    this.getUserItemList();
-    this.updatePaginationInfo();	
+    this.getUserItemList();	
   }
 
   getDocIDbyName(name: string) {
@@ -337,7 +367,7 @@ export class HomeComponent implements OnInit {
     const isDownload = (event.target as HTMLElement).id === 'downloadButtonIcon';
     const isShare = (event.target as HTMLElement).id === 'shareButtonIcon';
     const isDelete = (event.target as HTMLElement).id === 'deleteButtonIcon';
-    const isFavourite = (event.target as HTMLElement).id === 'FavouriteButtonIcon';
+    const isFavourite = (event.target as HTMLElement).id === 'favouriteButtonIcon';
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
@@ -512,7 +542,7 @@ export class HomeComponent implements OnInit {
     document.getElementById('copyURL').style.color = '#51585f';
   }
 
- copyURL(inputElement) {
+  copyURL(inputElement) {
     document.getElementById('copyURL').innerHTML = 'Copiado!';
     document.getElementById('copyURL').style.background = '#23b180';
     document.getElementById('copyURL').style.color = '#fff';
@@ -529,6 +559,7 @@ export class HomeComponent implements OnInit {
 
     document.getElementById(file).classList.add('selectedFile');
   }
+
   showsaveChangeMessage() {
     document.getElementById('confirmChange').style.display = 'block';
     setTimeout(() => {
