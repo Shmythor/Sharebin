@@ -7,6 +7,10 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
+
+// import { testData } from './datasource';
+import { DialogService } from 'src/app/shared/dialog.service';
+import {ComponentCanDeactivate} from 'src/app/shared/component-can-deactivate';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
 @Component({
@@ -41,6 +45,7 @@ export class HomeComponent implements OnInit {
   auditInfo: any;
   searchValue: string;
   hoverIndex: number;
+  lastDocumentSelected: any;
 
   //Variables paginación
   anterior: any;
@@ -57,7 +62,7 @@ export class HomeComponent implements OnInit {
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService) {
+             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
@@ -68,9 +73,11 @@ export class HomeComponent implements OnInit {
 
     this.itemSelected = {id: '', name: '', description: '', metadatas: []};
     this.textAreaText = this.itemSelected.description;
+    this.lastDocumentSelected = {id: '', name: '', description: '', metadatas: []};
 
     document.addEventListener('click', (event) => {
-      // Oculta el panel de edición de datos al pulsar fuera del mismo panel, listado de fichero o buscador
+      // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
+      // listado de fichero o buscador
       this.editionPanelVisibility(event);
     });
   }
@@ -82,6 +89,15 @@ export class HomeComponent implements OnInit {
     this.ultimo = document.getElementById("lastPage");
 
     this.getUserItemList();
+  }
+
+  detectChange($event){
+    // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
+    // con lo que solo lo haremos si el evento no ha sido en ese botón
+    if($event.explicitOriginalTarget.data != "Guardar cambios" && $event.explicitOriginalTarget.id != "dataEditionPanelSaveChanges") {
+      const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+      this.openConfirmationDialog(msg);
+    }
   }
 
   editionPanelVisibility(event) {
@@ -384,14 +400,14 @@ export class HomeComponent implements OnInit {
       this.docapi.patchAttributes(this.data[index].id, 
         { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
+          (no) => { console.log('Nothing'); },
+          (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
       this.tempMetadata.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('mismuertos'); },
-          (err) => {console.log('me cago en', err); }
+          (no) => {console.log('Nothing'); },
+          (err) => {console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
@@ -427,9 +443,54 @@ export class HomeComponent implements OnInit {
 
   updateMetadataKey(event: any, id: any) {
     this.tempMetadata[id].key = event.target.value;
+
   }
   updateMetadataValue(event: any, id: any) {
     this.tempMetadata[id].value = event.target.value;
+  }
+
+  // Opens confirmation dialog when you have not saved changes 
+  openConfirmationDialog(msg) {
+    this.dialogService.openConfirmDialog(msg)
+    .afterClosed().subscribe(res =>{
+      if(res){ 
+        // Accepted. Save changes
+        this.saveChanges();
+      }
+    });  
+  }
+
+  getDocDB(docID) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.docapi.findById(docID).subscribe({
+          next: (doc) => {console.log("Se ha encontrado el documento que buscabas: ", doc); resolve(doc)},
+          error: (err) => {reject(err)}
+        });       
+      } catch (err) {
+        console.log("An error ocurred at getDocDBDescription: ", err);
+        reject(err)
+      }
+    })
+  }
+
+  getDocMetadataByID(docID) {
+    return new Promise((resolve, reject) => {
+      try {
+        this.docapi.getMetadatas(docID).subscribe({
+          next: (metadata) => {console.log("Se han encontrado los metadatos: ", metadata); resolve(metadata)},
+          error: (err) => {reject(err)}
+        }
+          // (metadata) => {
+          // console.log("Found metadata by getDocMetadataByID (promise): ", metadata);
+          // resolve(metadata)
+          // }
+        );
+      } catch (err) {
+        console.log("An error ocurred at getDocDBName CATCH: ", err);
+        reject(err)
+      }
+    })
   }
 
   loadUploadModal() {
@@ -545,6 +606,14 @@ export class HomeComponent implements OnInit {
   }
 
   deleteMetadata(id: any) {
-    this.tempMetadata.splice(id, 1);
+    const msg = "¿Estás seguro de querer eliminar este metadato?"
+    this.dialogService.openConfirmDialog(msg)
+    .afterClosed().subscribe(res =>{
+      if(res){ 
+        // Accepted. Save changes
+        this.saveChanges();
+        this.tempMetadata.splice(id, 1);
+      }
+    }); 
   }
 }

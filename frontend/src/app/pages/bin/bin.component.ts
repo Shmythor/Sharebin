@@ -406,7 +406,7 @@ export class BinComponent implements OnInit {
 
 deletedFile(id: any ) {
   /* open confirmation dialog */
-  this.dialogService.openConfirmDialog()
+  this.dialogService.openConfirmDialog('¿Quieres eliminar este fichero definitivamente? No podrás recuperarlo.')
   .afterClosed().subscribe(res =>{
     if(res){
       /* update database */
@@ -421,9 +421,7 @@ deletedFile(id: any ) {
 
       );
     }
-  })
-
-  
+  })  
 }
 
 deletedAllFile() {
