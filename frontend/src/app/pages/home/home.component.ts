@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
   lastDocumentSelected: any;
 
-  //Variables paginación
+  // Variables paginación
   anterior: any;
   siguiente: any;
   primero: any;
@@ -83,10 +83,10 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.anterior = document.getElementById("anterior");
-    this.siguiente = document.getElementById("siguiente");
-    this.primero = document.getElementById("firstPage");
-    this.ultimo = document.getElementById("lastPage");
+    this.anterior = document.getElementById('anterior');
+    this.siguiente = document.getElementById('siguiente');
+    this.primero = document.getElementById('firstPage');
+    this.ultimo = document.getElementById('lastPage');
 
     this.getUserItemList();
   }
@@ -94,8 +94,8 @@ export class HomeComponent implements OnInit {
   detectChange($event){
     // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
     // con lo que solo lo haremos si el evento no ha sido en ese botón
-    if($event.explicitOriginalTarget.data != "Guardar cambios" && $event.explicitOriginalTarget.id != "dataEditionPanelSaveChanges") {
-      const msg = "No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán."
+    if ($event.explicitOriginalTarget.data != 'Guardar cambios' && $event.explicitOriginalTarget.id != 'dataEditionPanelSaveChanges') {
+      const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.'
       this.openConfirmationDialog(msg);
     }
   }
@@ -104,15 +104,15 @@ export class HomeComponent implements OnInit {
     let searchbarClicked = false, filesClicked = false, editionPanelClicked = false;
     let editionPanelVisible = false;
 
-    if(document.getElementById('searchbarContainer') != null){
+    if (document.getElementById('searchbarContainer') != null){
       searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
     }
 
-    if(document.getElementById('itemsTable') != null){
+    if (document.getElementById('itemsTable') != null){
       filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
     }
     
-    if(document.getElementById('dataEditionPanel') != null){
+    if (document.getElementById('dataEditionPanel') != null){
       editionPanelVisible = document.getElementById('dataEditionPanel').style.display == 'block';
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
@@ -242,85 +242,85 @@ export class HomeComponent implements OnInit {
     this.getSearch(this.searchValue);
   }
 
-  //Updates pagination pages text on clicks
-  updatePaginationInfo(docsView:number){
-    this.anterior.setAttribute("disabled","disabled");
-    this.siguiente.setAttribute("disabled","disabled");
-    this.primero.setAttribute("disabled","disabled");
-    this.ultimo.setAttribute("disabled","disabled");
+  // Updates pagination pages text on clicks
+  updatePaginationInfo(docsView: number){
+    this.anterior.setAttribute('disabled', 'disabled');
+    this.siguiente.setAttribute('disabled', 'disabled');
+    this.primero.setAttribute('disabled', 'disabled');
+    this.ultimo.setAttribute('disabled', 'disabled');
 
-    //Guarda los documentos que están visibles
+    // Guarda los documentos que están visibles
     this.visibleDocs = docsView;
 
-    //Comprueba si ya no hay ficheros en la tabla
-    if(this.visibleDocs == 0){
-      //Si ya no hay más páginas, quita la paginación
-      if(this.anterior.hasAttribute("disabled")){
-        document.getElementById("paginationContainer").style.display = "none";
-        //console.log("No hay documentos a mostrar!");
-        if(this.totalPages > 1){
+    // Comprueba si ya no hay ficheros en la tabla
+    if (this.visibleDocs == 0){
+      // Si ya no hay más páginas, quita la paginación
+      if (this.anterior.hasAttribute('disabled')){
+        document.getElementById('paginationContainer').style.display = 'none';
+        // console.log("No hay documentos a mostrar!");
+        if (this.totalPages > 1){
           this.pagAnterior();
         }
       }else{
-        //Si quedan páginas, vuelve a la anterior
+        // Si quedan páginas, vuelve a la anterior
         this.pagAnterior();
       }
       return;
     }
 
-    //Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
+    // Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
     this.docapi.count({isDeleted: false}).subscribe(docCount => {
       this.totalFiles = docCount.count;
-      //this.updatePaginationInfo();
+      // this.updatePaginationInfo();
 
-      //Cálculo de página actual y total de páginas
-      this.currentPage = Math.ceil(this.currentPos/this.perPage)+1;
-      this.totalPages = Math.ceil(this.totalFiles/this.perPage);
+      // Cálculo de página actual y total de páginas
+      this.currentPage = Math.ceil(this.currentPos / this.perPage) + 1;
+      this.totalPages = Math.ceil(this.totalFiles / this.perPage);
 
-      if(this.currentPos > 0){
-        this.anterior.removeAttribute("disabled");
-        this.primero.removeAttribute("disabled");
+      if (this.currentPos > 0){
+        this.anterior.removeAttribute('disabled');
+        this.primero.removeAttribute('disabled');
       }
-		  if(this.currentPos + this.perPage < this.totalFiles){
-        this.siguiente.removeAttribute("disabled");
-        this.ultimo.removeAttribute("disabled");
+		  if (this.currentPos + this.perPage < this.totalFiles){
+        this.siguiente.removeAttribute('disabled');
+        this.ultimo.removeAttribute('disabled');
       } 
 
-      if(this.totalPages > 1){
-        document.getElementById("currentPage").innerHTML = ""+this.currentPage;
-        document.getElementById("totalPages").innerHTML = ""+this.totalPages;
-        document.getElementById("paginationContainer").style.display = "block";
+      if (this.totalPages > 1){
+        document.getElementById('currentPage').innerHTML = '' + this.currentPage;
+        document.getElementById('totalPages').innerHTML = '' + this.totalPages;
+        document.getElementById('paginationContainer').style.display = 'block';
       }
     }, err => { console.log('docCount ERROR: ', err); });
-    //console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
+    // console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
 
-    if(this.anterior.hasAttribute("disabled") 
-      && this.siguiente.hasAttribute("disabled") 
-      && this.primero.hasAttribute("disabled") 
-      && this.ultimo.hasAttribute("disabled")){
-        document.getElementById("paginationContainer").style.display = "none";
+    if (this.anterior.hasAttribute('disabled') 
+      && this.siguiente.hasAttribute('disabled') 
+      && this.primero.hasAttribute('disabled') 
+      && this.ultimo.hasAttribute('disabled')){
+        document.getElementById('paginationContainer').style.display = 'none';
     }
   }
 
-  //Botón paginación de ir a la priemra página
-  firstPage(){
+  // Botón paginación de ir a la priemra página
+  firstPage() {
     this.currentPos = 0;
     this.getUserItemList();
   }
 
-  //Botón paginación de ir a la última página
-  lastPage(){
-    this.currentPos = (this.perPage*this.totalPages)-this.perPage;
+  // Botón paginación de ir a la última página
+  lastPage() {
+    this.currentPos = (this.perPage * this.totalPages) - this.perPage;
     this.getUserItemList();
   }
 
-  //Botón paginación de ir a la página anterior
+  // Botón paginación de ir a la página anterior
   pagAnterior() {
     this.currentPos -= this.perPage;
     this.getUserItemList();
   }
   
-  //Botón paginación de ir a la siguiente página
+  // Botón paginación de ir a la siguiente página
   pagSiguiente() {
     this.currentPos += this.perPage;
     this.getUserItemList();	
@@ -366,7 +366,7 @@ export class HomeComponent implements OnInit {
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
-      let iconsCSS = "padding: 0;vertical-align: middle;";
+      let iconsCSS = 'padding: 0;vertical-align: middle;';
       
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
@@ -378,7 +378,7 @@ export class HomeComponent implements OnInit {
       this.metadata = this.itemSelected.metadatas;
       this.tempMetadata = this.itemSelected.metadatas;
       this.getAuditInfo();
-      //console.log(this.auditInfo);
+      // console.log(this.auditInfo);
 
       this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
     }
@@ -417,14 +417,14 @@ export class HomeComponent implements OnInit {
 
   addMetadata() {
     this.tempMetadata.push({
-      key: (document.getElementById("clave") as HTMLInputElement).value, 
-      value: (document.getElementById("valor") as HTMLInputElement).value, 
+      key: (document.getElementById('clave') as HTMLInputElement).value, 
+      value: (document.getElementById('valor') as HTMLInputElement).value, 
       documentId: this.itemSelected.id
     });
   }
 
   remove(){
-    console.log("Borrar");
+    console.log('Borrar');
   }
 
   getAuditInfo(){
@@ -442,6 +442,7 @@ export class HomeComponent implements OnInit {
   }
 
   updateMetadataKey(event: any, id: any) {
+    console.log("Event: ", event);
     this.tempMetadata[id].key = event.target.value;
 
   }
@@ -452,8 +453,8 @@ export class HomeComponent implements OnInit {
   // Opens confirmation dialog when you have not saved changes 
   openConfirmationDialog(msg) {
     this.dialogService.openConfirmDialog(msg)
-    .afterClosed().subscribe(res =>{
-      if(res){ 
+    .afterClosed().subscribe(res => {
+      if (res){ 
         // Accepted. Save changes
         this.saveChanges();
       }
@@ -464,11 +465,11 @@ export class HomeComponent implements OnInit {
     return new Promise((resolve, reject) => {
       try {
         this.docapi.findById(docID).subscribe({
-          next: (doc) => {console.log("Se ha encontrado el documento que buscabas: ", doc); resolve(doc)},
+          next: (doc) => {console.log('Se ha encontrado el documento que buscabas: ', doc); resolve(doc)},
           error: (err) => {reject(err)}
         });       
       } catch (err) {
-        console.log("An error ocurred at getDocDBDescription: ", err);
+        console.log('An error ocurred at getDocDBDescription: ', err);
         reject(err)
       }
     })
@@ -478,7 +479,7 @@ export class HomeComponent implements OnInit {
     return new Promise((resolve, reject) => {
       try {
         this.docapi.getMetadatas(docID).subscribe({
-          next: (metadata) => {console.log("Se han encontrado los metadatos: ", metadata); resolve(metadata)},
+          next: (metadata) => {console.log('Se han encontrado los metadatos: ', metadata); resolve(metadata)},
           error: (err) => {reject(err)}
         }
           // (metadata) => {
@@ -487,7 +488,7 @@ export class HomeComponent implements OnInit {
           // }
         );
       } catch (err) {
-        console.log("An error ocurred at getDocDBName CATCH: ", err);
+        console.log('An error ocurred at getDocDBName CATCH: ', err);
         reject(err)
       }
     })
@@ -606,14 +607,15 @@ export class HomeComponent implements OnInit {
   }
 
   deleteMetadata(id: any) {
-    const msg = "¿Estás seguro de querer eliminar este metadato?"
+    const msg = '¿Estás seguro de querer eliminar este metadato?';
+
     this.dialogService.openConfirmDialog(msg)
-    .afterClosed().subscribe(res =>{
-      if(res){ 
+    .afterClosed().subscribe(res => {
+      if (res) {
         // Accepted. Save changes
         this.saveChanges();
         this.tempMetadata.splice(id, 1);
       }
-    }); 
+    });
   }
 }
