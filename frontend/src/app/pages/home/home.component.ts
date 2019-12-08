@@ -40,7 +40,6 @@ export class HomeComponent implements OnInit {
   dataFiltered: any;
   itemSelected: any;
   textAreaText: string;
-  metadata: any;
   tempMetadata: any;
   auditInfo: any;
   searchValue: string;
@@ -52,11 +51,11 @@ export class HomeComponent implements OnInit {
   siguiente: any;
   primero: any;
   ultimo: any;
-  currentPos: number = 0;
-  totalFiles: number = 0;
+  currentPos = 0;
+  totalFiles = 0;
   currentPage: number;
   totalPages: number;
-  perPage: number = 5;
+  perPage = 5;
   visibleDocs: number = this.perPage;
 
 
@@ -65,7 +64,6 @@ export class HomeComponent implements OnInit {
              public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
     this.data = [];
     this.dataFiltered = [];
-    this.metadata = [];
     this.tempMetadata = [];
     this.auditInfo = [];
     this.hoverIndex = -1;
@@ -91,29 +89,31 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  detectChange($event){
+  detectChange($event) {
     // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
     // con lo que solo lo haremos si el evento no ha sido en ese botón
-    if ($event.explicitOriginalTarget.data != 'Guardar cambios' && $event.explicitOriginalTarget.id != 'dataEditionPanelSaveChanges') {
-      const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.'
+    if ($event.explicitOriginalTarget.data !== 'Guardar cambios' && $event.explicitOriginalTarget.id !== 'dataEditionPanelSaveChanges') {
+      const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
       this.openConfirmationDialog(msg);
     }
   }
 
   editionPanelVisibility(event) {
-    let searchbarClicked = false, filesClicked = false, editionPanelClicked = false;
+    let searchbarClicked = false;
+    let filesClicked = false;
+    let editionPanelClicked = false;
     let editionPanelVisible = false;
 
-    if (document.getElementById('searchbarContainer') != null){
+    if (document.getElementById('searchbarContainer') != null) {
       searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
     }
 
-    if (document.getElementById('itemsTable') != null){
+    if (document.getElementById('itemsTable') != null) {
       filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
     }
-    
-    if (document.getElementById('dataEditionPanel') != null){
-      editionPanelVisible = document.getElementById('dataEditionPanel').style.display == 'block';
+
+    if (document.getElementById('dataEditionPanel') != null) {
+      editionPanelVisible = document.getElementById('dataEditionPanel').style.display === 'block';
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
 
@@ -141,11 +141,13 @@ export class HomeComponent implements OnInit {
 
     if (this.dataOrder.indexOf('ASC') < 0 && this.dataOrder.indexOf('DESC') < 0) {
       this.dataOrder = 'name ASC';
-      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML +=
+      '&nbsp;<img id="sortUpIcon" src="../../../assets/icons/sort-up.svg" width="10">';
     } else if (this.dataOrder.indexOf('ASC') >= 0) {
       this.dataOrder = 'name DESC';
       document.getElementById('sortUpIcon').remove();
-      document.getElementById('nameColumn').innerHTML += '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
+      document.getElementById('nameColumn').innerHTML +=
+      '&nbsp;<img id="sortDownIcon" src="../../../assets/icons/sort-down.svg" width="10">';
     } else {
       this.dataOrder = '';
       document.getElementById('sortDownIcon').remove();
@@ -243,7 +245,7 @@ export class HomeComponent implements OnInit {
   }
 
   // Updates pagination pages text on clicks
-  updatePaginationInfo(docsView: number){
+  updatePaginationInfo(docsView: number) {
     this.anterior.setAttribute('disabled', 'disabled');
     this.siguiente.setAttribute('disabled', 'disabled');
     this.primero.setAttribute('disabled', 'disabled');
@@ -253,15 +255,15 @@ export class HomeComponent implements OnInit {
     this.visibleDocs = docsView;
 
     // Comprueba si ya no hay ficheros en la tabla
-    if (this.visibleDocs == 0){
+    if (this.visibleDocs === 0) {
       // Si ya no hay más páginas, quita la paginación
-      if (this.anterior.hasAttribute('disabled')){
+      if (this.anterior.hasAttribute('disabled')) {
         document.getElementById('paginationContainer').style.display = 'none';
         // console.log("No hay documentos a mostrar!");
-        if (this.totalPages > 1){
+        if (this.totalPages > 1) {
           this.pagAnterior();
         }
-      }else{
+      } else {
         // Si quedan páginas, vuelve a la anterior
         this.pagAnterior();
       }
@@ -277,16 +279,17 @@ export class HomeComponent implements OnInit {
       this.currentPage = Math.ceil(this.currentPos / this.perPage) + 1;
       this.totalPages = Math.ceil(this.totalFiles / this.perPage);
 
-      if (this.currentPos > 0){
+      if (this.currentPos > 0) {
         this.anterior.removeAttribute('disabled');
         this.primero.removeAttribute('disabled');
       }
-		  if (this.currentPos + this.perPage < this.totalFiles){
+
+      if (this.currentPos + this.perPage < this.totalFiles) {
         this.siguiente.removeAttribute('disabled');
         this.ultimo.removeAttribute('disabled');
-      } 
+      }
 
-      if (this.totalPages > 1){
+      if (this.totalPages > 1) {
         document.getElementById('currentPage').innerHTML = '' + this.currentPage;
         document.getElementById('totalPages').innerHTML = '' + this.totalPages;
         document.getElementById('paginationContainer').style.display = 'block';
@@ -294,10 +297,10 @@ export class HomeComponent implements OnInit {
     }, err => { console.log('docCount ERROR: ', err); });
     // console.log(this.totalFiles +" " +this.totalPages +" " +this.currentPos);
 
-    if (this.anterior.hasAttribute('disabled') 
-      && this.siguiente.hasAttribute('disabled') 
-      && this.primero.hasAttribute('disabled') 
-      && this.ultimo.hasAttribute('disabled')){
+    if (this.anterior.hasAttribute('disabled')
+      && this.siguiente.hasAttribute('disabled')
+      && this.primero.hasAttribute('disabled')
+      && this.ultimo.hasAttribute('disabled')) {
         document.getElementById('paginationContainer').style.display = 'none';
     }
   }
@@ -319,11 +322,11 @@ export class HomeComponent implements OnInit {
     this.currentPos -= this.perPage;
     this.getUserItemList();
   }
-  
+
   // Botón paginación de ir a la siguiente página
   pagSiguiente() {
     this.currentPos += this.perPage;
-    this.getUserItemList();	
+    this.getUserItemList();
   }
 
   getDocIDbyName(name: string) {
@@ -351,7 +354,7 @@ export class HomeComponent implements OnInit {
       Object.keys(elem.metadatas).forEach(idx => {
         const element = elem.metadatas[idx];
        // res = res || element['key'].toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
-        res = res || element['value'].toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
+        res = res || element.value.toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
       });
       }
       return res;
@@ -366,8 +369,8 @@ export class HomeComponent implements OnInit {
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
-      let iconsCSS = 'padding: 0;vertical-align: middle;';
-      
+      const iconsCSS = 'padding: 0;vertical-align: middle;';
+
       document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
       document.getElementById("fileShare").setAttribute("style", iconsCSS);
@@ -375,7 +378,6 @@ export class HomeComponent implements OnInit {
       document.getElementById('dataEditionPanel').style.display = 'block';
 
       this.itemSelected = data;
-      this.metadata = this.itemSelected.metadatas;
       this.tempMetadata = this.itemSelected.metadatas;
       this.getAuditInfo();
       // console.log(this.auditInfo);
@@ -391,13 +393,14 @@ export class HomeComponent implements OnInit {
     if (this.itemSelected.id !== '') {
       const index = this.data.findIndex((x) => x.id === lastItemSelected.id);
       const dataIdx = this.data[index];
+
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.patchAttributes(this.data[index].id, 
+      this.docapi.patchAttributes(this.data[index].id,
         { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
           (no) => { console.log('Nothing'); },
@@ -411,23 +414,12 @@ export class HomeComponent implements OnInit {
         );
       });
     }
+
     this.showsaveChangeMessage();
     return;
   }
 
-  addMetadata() {
-    this.tempMetadata.push({
-      key: (document.getElementById('clave') as HTMLInputElement).value, 
-      value: (document.getElementById('valor') as HTMLInputElement).value, 
-      documentId: this.itemSelected.id
-    });
-  }
-
-  remove(){
-    console.log('Borrar');
-  }
-
-  getAuditInfo(){
+  getAuditInfo() {
     const filter = {
       where: { documentId: this.itemSelected.id}
     };
@@ -437,12 +429,10 @@ export class HomeComponent implements OnInit {
   }
 
   newMetadata() {
-    this.tempMetadata.push({key: '', value: '', documentId: this.itemSelected.id});
-   // console.log(this.tempMetadata);
+    this.tempMetadata = [...this.tempMetadata, {key: '', value: '', documentId: this.itemSelected.id}];
   }
 
   updateMetadataKey(event: any, id: any) {
-    console.log("Event: ", event);
     this.tempMetadata[id].key = event.target.value;
 
   }
@@ -450,37 +440,37 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id].value = event.target.value;
   }
 
-  // Opens confirmation dialog when you have not saved changes 
+  // Opens confirmation dialog when you have not saved changes
   openConfirmationDialog(msg) {
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
-      if (res){ 
+      if (res) {
         // Accepted. Save changes
         this.saveChanges();
       }
-    });  
+    });
   }
 
   getDocDB(docID) {
     return new Promise((resolve, reject) => {
       try {
         this.docapi.findById(docID).subscribe({
-          next: (doc) => {console.log('Se ha encontrado el documento que buscabas: ', doc); resolve(doc)},
-          error: (err) => {reject(err)}
-        });       
+          next: (doc) => { console.log('Se ha encontrado el documento que buscabas: ', doc); resolve(doc); },
+          error: (err) => { reject(err); }
+        });
       } catch (err) {
         console.log('An error ocurred at getDocDBDescription: ', err);
-        reject(err)
+        reject(err);
       }
-    })
+    });
   }
 
   getDocMetadataByID(docID) {
     return new Promise((resolve, reject) => {
       try {
         this.docapi.getMetadatas(docID).subscribe({
-          next: (metadata) => {console.log('Se han encontrado los metadatos: ', metadata); resolve(metadata)},
-          error: (err) => {reject(err)}
+          next: (metadata) => {console.log('Se han encontrado los metadatos: ', metadata); resolve(metadata); },
+          error: (err) => {reject(err); }
         }
           // (metadata) => {
           // console.log("Found metadata by getDocMetadataByID (promise): ", metadata);
@@ -489,9 +479,9 @@ export class HomeComponent implements OnInit {
         );
       } catch (err) {
         console.log('An error ocurred at getDocDBName CATCH: ', err);
-        reject(err)
+        reject(err);
       }
-    })
+    });
   }
 
   loadUploadModal() {
@@ -509,28 +499,28 @@ export class HomeComponent implements OnInit {
     const headers = new HttpHeaders();
     headers.append('Content-Type', 'application/json');
     this.http.get(`http://localhost:3000/api/Documents/${document.id}/download`,
-      {responseType: 'arraybuffer', headers}).subscribe((data: any) => {
-        const blob = new Blob([data], {type: document.type});
-        const url = window.URL.createObjectURL(blob);
+    {responseType: 'arraybuffer', headers}).subscribe((data: any) => {
+      const blob = new Blob([data], {type: document.type});
+      const url = window.URL.createObjectURL(blob);
 
-        saveAs(blob, document.name);
-        window.open(url);
-      });
+      saveAs(blob, document.name);
+      window.open(url);
+    });
   }
 
-  move2PapperBin(doc: any ) {
-      /* update database */
-      this.docapi.patchAttributes(doc.id, {isDeleted: true}).subscribe(
-          (no) => {
-            this.itemSelected = {id: '', name: '', description: '', metadatas: []};
-            this.hideAndSeekService.showFileMove2BinMessage();
-            this.getUserItemList();
-            // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
-           },
-          (err) => {console.log('me cago en', err); }
+  move2PapperBin(doc: any) {
+    /* update database */
+    this.docapi.patchAttributes(doc.id, {isDeleted: true}).subscribe(
+        (no) => {
+          this.itemSelected = {id: '', name: '', description: '', metadatas: []};
+          this.hideAndSeekService.showFileMove2BinMessage();
+          this.getUserItemList();
+          // setTimeout(() => {this.closeMessagefileMove2Bin()}, 5000);
+          },
+        (err) => {console.log('me cago en', err); }
 
-      );
-      // this.getUserItemList();
+    );
+    // this.getUserItemList();
   }
 
   shareFile(document) {
@@ -586,8 +576,8 @@ export class HomeComponent implements OnInit {
     }, 2000);
   }
 
-  Favourite(doc: any) {
-    if (doc.isFavourite){
+  addToFavorites(doc: any) {
+    if (doc.isFavourite) {
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
           // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
@@ -606,15 +596,15 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteMetadata(id: any) {
+  deleteMetadata(id: number) {
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
+        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];
         this.saveChanges();
-        this.tempMetadata.splice(id, 1);
       }
     });
   }
