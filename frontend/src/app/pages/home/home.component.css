@@ -19,6 +19,12 @@
     background-color: #E0EAFC;
 }
 
+.metadataList {
+    height: 150px;
+    overflow-x: hidden;
+    margin-top: 5px;
+}
+
 .metadataInput {
     outline: none;
     background: transparent;
@@ -28,6 +34,7 @@
     width: 64px;
     min-width: 64px;
     max-width: 256px;
+    font-size: 16px;
 }
 
 .metadataNew {
@@ -35,6 +42,7 @@
     box-sizing: border-box;
     border-radius: 2px;
     color: rgba(118, 115, 115);
+    font-size: 16px;
 }
 
 .custom-input-container {
