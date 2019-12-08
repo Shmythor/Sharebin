@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit {
     filters[1]: description
     filters[2]: metadata
   */
-  filters = [true, false, false];
+  filters = [false, false, false];
 
 
   data: any;
@@ -341,22 +341,24 @@ export class HomeComponent implements OnInit {
   }
 
   getSearch(search: string) {
+    const allFiltersActive = !this.filters[0] && !this.filters[1] && !this.filters[2];
     this.searchValue = search;
 
     this.dataFiltered = this.data.filter((elem: any) => {
       let res = false;
       /* Filtrando por nombre */
-      if (this.filters[0]) { res = res || elem.name.toLowerCase().startsWith(search.toLowerCase()); }
+      if (this.filters[0] || allFiltersActive) { res = res || elem.name.toLowerCase().startsWith(search.toLowerCase()); }
       /* Filtrando por Descripción */
-      if (this.filters[1]) { res = res || elem.description.toLowerCase().includes(search.toLowerCase()); }
+      if (this.filters[1] || allFiltersActive) { res = res || elem.description.toLowerCase().includes(search.toLowerCase()); }
       /* Filtrando por metadata */
-      if (this.filters[2]) {
-      Object.keys(elem.metadatas).forEach(idx => {
-        const element = elem.metadatas[idx];
-       // res = res || element['key'].toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
-        res = res || element.value.toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
-      });
+      if (this.filters[2] || allFiltersActive) {
+        Object.keys(elem.metadatas).forEach(idx => {
+          const element = elem.metadatas[idx];
+        // res = res || element['key'].toLowerCase().includes(search.toLowerCase()); // Buscamos la clave
+          res = res || element.value.toLowerCase().includes(search.toLowerCase()); // Buscamos el valor
+        });
       }
+
       return res;
     });
   }
@@ -400,8 +402,7 @@ export class HomeComponent implements OnInit {
       this.data[index].metadatas = this.tempMetadata;
 
       /* update database */
-      this.docapi.patchAttributes(this.data[index].id,
-        { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
+      this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
           (no) => { console.log('Nothing'); },
           (err) => {console.log('An error ocurred while patching atributes: ', err); }
