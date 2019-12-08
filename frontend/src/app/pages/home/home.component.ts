@@ -93,11 +93,11 @@ export class HomeComponent implements OnInit {
     // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
     // con lo que solo lo haremos si el evento no ha sido en ese botón
     console.log($event.explicitOriginalTarget.data)
-    // let isUndefined = $event.explicitOriginalTarget.data == undefined;
+    let dataIsNotUndefined = $event.explicitOriginalTarget.data != undefined;
     let textGuardarCambios = $event.explicitOriginalTarget.data == 'Guardar cambios';
     let idSaveChanges = $event.explicitOriginalTarget.id == 'dataEditionPanelSaveChanges'
 
-    if (textGuardarCambios || idSaveChanges) {
+    if (dataIsNotUndefined && (textGuardarCambios || idSaveChanges)) {
       console.log("No hace falta mostrar el cartel")
     } else {
       const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
