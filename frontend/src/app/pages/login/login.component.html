@@ -12,21 +12,21 @@
             {{"bob1@projects.com"}}
             {{"jane1@doe.com"}}
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
-                <div *ngIf="f.email.errors.required">Email is required</div>
-                <div *ngIf="f.email.errors.email">Email must be a valid email address</div>
+                <div *ngIf="f.email.errors.required">Se necesita introducir un email</div>
+                <div *ngIf="f.email.errors.email">Email debe ser una dirección email</div>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col">
                 <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />{{"password"}}
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                    <div *ngIf="f.password.errors.required">Password is required</div>
-                    <div *ngIf="f.password.errors.minlength">Password must be at least 6 characters</div>
+                    <div *ngIf="f.password.errors.required">Se require introducir una contraseña</div>
+                    <div *ngIf="f.password.errors.minlength">La contraseña debe tener mínimo 6 caracteres</div>
                 </div>
             </div>
         </div>
         <div class="text-center">
-            <button class="btn btn-primary mr-1">Enter</button>
+            <button class="btn btn-primary mr-1">Iniciar sersión</button>
         </div>
     </form>
 </div>
