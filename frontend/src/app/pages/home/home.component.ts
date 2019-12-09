@@ -13,6 +13,8 @@ import { DialogService } from 'src/app/shared/dialog.service';
 import {ComponentCanDeactivate} from 'src/app/shared/component-can-deactivate';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
+import { DatePipe } from '@angular/common';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -61,7 +63,7 @@ export class HomeComponent implements OnInit {
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
+             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService, public datepipe: DatePipe) {
     this.data = [];
     this.dataFiltered = [];
     this.tempMetadata = [];
@@ -76,6 +78,7 @@ export class HomeComponent implements OnInit {
     document.addEventListener('click', (event) => {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
       // listado de fichero o buscador
+      //console.log(document.getElementById('dataEditionPanel').contains((event.target as HTMLElement)));
       this.editionPanelVisibility(event);
     });
   }
@@ -433,6 +436,68 @@ export class HomeComponent implements OnInit {
     };
     this.auditapi.find(filter).subscribe(docAudit => {
       this.auditInfo = docAudit;
+
+      for(let i=0; i<this.auditInfo.length; i++){
+        let modifiedElement = this.auditInfo[i];
+        let modificationDate = modifiedElement.date;
+        let modificationFormattedDate = this.changeDateFormat(modificationDate);
+        let modificationFormattedTime = this.changeTimeFormat(modificationDate);
+        let modification = "";
+
+        switch(modifiedElement.modified_elem){
+          case "CREATED":
+            modification += "Fue subido el día "
+                            + modificationFormattedDate 
+                            + " a las " + modificationFormattedTime;
+            break;
+          case "isDeleted":
+            if(modifiedElement.old_value=="false"){
+              modification += "Fue borrado el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }else{
+              modification += "Fue recuperado de la papelera el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }
+            break;
+          case "isFavourite":
+            if(modifiedElement.old_value=="false"){
+              modification += "Fue añadido a favoritos el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }else{
+              modification += "Fue quitado de favoritos el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }
+            break;
+          case "description":
+            modification += "La descripción fue cambiada el día "
+                            + modificationFormattedDate
+                            + " a las " + modificationFormattedTime
+                            + " de '"
+                            + modifiedElement.old_value + "'"
+                            +" a '"
+                            + modifiedElement.new_value + "'";
+            break;
+          case "name":
+            modification += "El nombre fue cambiada el día "
+                            + modificationFormattedDate
+                            + " a las " + modificationFormattedTime
+                            + " de '"
+                            + modifiedElement.old_value + "'"
+                            +" a '"
+                            + modifiedElement.new_value + "'";
+            break;
+          default:
+            modification += "Sin modificación";
+            break;
+        }
+
+        this.auditInfo[i].modified_elem = modification;
+      }
+      //console.log(this.auditInfo);
     }, err => { console.log('docCount ERROR: ', err); });
   }
 
@@ -615,5 +680,15 @@ export class HomeComponent implements OnInit {
         this.saveChanges();
       }
     });
+  }
+
+  //Formatea la fecha a dd/MM/yyyy
+  changeDateFormat(date:Date):string{
+    return this.datepipe.transform(date, 'dd/MM/yyyy');
+  }
+
+  //Formatea la hora a h:mm:ss a
+  changeTimeFormat(date:Date):string{
+    return this.datepipe.transform(date, 'h:mm:ss a');
   }
 }

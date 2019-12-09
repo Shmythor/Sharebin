@@ -41,6 +41,8 @@ import {NavbarComponent} from './shared/components/navbar/navbar.component';
 import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
 
+import { DatePipe } from '@angular/common';
+
 
 
 @NgModule({
@@ -79,6 +81,7 @@ import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-i
     MatIconModule
   ],
   providers: [
+    DatePipe,
     ClientApi,
     AuditorApi,
     SocketConnection,
