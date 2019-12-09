@@ -1,6 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {MaterialModule} from './material/material.module';
+import {MatTabsModule} from '@angular/material';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatIconModule} from '@angular/material/icon';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 
@@ -76,7 +79,10 @@ import { DatePipe } from '@angular/common';
     ModalModule,
     GridModule,
     NgbModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatIconModule
   ],
   providers: [
     DatePipe,

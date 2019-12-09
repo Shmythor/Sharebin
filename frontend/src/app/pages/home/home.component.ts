@@ -99,11 +99,14 @@ export class HomeComponent implements OnInit {
     console.log(event)
 
     const isSaveTextArea = (event.target as HTMLElement).id === "dataEditionPanelDescriptionTextarea"
-    
-    console.log(isSaveTextArea)
+    // const isText = (event.target as HTMLElement).textContent == "Guardar cambios"
+    let text = event.explicitOriginalTarget.textContent;
+    console.log(text == "Guardar cambios")
     
     if(isSaveTextArea) {
       console.log("No hace falta mostrar el cartel porque es el boton/texto de guardar")
+    } else if (text == "Guardar cambios") {
+      console.log("No hace falta mostrar el cartel porque es el texto de guardar")
     } else {
       const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
       this.openConfirmationDialog(msg);
