@@ -1,6 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {MaterialModule} from './material/material.module'
+import {MaterialModule} from './material/material.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -71,7 +73,9 @@ import { ItemlistComponent } from './shared/components/itemlist/itemlist.compone
     ReactiveFormsModule,
     MaterialModule,
     ModalModule,
-    GridModule
+    GridModule,
+    NgbModule,
+    NgxDropzoneModule
   ],
   providers: [
     ClientApi,

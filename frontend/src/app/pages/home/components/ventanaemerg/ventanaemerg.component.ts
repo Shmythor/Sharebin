@@ -19,6 +19,7 @@ export class VentanaemergComponent implements OnInit {
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
   bodyText: string;
+  MAX_FILE: number = 20971520;
 
   constructor(private clientapi: ClientApi, private modalService: ModalService,
     private http: HttpClient, private themesService: ThemesService) {}
@@ -85,7 +86,7 @@ export class VentanaemergComponent implements OnInit {
   onUpload(fileDescription: string) {
     fileDescription = this.fileData.name;
     
-    if(this.fileData.size > 20971520){
+    if(this.fileData.size > this.MAX_FILE){
       this.showLimitsUploadMessage();
       return;
     }
@@ -95,7 +96,7 @@ export class VentanaemergComponent implements OnInit {
       /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
       //console.log("Subida hecha");
       //location.reload();
-      if(this.fileData.size > 0 && this.fileData.size <= 20971520){
+      if(this.fileData.size > 0 && this.fileData.size <= this.MAX_FILE){
         this.showSuccessUploadMessage();
         this.addDataTable(this.fileData);
       }      
@@ -129,6 +130,53 @@ export class VentanaemergComponent implements OnInit {
       document.getElementById('fileUploadLimit').style.display = 'none';
     }, 2000);
   }
+
+  //para el drop_zone
+  files: File[] = [];
+ 
+  onSelect(event) {
+  console.log(event);
+  this.files.push(...event.addedFiles);
+  }
+ 
+  onRemove(event) {
+  console.log(event);
+  this.files.splice(this.files.indexOf(event), 1);
+  }
+
+  onFilesAdded(event) {
+    console.log(event);
+    this.files.push(...event.addedFiles);
+  
+    this.readFile(this.files[0]).then(fileContents => {
+      // Put this string in a request body to upload it to an API.
+      console.log(fileContents);
+    }); }
+    
+  
+  private async readFile(file: File): Promise<string | ArrayBuffer> {
+    return new Promise<string | ArrayBuffer>((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = e => {
+        return resolve((e.target as FileReader).result);
+      };
+  
+      reader.onerror = e => {
+        console.error(`FileReader failed on file ${file.name}.`);
+        return reject(null);
+      };
+  
+      if (!file) {
+        console.error('No file to read.');
+        return reject(null);
+      }
+  
+      reader.readAsDataURL(file);
+    });
+  }
+
+  
 
 }
 
