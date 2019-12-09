@@ -9,7 +9,7 @@ export class DialogService {
 
   constructor(private dialog: MatDialog) {}
 
-  openConfirmDialog(msg){
+  openConfirmDialog(msg:any){
     return this.dialog.open(MatConfirmDialogComponent, {
       panelClass: 'confirm-dialog-container',
       disableClose: true,
