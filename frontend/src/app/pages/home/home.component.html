@@ -87,7 +87,7 @@
             </mat-tab>
             <mat-tab label="Metadatos">
                 <ul class="list">                            
-                    <cdk-virtual-scroll-viewport class="metadataList" itemSize="4" >
+                    <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
                         <div *cdkVirtualFor="let item of tempMetadata; let id = index" class="badge badge-pill badge-light">
                             <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" (change)="detectChange($event)" class="metadataInput"> : 
                             <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" (change)="detectChange($event)" class="metadataInput">
@@ -99,12 +99,14 @@
             </mat-tab>
             <mat-tab label="Histórico">
                 <ul class="list">
-                    <cdk-virtual-scroll-viewport  style="height: 150px" itemSize="4" >
+                    <cdk-virtual-scroll-viewport  style="height: 200px" itemSize="5" >
+                        <ul>
                         <ng-container *cdkVirtualFor="let audit of auditInfo; let id = index">
-                            <p>{{audit.modified_elem}}</p>
+                            <li><p style="margin:0;font-size: 12px;">{{audit.modified_elem}}</p></li>
                         </ng-container>
+                        </ul>
                     </cdk-virtual-scroll-viewport>                        
-                    <div id="dataEditionPanelAudit" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 tc" (click)="getAuditInfo()">Abrir información histórico</div>
+                    <!--<div id="dataEditionPanelAudit" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 tc" (click)="getAuditInfo()">Abrir información histórico</div>-->
                 </ul>
             </mat-tab>
         </mat-tab-group> 
@@ -116,8 +118,8 @@
     <div id="paginationContainer" style="display: none;">
         <nav aria-label="Page navigation example" style="float: left; width: 100%;">
             <ul class="pagination pg-blue">
-                <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"></button></li>
-                <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"></button></li>
+                <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
                 <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
                 <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
             </ul>
