@@ -89,16 +89,15 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  detectChange($event) {
-    // Si el usuario ha hecho click en Guardar Cambios, no queremos mostrarle el cartel
-    // con lo que solo lo haremos si el evento no ha sido en ese botón
-    console.log($event.explicitOriginalTarget.data)
-    let dataIsNotUndefined = $event.explicitOriginalTarget.data != undefined;
-    let textGuardarCambios = $event.explicitOriginalTarget.data == 'Guardar cambios';
-    let idSaveChanges = $event.explicitOriginalTarget.id == 'dataEditionPanelSaveChanges'
+  detectChange(event: any) {
+    console.log(event)
 
-    if (dataIsNotUndefined && (textGuardarCambios || idSaveChanges)) {
-      console.log("No hace falta mostrar el cartel")
+    const isSaveTextArea = (event.target as HTMLElement).id === "dataEditionPanelDescriptionTextarea"
+    
+    console.log(isSaveTextArea)
+    
+    if(isSaveTextArea) {
+      console.log("No hace falta mostrar el cartel porque es el boton/texto de guardar")
     } else {
       const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
       this.openConfirmationDialog(msg);
