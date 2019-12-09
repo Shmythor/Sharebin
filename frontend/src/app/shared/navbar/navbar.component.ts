@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from 'src/app/services/login.service';
-import { ThemesService } from 'src/app/services/themes.service';
+import { LoginService } from '../../services/login.service';
+import { ThemesService } from '../../services/themes.service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,9 +14,6 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) { }
 
   ngOnInit() {
-    document.getElementById("navbar-logo").addEventListener("click",function(){
-      location.href = "/";
-    });
     this.themesService.refreshTheme(true);
   }
 

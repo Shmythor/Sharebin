@@ -1,9 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {MaterialModule} from './material/material.module'
-import {MatTabsModule} from '@angular/material';
-import {MatChipsModule} from '@angular/material/chips';
-import {MatIconModule} from '@angular/material/icon';
+import {MaterialModule} from './material/material.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -41,6 +40,8 @@ import {NavbarComponent} from './shared/components/navbar/navbar.component';
 import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
 
+import { DatePipe } from '@angular/common';
+
 
 
 @NgModule({
@@ -74,11 +75,11 @@ import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-i
     MaterialModule,
     ModalModule,
     GridModule,
-    MatTabsModule,
-    MatChipsModule,
-    MatIconModule
+    NgbModule,
+    NgxDropzoneModule
   ],
   providers: [
+    DatePipe,
     ClientApi,
     AuditorApi,
     SocketConnection,

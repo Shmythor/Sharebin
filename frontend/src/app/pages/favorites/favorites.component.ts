@@ -77,13 +77,16 @@ export class FavoritesComponent implements OnInit {
   }
 
   editionPanelVisibility(event) {
-    const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
-    const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
-    const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    if(document.getElementById('searchbarContainer') != null && document.getElementById('itemsTable') != null
+    && document.getElementById('dataEditionPanel') != null){
+      const searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+      const filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+      const editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
 
-    if(!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
-      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-      document.getElementById('dataEditionPanel').style.display = 'none';
+      if(!searchbarClicked && !filesClicked && !editionPanelClicked && document.getElementById('dataEditionPanel').style.display === 'block') {
+        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+        document.getElementById('dataEditionPanel').style.display = 'none';
+      }
     }
   }
 

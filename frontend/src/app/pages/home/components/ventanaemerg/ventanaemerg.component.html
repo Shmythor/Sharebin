@@ -1,4 +1,15 @@
+
 <div class="col-md-12" class="uploadModal">
+    
+        <ngx-dropzone [maxFileSize]="20971520" (change)="onSelect($event)">
+                <ngx-dropzone-label>Pulsa o arrastra aquí tus archivos</ngx-dropzone-label>
+                <ngx-dropzone-image-preview ngProjectAs="ngx-dropzone-preview" *ngFor="let f of files" [file]="f" [removable]="true" (removed)="onRemove(f)">
+                  
+                </ngx-dropzone-image-preview>
+        </ngx-dropzone>      
+
+
+
     <div id="fileUploadSuccess" class="alert alert-success" role="alert" style="display:none; text-align: center; opacity: 0.7;">
         Fichero subido correctamente.
     </div>
