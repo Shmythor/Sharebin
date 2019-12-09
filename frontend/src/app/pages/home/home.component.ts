@@ -79,7 +79,10 @@ export class HomeComponent implements OnInit {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
       // listado de fichero o buscador
       //console.log(document.getElementById('dataEditionPanel').contains((event.target as HTMLElement)));
-      this.editionPanelVisibility(event);
+      //if(!document.getElementById('themes-section').contains((event.target as HTMLElement))){
+        //console.log("Distinto temas");
+        this.editionPanelVisibility(event);
+      //}
     });
   }
 
@@ -126,10 +129,15 @@ export class HomeComponent implements OnInit {
       editionPanelVisible = document.getElementById('dataEditionPanel').style.display === 'block';
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
-
+    
     if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
-      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-      document.getElementById('dataEditionPanel').style.display = 'none';
+      
+      if(document.getElementsByClassName('table').length > 0){
+        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+        if(document.getElementById('dataEditionPanel') != null){
+          document.getElementById('dataEditionPanel').style.display = 'none';
+        }
+      }
     }
   }
 
@@ -383,11 +391,16 @@ export class HomeComponent implements OnInit {
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
       const iconsCSS = 'padding: 0;vertical-align: middle;';
 
-      document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      if(document.getElementsByClassName('table').length > 0){
+        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
+      }
+      
       /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
       document.getElementById("fileShare").setAttribute("style", iconsCSS);
       document.getElementById("fileDelete").setAttribute("style", iconsCSS);*/
-      document.getElementById('dataEditionPanel').style.display = 'block';
+      if(document.getElementById('dataEditionPanel') != null){
+        document.getElementById('dataEditionPanel').style.display = 'block';
+      }
 
       this.itemSelected = data;
       this.tempMetadata = this.itemSelected.metadatas;

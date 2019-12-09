@@ -41,7 +41,9 @@ export class HideAndSeekService {
   public showFileMove2BinMessage() {
     document.getElementById('fileMove2Bin').style.display = 'block';
     setTimeout(() => {
-      document.getElementById('fileMove2Bin').style.display = 'none';
+      if(document.getElementById('fileMove2Bin') != null){
+        document.getElementById('fileMove2Bin').style.display = 'none';
+      }
     }, 3000);
   }
 

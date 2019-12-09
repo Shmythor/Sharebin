@@ -14,6 +14,9 @@ export class NavbarComponent implements OnInit {
   constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) { }
 
   ngOnInit() {
+    document.getElementById("navbar-logo").addEventListener("click",function(){
+      location.href = "/";
+    });
     this.themesService.refreshTheme(true);
   }
 
