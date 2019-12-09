@@ -44,6 +44,7 @@ import {SearchbarComponent} from './shared/components/searchbar/searchbar.compon
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
 
 import { DatePipe } from '@angular/common';
+import { MatTabsModule, MatChipsModule, MatIconModule } from '@angular/material';
 
 
 
