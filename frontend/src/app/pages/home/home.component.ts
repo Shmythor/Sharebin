@@ -97,23 +97,7 @@ export class HomeComponent implements OnInit {
   }
 
   detectChange(event: any) {
-
     this.saveChanges()
-    // console.log(event)
-
-    // const isSaveTextArea = (event.target as HTMLElement).id === "dataEditionPanelDescriptionTextarea"
-    // // const isText = (event.target as HTMLElement).textContent == "Guardar cambios"
-    // let text = event.explicitOriginalTarget.textContent;
-    // console.log(text == "Guardar cambios")
-    
-    // if(isSaveTextArea) {
-    //   console.log("No hace falta mostrar el cartel porque es el boton/texto de guardar")
-    // } else if (text == "Guardar cambios") {
-    //   console.log("No hace falta mostrar el cartel porque es el texto de guardar")
-    // } else {
-    //   const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
-    //   this.openConfirmationDialog(msg);
-    // }
   }
 
   editionPanelVisibility(event) {
@@ -694,8 +678,20 @@ export class HomeComponent implements OnInit {
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];
+        let metaId = this.tempMetadata[id].id;
+        let docId = this.tempMetadata[id].documentId;
+
+        console.log(this.tempMetadata[id])
+        console.log("Metadata id: ", metaId); 
+        console.log("Metadata Document id: ", docId); 
+
+        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];        
+        this.docapi.deleteOneMetadata(docId, metaId).subscribe(
+          (res) => { console.log("Deleted correctly"); },
+          (err) => { console.log("Error while deleting: ", err); }
+          )
         this.saveChanges();
+        // this.showsaveChangeMessage();
       }
     });
   }
