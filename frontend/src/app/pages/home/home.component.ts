@@ -49,6 +49,8 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
   lastDocumentSelected: any;
 
+  clientName: string;
+
   // Variables paginación
   anterior: any;
   siguiente: any;
