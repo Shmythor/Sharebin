@@ -684,7 +684,7 @@ export class HomeComponent implements OnInit {
         let docId = this.tempMetadata[id].documentId;
 
         this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];        
-        this.docapi.deleteOneMetadata(docId, metaId).subscribe(
+        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
           (res) => { console.log("Deleted correctly"); },
           (err) => { console.log("Error while deleting: ", err); }
           )
