@@ -666,20 +666,22 @@ export class HomeComponent implements OnInit {
       // Nuevo item pulsado
       this.multipleMetadataIDList.push(itemID);
 
-      this.fillMultipleMetadataList(this.itemSelected);
+      this.fillMultipleMetadataList(this.itemSelected, false);
     } else {
       this.multipleMetadataIDList.splice(index, 1);
       // Quitamos item de la lista
       let count = this.multipleMetadataIDList.length;
 
       while (count-- > 0) {
-        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]));
+
+        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]),
+          count === this.multipleMetadataIDList.length + 1);
       }
     }
   }
 
-  private fillMultipleMetadataList(itemToIntersect: any) {
-    if (this.multipleMetadataIDList.length === 1) {
+  private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
+    if (this.multipleMetadataIDList.length === 1 || cond) {
       this.multipleMetadataList = itemToIntersect.metadatas;
     } else {
       // Sacamos la intersección entre los dos conjuntos
