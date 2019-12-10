@@ -24,6 +24,7 @@
     "@ng-bootstrap/ng-bootstrap": "^5.1.4",
     "@syncfusion/ej2-angular-grids": "^17.3.30",
     "@types/jquery": "^3.3.31",
+    "acorn": "^6.4.0",
     "bootstrap": "^4.4.1",
     "file-saver": "^2.0.2",
     "ionicons": "^4.6.3",

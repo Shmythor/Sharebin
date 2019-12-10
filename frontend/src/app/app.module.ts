@@ -41,8 +41,8 @@ import {SearchbarComponent} from './shared/components/searchbar/searchbar.compon
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
 
 import { DatePipe } from '@angular/common';
-import { MatTabsModule, MatChipsModule, MatIconModule } from '@angular/material';
 
+import { MatTabsModule, MatChipsModule, MatIconModule, MatToolbarModule, MatCardModule } from '@angular/material';
 
 
 @NgModule({
@@ -80,7 +80,9 @@ import { MatTabsModule, MatChipsModule, MatIconModule } from '@angular/material'
     NgxDropzoneModule,
     MatTabsModule,
     MatChipsModule,
-    MatIconModule
+    MatIconModule,
+    MatCardModule,
+    MatToolbarModule
   ],
   providers: [
     DatePipe,

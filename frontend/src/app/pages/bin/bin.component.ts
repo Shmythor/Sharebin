@@ -45,7 +45,7 @@ export class BinComponent implements OnInit {
   totalFiles: number = 0;
   currentPage: number;
   totalPages: number;
-  perPage: number = 10;
+  perPage: number = 5;
   visibleDocs: number = this.perPage;
 
 
@@ -63,12 +63,14 @@ export class BinComponent implements OnInit {
     this.textAreaText = this.itemSelected.description;
 
     document.addEventListener('click', (event) => {
-      if ((event.target as HTMLElement).id.indexOf('file') < 0 && (event.target as HTMLElement).id.indexOf('dataEditionPanel') < 0 &&
-      document.getElementById('dataEditionPanel').style.display === 'block') {
-        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-        document.getElementById('dataEditionPanel').style.display = 'none';
-      }
-   });
+      // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
+      // listado de fichero o buscador
+      //console.log(document.getElementById('dataEditionPanel').contains((event.target as HTMLElement)));
+      //if(!document.getElementById('themes-section').contains((event.target as HTMLElement))){
+        //console.log("Distinto temas");
+        this.editionPanelVisibility(event);
+      //}
+    });
   }
 
   ngOnInit() {
@@ -78,6 +80,36 @@ export class BinComponent implements OnInit {
     this.ultimo = document.getElementById("lastPage");
 
     this.getUserItemList();
+  }
+
+  editionPanelVisibility(event) {
+    let searchbarClicked = false;
+    let filesClicked = false;
+    let editionPanelClicked = false;
+    let editionPanelVisible = false;
+
+    if (document.getElementById('searchbarContainer') != null) {
+      searchbarClicked = document.getElementById('searchbarContainer').contains((event.target as HTMLElement));
+    }
+
+    if (document.getElementById('itemsTable') != null) {
+      filesClicked = document.getElementById('itemsTable').contains((event.target as HTMLElement));
+    }
+
+    if (document.getElementById('dataEditionPanel') != null) {
+      editionPanelVisible = document.getElementById('dataEditionPanel').style.display === 'block';
+      editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
+    }
+    
+    if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
+      
+      if(document.getElementsByClassName('table').length > 0){
+        document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
+        if(document.getElementById('dataEditionPanel') != null){
+          document.getElementById('dataEditionPanel').style.display = 'none';
+        }
+      }
+    }
   }
 
   deleteSortIcons() {
