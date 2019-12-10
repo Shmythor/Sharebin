@@ -10,11 +10,13 @@ import { ThemesService } from '../../services/themes.service';
 })
 export class NavbarComponent implements OnInit {
   navbarSelection: string;
+  //username: any;
 
-  constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) { }
+  constructor(private router: Router, private loginService: LoginService, private themesService: ThemesService) {}
 
   ngOnInit() {
     this.themesService.refreshTheme(true);
+    //this.username = this.loginService.getCurrentUser;
   }
 
   select(val) {
