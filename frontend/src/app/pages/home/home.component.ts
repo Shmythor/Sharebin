@@ -96,6 +96,7 @@ export class HomeComponent implements OnInit {
   }
 
   detectChange(event: any) {
+
     this.saveChanges()
     // console.log(event)
 
