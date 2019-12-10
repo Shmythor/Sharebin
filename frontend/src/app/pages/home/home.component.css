@@ -7,7 +7,6 @@
 @import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
-
 .list-container {
     height: 100%;
 }
@@ -20,6 +19,12 @@
     background-color: #E0EAFC;
 }
 
+.metadataList {
+    height: 150px;
+    overflow-x: hidden;
+    margin-top: 5px;
+}
+
 .metadataInput {
     outline: none;
     background: transparent;
@@ -29,6 +34,7 @@
     width: 64px;
     min-width: 64px;
     max-width: 256px;
+    font-size: 16px;
 }
 
 .metadataNew {
@@ -36,6 +42,7 @@
     box-sizing: border-box;
     border-radius: 2px;
     color: rgba(118, 115, 115);
+    font-size: 16px;
 }
 
 .custom-input-container {
@@ -48,12 +55,13 @@
     padding-bottom: 0;
 }
 
-.pl2 > img, .pl2 > button {
+.pl2>img,
+.pl2>button {
     margin: 0 10px;
 }
 
 .selectedFile {
-    background-color: rgba(0,0,0,.075);
+    background-color: rgba(0, 0, 0, .075);
 }
 
 .line-breaker {
@@ -70,6 +78,12 @@
     border: none;
 }
 
+.file-button-favourite {
+    float: right;
+    background-color: transparent;
+    border: none;
+}
+
 .table {
     background-color: #ffffff;
     margin-top: 2em;
@@ -77,10 +91,23 @@
     border-radius: 4px;
 }
 
-#nameColumn, #createDateColumn, #updateDateColumn {
+#nameColumn,
+#createDateColumn,
+#updateDateColumn {
     cursor: pointer;
 }
 
-#nameColumn:hover, #createDateColumn:hover, #updateDateColumn:hover {
-    background-color: rgba(0,0,0,.075);
+#nameColumn:hover,
+#createDateColumn:hover,
+#updateDateColumn:hover {
+    background-color: rgba(0, 0, 0, .075);
+}
+
+#paginationInfo{
+    float: left;
+    font-size: 12px;
+}
+
+.pagination li {
+    margin-right: 10px;
 }

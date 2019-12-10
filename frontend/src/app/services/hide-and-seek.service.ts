@@ -14,6 +14,13 @@ export class HideAndSeekService {
   public hideDownloadButton(buttonId: any) {
     document.getElementById('downloadButton-' + buttonId).style.display = 'none';
   }
+  public showDownloadFav(buttonId: any) {
+    document.getElementById('favouriteButton-' + buttonId).style.display = 'block';
+  }
+
+  public hideDownloadFav(buttonId: any) {
+    document.getElementById('favouriteButton-' + buttonId).style.display = 'none';
+  }
 
   public showPapperBinButton(buttonId: any) {
     document.getElementById('papperBinButton-' + buttonId).style.display = 'block';
@@ -34,7 +41,9 @@ export class HideAndSeekService {
   public showFileMove2BinMessage() {
     document.getElementById('fileMove2Bin').style.display = 'block';
     setTimeout(() => {
-      document.getElementById('fileMove2Bin').style.display = 'none';
+      if(document.getElementById('fileMove2Bin') != null){
+        document.getElementById('fileMove2Bin').style.display = 'none';
+      }
     }, 3000);
   }
 

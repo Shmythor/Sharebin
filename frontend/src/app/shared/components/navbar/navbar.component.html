@@ -1,0 +1,24 @@
+<div class="flex flex-column pa4 h-100 navbar-bg">
+    <img src="../../../assets/logo.png" title="ShareBin" class="navbar-logo" id="navbar-logo" style="cursor: pointer;">
+    <button class="row navbar-element flex items-center" (click)="select('home')">
+        <img src="../../../assets/icons/home.svg" width="32" alt="home icon" id="navbar-icon-home">
+        <div class="ml2">Inicio</div>
+    </button>
+
+    <button class="row navbar-element flex items-center" (click)="select('bin')">
+        <img src="../../../assets/icons/bin.svg" width="32" alt="bin icon" id="navbar-icon-bin">
+        <div class="ml2">Papelera</div>
+    </button>
+
+    <button class="row navbar-element flex items-center" (click)="select('themes')" id="themes-section">
+        <img src="../../../assets/icons/themes.svg" width="32" alt="themes icon" id="navbar-icon-themes">
+        <div class="ml2">Temas</div>
+    </button>
+
+    <button class="row navbar-element flex items-center" (click)="select('favorites')">
+        <img src="../../../assets/icons/estrella.png" width="32" alt="themes icon" id="navbar-icon-themes">
+        <div class="ml2">Favoritos</div>
+    </button>
+
+    <button class="btn btn-danger btn-sm" (click)="logOut()" style="margin-top: 1em;" id="navbar-logout">Cerrar Sesión</button>
+</div>

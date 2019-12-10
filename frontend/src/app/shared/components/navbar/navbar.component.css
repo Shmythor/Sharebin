@@ -1,0 +1,39 @@
+.navbar-bg {
+    background: linear-gradient(180deg, #7B68EE 0%, #00BFFF 100%);
+}
+
+.navbar-element {
+    background: transparent;
+    border: none;
+    text-align: start;
+    color: white;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.navbar-item-icon, .navbar-logout-icon {
+    width: 32px;
+}
+
+.navbar-logout {
+    margin-top: 2em;
+    display: inline-block;
+}
+
+.navbar-logo {
+    width: 128px;
+    height: auto;
+    margin: 0 auto 1em;
+}
+
+.navbar-item-text {
+    display: block;
+}    
+
+.navbar-logout-text {
+    display: block;
+}
+
+.navbar-logout-icon {
+    display: none;
+}

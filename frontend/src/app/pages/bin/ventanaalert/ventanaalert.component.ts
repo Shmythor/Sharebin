@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { MatDialog, MatDialogConfig, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi } from '../../../services/lb-api/services/index';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { BinComponent } from '../bin.component';
-import { ModalComponent } from '../../../shared/_modal/modal.component';
+import { MatDialogRef } from '@angular/material';
+import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 
 
 @Component({
@@ -16,26 +15,21 @@ export class VentanaalertComponent implements OnInit {
   ngOnInit() {
 
   }
-  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi
+  constructor(public dialogRef: MatDialogRef<VentanaalertComponent>,public hideAndSeekService: HideAndSeekService,private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi
     , private http: HttpClient){
 
     }
 
     deleteAllElement(){
      this.docapi.destroyAll({isDeleted: true}).subscribe(() => {
-      this.showConfirm();
+       this.closeDialog();
+       this.hideAndSeekService.showFileDeletedFileMessage();
+       setTimeout(() => { this.hideAndSeekService.closeMessagefileDeletedFile(); }, 2500);
     });
     }
 
-
-    showConfirm(){
-      document.getElementById('confirmDeleted').style.display = 'block';
-      setTimeout(() => {
-        document.getElementById('confirmDeleted').style.display = 'none';
-      }, 3000);
+    closeDialog() {
+      this.dialogRef.close(false);
     }
-
-
-
 
 }

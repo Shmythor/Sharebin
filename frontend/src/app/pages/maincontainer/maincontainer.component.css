@@ -1,0 +1,24 @@
+@media only screen and (max-width: 960px) {
+    .maincontainer-navbar {
+        display: none;
+    }
+    
+    .maincontainer-content {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+ /* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .maincontainer-navbar {
+        display: block;
+        height: 100%;
+        width: 20%;
+    }
+    
+    .maincontainer-content {
+        height: 100%;
+        width: 80%;
+    }
+}

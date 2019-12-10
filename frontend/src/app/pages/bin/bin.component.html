@@ -1,4 +1,4 @@
-<div class="h-100 w-100" style="position: relative">
+<div class="ma4" style="position: relative">
     <!-- Barra de búsqueda y subida de archivos -->
     <div class="flex justify-between">
         <div class="w-70 flex">
@@ -29,7 +29,7 @@
               </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2"
+                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2 pointer"
                 (click)="itemPressed(dat); fileSelected('file' + dat.id)"
                 (mouseover)="hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showRecoverButton(dat.id); hideAndSeekService.showDownloadButton(dat.id)"
                 (mouseout)="hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideRecoverButton(dat.id); hideAndSeekService.hideDownloadButton(dat.id)">
@@ -38,20 +38,19 @@
                     <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24" alt="descargar">
+                            <img src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="Descargar">
                         </button>
                     </td>
                     <td id="fileRecover">
                         <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/recoverBin.svg" width="24" alt="recuperar">
+                            <img src="../../../assets/icons/reciclaje.svg" width="24" title="Recuperar" alt="Recuperar">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24" alt="borrar">
+                            <img src="../../../assets/icons/bin-black.svg" width="24" title="Borrar" alt="Borrar">
                         </button>
-                    </td>
-                    
+                    </td>                    
                 <tr>
             </tbody>
           </table>
@@ -80,5 +79,15 @@
                 </div>
             </div>
         </div>    
-   
+        <div id="paginationContainer" style="display: none;">
+            <nav aria-label="Page navigation example" style="float: left;width: 100%;">
+                <ul class="pagination pg-blue">
+                    <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                    <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
+                    <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
+                    <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
+                </ul>
+                <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
+            </nav>
+        </div>
 </div>

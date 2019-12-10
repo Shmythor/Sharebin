@@ -1,0 +1,116 @@
+<div class="ma4" style="position: relative">
+    <!-- Barra de búsqueda y subida de archivos -->
+    <div class="flex justify-between">
+        <div class="flex w-70">
+            <h2>Favoritos</h2>
+            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+        </div>
+
+        <button class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()">Subir archivo</button>
+    </div>    
+
+    <!-- Alerta de fichero de inicio a papelera -->
+    <div id="fileMove2Bin" class="alert alert-danger w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3;" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
+        Fichero enviado a la papelera. 
+    </div>
+    <!-- Alerta de guardado del cambio -->
+    <div id="confirmChange" class="alert alert-success w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3;  opacity: 0.8;" (click)="hideAndSeekService.saveChanges()">
+        Guardado con éxito!
+    </div>
+    
+    <!-- Contenido modal share -->
+    <jw-modal id="shareURLModal">
+        <div class="input-group mb-3">
+            <input type="text" id="shareURLContent" class="form-control" readonly placeholder="Document URL" aria-label="Document URL" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+              <span class="input-group-text" id="copyURL" style="cursor: pointer;" (click)="copyURL('shareURLContent')">Copiar</span>
+            </div>
+        </div>
+        <button class="btn btn-primary" (click)="closeModal('shareURLModal')">Cerrar</button>
+    </jw-modal>
+
+    <table class="table table-hover" id="itemsTable">
+            <thead>
+              <tr>
+                <th style="width: 70px;"></th>
+                <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
+                <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
+                <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+                <th style="width: 70px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2 pointer"
+                (click)="itemPressed($event, dat); fileSelected('file' + dat.id)"
+                (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id);"
+                (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id);">
+                    <td id="favourite" ng-switch="dat.isFavourite" title="favourite">
+                        <button  id="favouriteButton-{{dat.id}}" class="file-button-favourite ml2 mr2" >
+                            <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)">
+                        </button>
+                    </td>
+                    <td id="fileName" title="Nombre"> {{ dat.name }}</td>
+                    <td id="fileCreateDate" title="Fecha de creación"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileUpdateDate" title="Fecha de modificación"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                    <td id="fileDownload">
+                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
+                            <img id="downloadButtonIcon" src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="descargar">
+                        </button>
+                    </td>
+                    <td id="fileShare">
+                        <button id="shareIcon-{{dat.id}}" class="file-button ml2 mr2" (click)="shareFile(dat)">
+                            <img id="shareButtonIcon" src="../../../assets/icons/share-black.svg" width="24" title="Compartir" alt="compartir">
+                        </button>
+                    </td>
+                    <td id="fileDelete">
+                        <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2PapperBin(dat)">
+                            <img id="deleteButtonIcon" src="../../../assets/icons/bin-black.svg" width="24" title="Eliminar" alt="borrar">
+                        </button>
+                    </td>
+                <tr>
+            </tbody>
+          </table>
+
+          <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
+            <div id="dataEditionPanelContent">
+                <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
+                <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
+
+                <div class="w-100 mb3">
+                    <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
+                </div>
+                <div class="w-100 mb2">
+                    <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
+                </div>
+                <div class="w-100 mb2">
+                    <div id="dataEditionPanelMetadataTag">Metadatos</div>
+                    <div class="flex flex-wrap">
+                        <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1 flex justify-between">
+                            <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput">:
+                            <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
+                            <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id)"></i>
+                        </div>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 pl1 pr1" (click)="newMetadata()">Añadir... </div>
+                    </div>
+                </div>
+                <div class="tc">
+                    <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+                </div>
+            </div>
+        </div>    
+        <div id="paginationContainer" style="display: none;">
+            <nav aria-label="Page navigation example" style="float: left;width: 100%;">
+                <ul class="pagination pg-blue">
+                    <li class="page-item"><button type="button" title="Primera página" class="btn btn-secondary btn-sm" id="firstPage" (click)="firstPage()"><<</button></li>
+                    <li class="page-item"><button type="button" title="Anterior" class="btn btn-secondary btn-sm" id="anterior" (click)="pagAnterior()"><</button></li>
+                    <li class="page-item"><button type="button" title="Siguiente" class="btn btn-secondary btn-sm" id="siguiente" (click)="pagSiguiente()">></button></li>
+                    <li class="page-item" style="margin-right: 0;"><button type="button" title="Última página" class="btn btn-secondary btn-sm" id="lastPage" (click)="lastPage()">>></button></li>
+                </ul>
+                <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
+            </nav>
+        </div>
+</div>
