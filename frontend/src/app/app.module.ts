@@ -1,6 +1,8 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import {MaterialModule} from './material/material.module'
+import {MaterialModule} from './material/material.module';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -17,7 +19,7 @@ import {ModalModule} from '../app/shared/_modal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 import {UploadFilesComponent} from './pages/home/components/upload-files/upload-files.component';
 // Providers to use LoopBack Services
-import {ClientApi, DocumentApi, EnterpriseApi, MetadataApi, SDKModels} from './services/lb-api/services/index';
+import {ClientApi, DocumentApi, EnterpriseApi, MetadataApi, SDKModels, AuditorApi} from './services/lb-api/services/index';
 import {LoopBackAuth} from './services/lb-api/services/core/auth.service';
 import {InternalStorage} from './services/lb-api/storage/storage.swaps';
 
@@ -37,7 +39,10 @@ import { FavoritesComponent } from './pages/favorites/favorites.component';
 import {NavbarComponent} from './shared/components/navbar/navbar.component';
 import {SearchbarComponent} from './shared/components/searchbar/searchbar.component';
 import { ThemeItemComponent } from './pages/themes/components/theme-item/theme-item.component';
-import { ItemlistComponent } from './shared/components/itemlist/itemlist.component';
+
+import { DatePipe } from '@angular/common';
+
+import { MatTabsModule, MatChipsModule, MatIconModule, MatToolbarModule, MatCardModule } from '@angular/material';
 
 
 @NgModule({
@@ -58,8 +63,7 @@ import { ItemlistComponent } from './shared/components/itemlist/itemlist.compone
     ShareURLPopupComponent,
     MatConfirmDialogComponent,
     FavoritesComponent,
-    ThemeItemComponent,
-    ItemlistComponent
+    ThemeItemComponent
   ],
   entryComponents: [VentanaemergComponent, VentanaalertComponent, MatConfirmDialogComponent],
   imports: [
@@ -71,10 +75,19 @@ import { ItemlistComponent } from './shared/components/itemlist/itemlist.compone
     ReactiveFormsModule,
     MaterialModule,
     ModalModule,
-    GridModule
+    GridModule,
+    NgbModule,
+    NgxDropzoneModule,
+    MatTabsModule,
+    MatChipsModule,
+    MatIconModule,
+    MatCardModule,
+    MatToolbarModule
   ],
   providers: [
+    DatePipe,
     ClientApi,
+    AuditorApi,
     SocketConnection,
     SocketDriver,
     DocumentApi,

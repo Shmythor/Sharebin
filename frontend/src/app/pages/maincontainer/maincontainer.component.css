@@ -14,11 +14,11 @@
     .maincontainer-navbar {
         display: block;
         height: 100%;
-        width: 20%;
+        width: 15%;
     }
     
     .maincontainer-content {
         height: 100%;
-        width: 80%;
+        width: 85%;
     }
 }

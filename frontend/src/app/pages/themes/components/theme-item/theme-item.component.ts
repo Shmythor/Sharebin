@@ -26,8 +26,8 @@ export class ThemeItemComponent implements OnInit {
       case 'spring': this.themeClass = 'theme-spring'; this.themeName = 'primaveral'; break;
     }
 
-    console.log('theme is: ' + this.theme);
-    console.log('themeClass is: ' + this.themeClass);
+    //console.log('theme is: ' + this.theme);
+    //console.log('themeClass is: ' + this.themeClass);
   }
 
   switchTheme() {

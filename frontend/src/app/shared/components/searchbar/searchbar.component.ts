@@ -12,14 +12,14 @@ export class SearchbarComponent implements OnInit {
 
   expandFilters = false;
 
-  nameActivated = true;
-  descriptionActivated = true;
-  metadataActivated = true;
+  nameActivated = false;
+  descriptionActivated = false;
+  metadataActivated = false;
 
   constructor() { }
 
   ngOnInit() {
-    
+
   }
 
   filterBy(filter: string) {
@@ -37,7 +37,7 @@ export class SearchbarComponent implements OnInit {
 
   switchFilters() {
     this.expandFilters = !this.expandFilters;
-  }  
+  }
 }
 
 
