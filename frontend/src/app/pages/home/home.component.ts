@@ -242,7 +242,7 @@ export class HomeComponent implements OnInit {
       limit: this.perPage,
       skip: this.currentPos,
       order: this.dataOrder,
-      where: { clientId: userId, isDeleted: false},
+      where: {clientId: userId, isDeleted: false},
       include: 'metadatas',
     };
 
@@ -258,9 +258,15 @@ export class HomeComponent implements OnInit {
 
   getFilter(filter: string) {
     switch (filter) {
-      case 'name': this.filters[0] = !this.filters[0]; break;
-      case 'description': this.filters[1] = !this.filters[1]; break;
-      case 'metadata': this.filters[2] = !this.filters[2]; break;
+      case 'name':
+        this.filters[0] = !this.filters[0];
+        break;
+      case 'description':
+        this.filters[1] = !this.filters[1];
+        break;
+      case 'metadata':
+        this.filters[2] = !this.filters[2];
+        break;
     }
 
     this.getSearch(this.searchValue);
@@ -359,7 +365,9 @@ export class HomeComponent implements OnInit {
           return doc[0].id;
         }
       });
-    }, err => { console.log('getDocIDbyName ERROR: ', err); });
+    }, err => {
+      console.log('getDocIDbyName ERROR: ', err);
+    });
   }
 
   getSearch(search: string) {
@@ -526,6 +534,7 @@ export class HomeComponent implements OnInit {
     this.tempMetadata[id].key = event.target.value;
 
   }
+
   updateMetadataValue(event: any, id: any) {
     this.tempMetadata[id].value = event.target.value;
   }

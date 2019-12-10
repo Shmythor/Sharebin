@@ -33,11 +33,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Buscar un elemento relacionado por id para accessTokens.
+   * Find a related item by id for accessTokens.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para accessTokens
+   * @param {any} fk Foreign key for accessTokens
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -63,11 +63,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprimir un elemento relacionado por id para accessTokens.
+   * Delete a related item by id for accessTokens.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para accessTokens
+   * @param {any} fk Foreign key for accessTokens
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -90,11 +90,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar un elemento relacionado por id para accessTokens.
+   * Update a related item by id for accessTokens.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para accessTokens
+   * @param {any} fk Foreign key for accessTokens
    *
    * @param {object} data Request data.
    *
@@ -126,7 +126,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Capta la relación belongsTo enterprise.
+   * Fetches belongsTo relation enterprise.
    *
    * @param {any} id Client id
    *
@@ -156,11 +156,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Buscar un elemento relacionado por id para documents.
+   * Find a related item by id for documents.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para documents
+   * @param {any} fk Foreign key for documents
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -186,11 +186,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprimir un elemento relacionado por id para documents.
+   * Delete a related item by id for documents.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para documents
+   * @param {any} fk Foreign key for documents
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -213,11 +213,11 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar un elemento relacionado por id para documents.
+   * Update a related item by id for documents.
    *
    * @param {any} id Client id
    *
-   * @param {any} fk Clave foránea para documents
+   * @param {any} fk Foreign key for documents
    *
    * @param {object} data Request data.
    *
@@ -249,7 +249,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Capta la relación hasOne folder.
+   * Fetches hasOne relation folder.
    *
    * @param {any} id Client id
    *
@@ -279,7 +279,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en folder de este modelo.
+   * Creates a new instance in folder of this model.
    *
    * @param {any} id Client id
    *
@@ -312,7 +312,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar folder de este modelo.
+   * Update folder of this model.
    *
    * @param {any} id Client id
    *
@@ -345,7 +345,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime folder de este modelo.
+   * Deletes folder of this model.
    *
    * @param {any} id Client id
    *
@@ -369,7 +369,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * accessTokens consultas de Client.
+   * Queries accessTokens of Client.
    *
    * @param {any} id Client id
    *
@@ -399,7 +399,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en accessTokens de este modelo.
+   * Creates a new instance in accessTokens of this model.
    *
    * @param {any} id Client id
    *
@@ -432,7 +432,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime todos los accessTokens de este modelo.
+   * Deletes all accessTokens of this model.
    *
    * @param {any} id Client id
    *
@@ -456,7 +456,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Recuentos accessTokens de Client.
+   * Counts accessTokens of Client.
    *
    * @param {any} id Client id
    *
@@ -485,7 +485,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * documents consultas de Client.
+   * Queries documents of Client.
    *
    * @param {any} id Client id
    *
@@ -515,7 +515,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en documents de este modelo.
+   * Creates a new instance in documents of this model.
    *
    * @param {any} id Client id
    *
@@ -548,7 +548,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime todos los documents de este modelo.
+   * Deletes all documents of this model.
    *
    * @param {any} id Client id
    *
@@ -572,7 +572,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Recuentos documents de Client.
+   * Counts documents of Client.
    *
    * @param {any} id Client id
    *
@@ -705,10 +705,10 @@ export class ClientApi extends BaseLoopBackApi {
    *   populated with the actual data once the response is returned
    *   from the server.
    *
-   * El cuerpo de respuesta contiene propiedades de la AccessToken creada durante el inicio de la sesión.
-   * Dependiendo del valor del parámetro `include`, el cuerpo puede contener propiedades adicionales:
+   * The response body contains properties of the AccessToken created on login.
+   * Depending on the value of `include` parameter, the body may contain additional properties:
    * 
-   *   - `user` - `U+007BUserU+007D` - Datos del usuario conectado actualmente. (`include=user`)
+   *   - `user` - `U+007BUserU+007D` - Data of the currently logged in user. (`include=user`)
    * 
    *
    */
@@ -968,7 +968,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en folder de este modelo.
+   * Creates a new instance in folder of this model.
    *
    * @param {any} id Client id
    *
@@ -1001,7 +1001,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en accessTokens de este modelo.
+   * Creates a new instance in accessTokens of this model.
    *
    * @param {any} id Client id
    *
@@ -1034,7 +1034,7 @@ export class ClientApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en documents de este modelo.
+   * Creates a new instance in documents of this model.
    *
    * @param {any} id Client id
    *

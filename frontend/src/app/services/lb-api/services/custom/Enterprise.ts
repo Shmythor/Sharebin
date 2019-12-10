@@ -31,11 +31,11 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Buscar un elemento relacionado por id para clients.
+   * Find a related item by id for clients.
    *
    * @param {any} id Enterprise id
    *
-   * @param {any} fk Clave foránea para clients
+   * @param {any} fk Foreign key for clients
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -61,11 +61,11 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprimir un elemento relacionado por id para clients.
+   * Delete a related item by id for clients.
    *
    * @param {any} id Enterprise id
    *
-   * @param {any} fk Clave foránea para clients
+   * @param {any} fk Foreign key for clients
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -88,11 +88,11 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar un elemento relacionado por id para clients.
+   * Update a related item by id for clients.
    *
    * @param {any} id Enterprise id
    *
-   * @param {any} fk Clave foránea para clients
+   * @param {any} fk Foreign key for clients
    *
    * @param {object} data Request data.
    *
@@ -124,7 +124,7 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * clients consultas de Enterprise.
+   * Queries clients of Enterprise.
    *
    * @param {any} id Enterprise id
    *
@@ -154,7 +154,7 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en clients de este modelo.
+   * Creates a new instance in clients of this model.
    *
    * @param {any} id Enterprise id
    *
@@ -187,7 +187,7 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime todos los clients de este modelo.
+   * Deletes all clients of this model.
    *
    * @param {any} id Enterprise id
    *
@@ -211,7 +211,7 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Recuentos clients de Enterprise.
+   * Counts clients of Enterprise.
    *
    * @param {any} id Enterprise id
    *
@@ -327,7 +327,7 @@ export class EnterpriseApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en clients de este modelo.
+   * Creates a new instance in clients of this model.
    *
    * @param {any} id Enterprise id
    *

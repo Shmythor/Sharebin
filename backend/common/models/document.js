@@ -3,7 +3,7 @@
 let App = require('../../server/server');
 const crypto = require('crypto');
 
-let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted" ]
+let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted"]
 module.exports = function (Document) {
   // clientId mantatory
   Document.validatesPresenceOf('clientId');
@@ -16,20 +16,20 @@ module.exports = function (Document) {
   });
   Document.observe('before save', function createAuditorsAfterModify(ctx, next) {
     if (ctx.isNewInstance) return next();
-      ModifCheckParams.forEach((field) => {
+    ModifCheckParams.forEach((field) => {
 
-        if (ctx.data !== undefined && (field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
-          Document.createAuditorDocument(ctx.currentInstance.id, field, ctx.data[field], ctx.currentInstance[field])
+      if (ctx.data !== undefined && (field in ctx.data) && (ctx.data[field] != ctx.currentInstance[field]))
+        Document.createAuditorDocument(ctx.currentInstance.id, field, ctx.data[field], ctx.currentInstance[field])
           .then((auditor) => {
             console.log("SE HA CREADO AUDITOR");
           })
           .catch(err => console.log(err));
-      })
+    })
 
     next();
   });
 
-  Document.createAuditorDocument = function(docId, field, newValue, oldValue) {
+  Document.createAuditorDocument = function (docId, field, newValue, oldValue) {
     let Auditor = App.models.Auditor;
 
     return Auditor.upsert({documentId: docId, modified_elem: field, old_value: oldValue, new_value: newValue})
@@ -66,21 +66,30 @@ module.exports = function (Document) {
         data.urlToShare = url;
         data.save();
         return url;
-      }else {
+      } else {
         return data.urlToShare;
       }
     }).then((url) => cb(null, url))
       .catch(err => cb(err));
   };
 
-  Document.downloadByLink = function(req, res, url, cb){
-    Document.findOne({where :{urlToShare: url}}).then((document)=>{
-      return Document.download(req,res,document.id, cb);
+  Document.downloadByLink = function (req, res, url, cb) {
+    Document.findOne({where: {urlToShare: url}}).then((document) => {
+      return Document.download(req, res, document.id, cb);
     }).catch(err => cb(err))
   };
 
-  Document.deleteMetadata = function(documentId, key, value, cb){
-    Document.findById(id).then
+  Document.deleteMetadata = function (documentId, key, value, cb) {
+    let Metadata = App.models.Metadata;
+    console.log("1234123");
+
+    Document.findById(documentId).then((document) => {
+      Metadata.findOne({where: {documentId: document.id, key: key, value: value}})
+        .then((metadata) => {
+          console.log("uo");
+          metadata.delete();
+        }).then(()=>{cb()});
+    }).catch(err => cb(err));
   };
 
   Document.remoteMethod('download', {
@@ -108,7 +117,7 @@ module.exports = function (Document) {
     http: {verb: 'GET', path: '/createURL'}
   });
 
-  Document.remoteMethod('downloadByLink',{
+  Document.remoteMethod('downloadByLink', {
     description: "Download the file by the shared url",
     accepts: [
       {arg: 'req', type: 'object', http: {source: 'req'}},
@@ -122,38 +131,47 @@ module.exports = function (Document) {
     http: {verb: 'GET', path: '/downloadByLink/:url'}
   });
 
-    Document.observe('before delete', (ctx, next) => {
-        // console.log('Deleted %s matching %j',
-        //   ctx.Model.pluralModelName,
-        //   ctx.where);
+  Document.remoteMethod('deleteMetadata', {
+    description: "Delete metadata of this document",
+    accepts: [
+      {arg: 'documentId', type: 'string'},
+      {arg: 'key', type: 'string'},
+      {arg: 'value', type: 'string'},
+    ]
+  });
 
-        //console.log('El ctx: ', ctx)
+  Document.observe('before delete', (ctx, next) => {
+    // console.log('Deleted %s matching %j',
+    //   ctx.Model.pluralModelName,
+    //   ctx.where);
 
-        let Folder = App.models.Folder;
-        let Client = App.models.Client;
-        let document;
+    //console.log('El ctx: ', ctx)
 
-        console.log(ctx.where);
+    let Folder = App.models.Folder;
+    let Client = App.models.Client;
+    let document;
 
-        let docID = ctx.where.id;
+    console.log(ctx.where);
 
-        Document.findById(docID)
-        .then((doc) => {
-            document = doc;
-            return Client.findById(document.clientId);
-        })
-        .then((client) => {
-            return Folder.removeFile(client.email, document.path);
-        })
-        .then((stdout) => {
-            console.log('Removing file completed');
-        })
-        .catch((err) => {
-            console.log('Error while removing document file: ', err);
-        });
+    let docID = ctx.where.id;
 
-        next();
+    Document.findById(docID)
+      .then((doc) => {
+        document = doc;
+        return Client.findById(document.clientId);
+      })
+      .then((client) => {
+        return Folder.removeFile(client.email, document.path);
+      })
+      .then((stdout) => {
+        console.log('Removing file completed');
+      })
+      .catch((err) => {
+        console.log('Error while removing document file: ', err);
       });
+
+    next();
+  });
 
 
 };

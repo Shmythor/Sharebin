@@ -33,11 +33,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Buscar un elemento relacionado por id para metadatas.
+   * Find a related item by id for metadatas.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para metadatas
+   * @param {any} fk Foreign key for metadatas
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -63,11 +63,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprimir un elemento relacionado por id para metadatas.
+   * Delete a related item by id for metadatas.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para metadatas
+   * @param {any} fk Foreign key for metadatas
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -90,11 +90,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar un elemento relacionado por id para metadatas.
+   * Update a related item by id for metadatas.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para metadatas
+   * @param {any} fk Foreign key for metadatas
    *
    * @param {object} data Request data.
    *
@@ -126,7 +126,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Capta la relación belongsTo client.
+   * Fetches belongsTo relation client.
    *
    * @param {any} id Document id
    *
@@ -156,11 +156,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Buscar un elemento relacionado por id para auditors.
+   * Find a related item by id for auditors.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para auditors
+   * @param {any} fk Foreign key for auditors
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -186,11 +186,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprimir un elemento relacionado por id para auditors.
+   * Delete a related item by id for auditors.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para auditors
+   * @param {any} fk Foreign key for auditors
    *
    * @returns {object} An empty reference that will be
    *   populated with the actual data once the response is returned
@@ -213,11 +213,11 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Actualizar un elemento relacionado por id para auditors.
+   * Update a related item by id for auditors.
    *
    * @param {any} id Document id
    *
-   * @param {any} fk Clave foránea para auditors
+   * @param {any} fk Foreign key for auditors
    *
    * @param {object} data Request data.
    *
@@ -249,7 +249,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * metadatas consultas de Document.
+   * Queries metadatas of Document.
    *
    * @param {any} id Document id
    *
@@ -279,7 +279,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en metadatas de este modelo.
+   * Creates a new instance in metadatas of this model.
    *
    * @param {any} id Document id
    *
@@ -312,7 +312,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime todos los metadatas de este modelo.
+   * Deletes all metadatas of this model.
    *
    * @param {any} id Document id
    *
@@ -336,7 +336,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Recuentos metadatas de Document.
+   * Counts metadatas of Document.
    *
    * @param {any} id Document id
    *
@@ -365,7 +365,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * auditors consultas de Document.
+   * Queries auditors of Document.
    *
    * @param {any} id Document id
    *
@@ -395,7 +395,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en auditors de este modelo.
+   * Creates a new instance in auditors of this model.
    *
    * @param {any} id Document id
    *
@@ -428,7 +428,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Suprime todos los auditors de este modelo.
+   * Deletes all auditors of this model.
    *
    * @param {any} id Document id
    *
@@ -452,7 +452,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Recuentos auditors de Document.
+   * Counts auditors of Document.
    *
    * @param {any} id Document id
    *
@@ -654,7 +654,38 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en metadatas de este modelo.
+   * Delete metadata of this document
+   *
+   * @param {object} data Request data.
+   *
+   *  - `documentId` – `{string}` - 
+   *
+   *  - `key` – `{string}` - 
+   *
+   *  - `value` – `{string}` - 
+   *
+   * @returns {object} An empty reference that will be
+   *   populated with the actual data once the response is returned
+   *   from the server.
+   *
+   * This method returns no data.
+   */
+  public deleteMetadata(documentId: any = {}, key: any = {}, value: any = {}, customHeaders?: Function): Observable<any> {
+    let _method: string = "POST";
+    let _url: string = LoopBackConfig.getPath() + "/" + LoopBackConfig.getApiVersion() +
+    "/documents/deleteMetadata";
+    let _routeParams: any = {};
+    let _postBody: any = {};
+    let _urlParams: any = {};
+    if (typeof documentId !== 'undefined' && documentId !== null) _urlParams.documentId = documentId;
+    if (typeof key !== 'undefined' && key !== null) _urlParams.key = key;
+    if (typeof value !== 'undefined' && value !== null) _urlParams.value = value;
+    let result = this.request(_method, _url, _routeParams, _urlParams, _postBody, null, customHeaders);
+    return result;
+  }
+
+  /**
+   * Creates a new instance in metadatas of this model.
    *
    * @param {any} id Document id
    *
@@ -687,7 +718,7 @@ export class DocumentApi extends BaseLoopBackApi {
   }
 
   /**
-   * Crea una nueva instancia en auditors de este modelo.
+   * Creates a new instance in auditors of this model.
    *
    * @param {any} id Document id
    *
