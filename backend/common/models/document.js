@@ -80,14 +80,15 @@ module.exports = function (Document) {
     }).catch(err => cb(err))
   };
 
-  Document.deleteMetadata = function(documentId, metaID, cb){
+  Document.deleteOneMetadata = function(documentId, metaID, cb) {
     let host = "localhost";
     let port = ":3000";
     let path = `/documents/${documentId}/metadatas/${metaID}`;
-    let url = host + port + path
+    let url = "http://" + host + port + path
     request.post(url, { json: true } ,(err, res, body) => {
-      if (err) { return console.log(err); }
-      console.log(res)
+      if(err) {
+        console.log(err)
+      }
     });    
   };
 
@@ -128,6 +129,19 @@ module.exports = function (Document) {
       {arg: 'Content-Type', type: 'string', http: {target: 'header'}}
     ],
     http: {verb: 'GET', path: '/downloadByLink/:url'}
+  });
+
+  Document.remoteMethod('deleteOneMetadata',{
+    description: "Delete one metadata of a document",
+    accepts: [
+      {arg: 'documentId', type: 'string'},
+      {arg: 'metaID', type: 'string'}
+    ],
+    returns: [
+      {arg: 'body', type: 'file', root: true},
+      {arg: 'Content-Type', type: 'string', http: {target: 'header'}}
+    ],
+    http: {verb: 'POST', path: '/documents/documentId/metadatas/metaID'}
   });
 
     Document.observe('before delete', (ctx, next) => {
