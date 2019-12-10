@@ -2,6 +2,7 @@
 
 let App = require('../../server/server');
 const crypto = require('crypto');
+const request = require("request");
 
 let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted" ]
 module.exports = function (Document) {
@@ -79,8 +80,15 @@ module.exports = function (Document) {
     }).catch(err => cb(err))
   };
 
-  Document.deleteMetadata = function(documentId, key, value, cb){
-    Document.findById(id).then
+  Document.deleteMetadata = function(documentId, metaID, cb){
+    let host = "localhost";
+    let port = ":3000";
+    let path = `/documents/${documentId}/metadatas/${metaID}`;
+    let url = host + port + path
+    request.post(url, { json: true } ,(err, res, body) => {
+      if (err) { return console.log(err); }
+      console.log(res)
+    });    
   };
 
   Document.remoteMethod('download', {
