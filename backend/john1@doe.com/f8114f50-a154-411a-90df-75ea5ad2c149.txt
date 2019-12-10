@@ -1,0 +1,18 @@
+1. Introducción: eso, presentan de qué van a hablar y blabla.
+
+2. Running example: explican un ejemplo que van a gastar y algunas refactorizaciones que le aplican y cómo le afectan.
+
+3. Refactoring activities: 6 pasos que deberían darse antes, durante y después de refactorizar. 
+
+4. Refactoring techiniques and formalisms: diferentes técnicas (muchas) comentadas teóricamente para refactorizar. Aquí vería coger las más sonoras y comentarlas resumidamente.
+
+5. Types of Software Artifacts: elementos del software que se pueden refactorizar (programas, diagramas y requisitos).
+ 
+6. Tool support: distintas características que afectan al uso de herramientas para refactorizar (ejemplo: características que afectan a que un IDE no de puto asco para refactorizar).
+
+7. Process support: cómo introducir la refactorización en el desarrollo ágil de software o de software para un entorno concreto. 
+
+8. Conclusión
+
+Propuesta: ignorar el punto 1. y usar de introducción el 8. Usar un ejemplo de código (puede ser el de 2. u otro nuestro) para mostrarlo a lo largo de la presentación. Quedaría chulo que fuera en live coding, pero por si acaso hacemos capturas. Aplicar el 3. a este ejemplo. Resumir y explicar el 4 (es que es super denso, de verdad). Comentar el punto 5. y aplicar el ejemplo en cada una de las cosas que comenta (programa -que ya lo tendremos-, UML y requisitos).
+Resumir los puntos 6 y 7.
