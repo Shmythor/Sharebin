@@ -83,7 +83,7 @@ module.exports = function (Document) {
   Document.deleteOneMetadata = function(documentId, metaID, cb) {
     let host = "localhost";
     let port = ":3000";
-    let path = `/documents/${documentId}/metadatas/${metaID}`;
+    let path = `/api/documents/${documentId}/metadatas/${metaID}`;
     let url = "http://" + host + port + path
     request.delete(url, { json: true } ,(err, res, body) => {
       if(err) {
