@@ -112,3 +112,8 @@
 .pagination li {
     margin-right: 10px;
 }
+
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+}
