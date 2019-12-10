@@ -38,17 +38,17 @@
                     <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
                     <td id="fileDownload">
                         <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24" alt="descargar">
+                            <img src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="Descargar">
                         </button>
                     </td>
                     <td id="fileRecover">
                         <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/recoverBin.svg" width="24" alt="recuperar">
+                            <img src="../../../assets/icons/reciclaje.svg" width="24" title="Recuperar" alt="Recuperar">
                         </button>
                     </td>
                     <td id="fileDelete">
                         <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24" alt="borrar">
+                            <img src="../../../assets/icons/bin-black.svg" width="24" title="Borrar" alt="Borrar">
                         </button>
                     </td>                    
                 <tr>
