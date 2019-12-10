@@ -85,7 +85,7 @@ module.exports = function (Document) {
     let port = ":3000";
     let path = `/documents/${documentId}/metadatas/${metaID}`;
     let url = "http://" + host + port + path
-    request.post(url, { json: true } ,(err, res, body) => {
+    request.delete(url, { json: true } ,(err, res, body) => {
       if(err) {
         console.log(err)
       }

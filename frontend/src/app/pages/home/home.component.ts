@@ -93,8 +93,8 @@ export class HomeComponent implements OnInit {
   }
 
   detectChange(event: any) {
+    console.log(event)
     this.saveChanges()
-    // console.log(event)
 
     // const isSaveTextArea = (event.target as HTMLElement).id === "dataEditionPanelDescriptionTextarea"
     // // const isText = (event.target as HTMLElement).textContent == "Guardar cambios"
