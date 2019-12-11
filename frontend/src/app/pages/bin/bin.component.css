@@ -113,7 +113,35 @@
     margin-right: 10px;
 }
 
+
+
+.botonMenu {
+    color: #fff;
+    background: #64a3f9;
+    float: right;
+    text-decoration: none;
+    font-weight: bold;
+}
+.itemsMenu {                
+    background: #64a3f9;        
+    color: #fff;
+    text-decoration: none;
+    
+}
+.itemsMenu span {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+@media screen and (min-width: 1057px) {
+   
+    .botonMenu {
+        display: none;
+    }
+
 .mat-tab-label {
     min-width: 0px !important;
     padding: 0 10px !important;
+
 }
