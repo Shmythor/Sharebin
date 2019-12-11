@@ -22,4 +22,9 @@ describe('FavoritesComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should show only favourite documents', () => {
+    component = fixture.componentInstance;
+    
+  });
 });

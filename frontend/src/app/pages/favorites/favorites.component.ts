@@ -7,9 +7,9 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 // import { testData } from './datasource';
-import { DialogService } from 'src/app/shared/dialog.service';
 import {ComponentCanDeactivate} from 'src/app/shared/component-can-deactivate';
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 
@@ -60,7 +60,6 @@ export class FavoritesComponent implements OnInit {
   totalPages: number;
   perPage = 5;
   visibleDocs: number = this.perPage;
-
 
  constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
              public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
