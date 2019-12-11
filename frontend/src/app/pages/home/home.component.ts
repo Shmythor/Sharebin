@@ -39,6 +39,7 @@ export class HomeComponent implements OnInit {
   textAreaText: string;
   metadataList: any;
   multipleMetadataList: any;
+  multipleMetadataListIntersected: any;
   multipleMetadataIDList: any;
   auditInfo: any;
   searchValue: string;
@@ -59,13 +60,14 @@ export class HomeComponent implements OnInit {
   perPage = 5;
   visibleDocs: number = this.perPage;
 
- constructor(private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
-             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService, public datepipe: DatePipe) {
+ constructor(private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi, public dialog: MatDialog,
+             private http: HttpClient, private modalService: ModalService, public hideAndSeekService: HideAndSeekService,
+             private dialogService: DialogService, public datepipe: DatePipe) {
     this.data = [];
     this.dataFiltered = [];
     this.metadataList = [];
     this.multipleMetadataList = [];
+    this.multipleMetadataListIntersected = [];
     this.multipleMetadataIDList = [];
     this.auditInfo = [];
     this.hoverIndex = -1;
@@ -505,16 +507,45 @@ export class HomeComponent implements OnInit {
     }, err => { console.log('docCount ERROR: ', err); });
   }
 
-  newMetadata() {
-    this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
+  newMetadata(isMultiple: boolean) {
+    if (isMultiple) {
+      /* this.multipleMetadataIDList.forEach(docID => {
+        this.multipleMetadataList = [...this.multipleMetadataList, {key: '', value: '', documentId: docID}];
+      }); */
+    } else {
+      this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
+    }
   }
 
-  updateMetadataKey(event: any, id: any) {
-    this.metadataList[id].key = event.target.value;
+  updateMetadataKey(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      const metadataToUpdate = this.multipleMetadataList[id];
 
+      this.multipleMetadataIDList.forEach(docID => {
+        this.dataFiltered.find(doc => doc.id === docID)
+            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
+            .key = event.target.value;
+      });
+
+      this.multipleMetadataList[id].key = event.target.value;
+    } else {
+      this.metadataList[id].key = event.target.value;
+    }
   }
-  updateMetadataValue(event: any, id: any) {
-    this.metadataList[id].value = event.target.value;
+  updateMetadataValue(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      const metadataToUpdate = this.multipleMetadataList[id];
+
+      this.multipleMetadataIDList.forEach(docID => {
+        this.dataFiltered.find(doc => doc.id === docID)
+            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
+            .value = event.target.value;
+      });
+
+      this.multipleMetadataList[id].value = event.target.value;
+    } else {
+      this.metadataList[id].value = event.target.value;
+    }
   }
 
   // Opens confirmation dialog when you have not saved changes
@@ -657,7 +688,7 @@ export class HomeComponent implements OnInit {
       this.fillMultipleMetadataList(this.itemSelected, false);
     } else {
       this.multipleMetadataIDList.splice(index, 1);
-      
+
       // Quitamos item de la lista
       let count = this.multipleMetadataIDList.length - 1;
       this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), true);
@@ -670,15 +701,37 @@ export class HomeComponent implements OnInit {
 
   private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
     if (itemToIntersect === undefined) { return; }
-    console.log('Item to interest (metadatas) is: ', itemToIntersect.metadatas);
 
     if (this.multipleMetadataIDList.length === 1 || cond) {
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas;
       this.multipleMetadataList = itemToIntersect.metadatas;
     } else {
       // Sacamos la intersección entre los dos conjuntos
-      this.multipleMetadataList = itemToIntersect.metadatas.filter(a =>
-        this.multipleMetadataList.find(b => b.value === a.value && b.key === a.key) != null
+      this.multipleMetadataList = [];
+
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas.filter(a => {
+          const itemToAdd = this.multipleMetadataListIntersected.find(b => b.value === a.value && b.key === a.key);
+
+          if (itemToAdd !== null && itemToAdd !== undefined) {
+            this.multipleMetadataIDList.forEach(docID => {
+              const fileInMultipleList = this.dataFiltered.find(doc => doc.id === docID);
+
+              const metadataToAdd = fileInMultipleList.metadatas.find(metadata =>
+                metadata.key === itemToAdd.key && metadata.value === itemToAdd.value
+              );
+
+              this.multipleMetadataList = [...this.multipleMetadataList, metadataToAdd];
+            });
+
+
+            return itemToAdd !== null || itemToAdd !== undefined;
+          } else {
+            return false;
+          }
+        }
       );
+
+      console.log("Lista sin filtrado: ", this.multipleMetadataList);
     }
   }
 
