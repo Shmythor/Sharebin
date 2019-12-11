@@ -277,7 +277,7 @@ export class FavoritesComponent implements OnInit {
     }
 
     // Obtenemos el número total de documentos disponibles y actualizamos los datos de paginación
-    this.docapi.count({isDeleted: false}).subscribe(docCount => {
+    this.docapi.count({isDeleted: false, isFavourite: true}).subscribe(docCount => {
       this.totalFiles = docCount.count;
       // this.updatePaginationInfo();
 
