@@ -2,6 +2,7 @@
 
 let App = require('../../server/server');
 const crypto = require('crypto');
+const request = require("request");
 
 let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted" ]
 module.exports = function (Document) {
@@ -79,8 +80,16 @@ module.exports = function (Document) {
     }).catch(err => cb(err))
   };
 
-  Document.deleteMetadata = function(documentId, key, value, cb){
-    Document.findById(id).then
+  Document.deleteOneMetadata = function(documentId, metaID, cb) {
+    let host = "localhost";
+    let port = ":3000";
+    let path = `/api/documents/${documentId}/metadatas/${metaID}`;
+    let url = "http://" + host + port + path
+    request.delete(url, { json: true } ,(err, res, body) => {
+      if(err) {
+        console.log(err)
+      }
+    });    
   };
 
   Document.remoteMethod('download', {
@@ -120,6 +129,19 @@ module.exports = function (Document) {
       {arg: 'Content-Type', type: 'string', http: {target: 'header'}}
     ],
     http: {verb: 'GET', path: '/downloadByLink/:url'}
+  });
+
+  Document.remoteMethod('deleteOneMetadata',{
+    description: "Delete one metadata of a document",
+    accepts: [
+      {arg: 'documentId', type: 'string'},
+      {arg: 'metaID', type: 'string'}
+    ],
+    returns: [
+      {arg: 'body', type: 'file', root: true},
+      {arg: 'Content-Type', type: 'string', http: {target: 'header'}}
+    ],
+    http: {verb: 'POST', path: '/documents/documentId/metadatas/metaID'}
   });
 
     Document.observe('before delete', (ctx, next) => {

@@ -20,6 +20,12 @@
     background-color: #E0EAFC;
 }
 
+.metadataList {
+    height: 150px;
+    overflow-x: hidden;
+    margin-top: 5px;
+}
+
 .metadataInput {
     outline: none;
     background: transparent;
@@ -28,7 +34,8 @@
     color: #767373;
     width: 64px;
     min-width: 64px;
-    max-width: 256x;
+    max-width: 256px;
+    font-size: 16px;
 }
 
 .metadataNew {
@@ -36,6 +43,7 @@
     box-sizing: border-box;
     border-radius: 2px;
     color: rgba(118, 115, 115);
+    font-size: 16px;
 }
 
 .custom-input-container {
@@ -68,6 +76,12 @@
     float: right;
     background-color: transparent;
     display: none;
+    border: none;
+}
+
+.file-button-favourite {
+    float: right;
+    background-color: transparent;
     border: none;
 }
 
@@ -125,4 +139,9 @@
     .botonMenu {
         display: none;
     }
+
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+
 }
