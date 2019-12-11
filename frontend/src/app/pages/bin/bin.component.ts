@@ -45,7 +45,7 @@ export class BinComponent implements OnInit {
   totalFiles: number = 0;
   currentPage: number;
   totalPages: number;
-  perPage: number = 10;
+  perPage: number = 5;
   visibleDocs: number = this.perPage;
 
 
