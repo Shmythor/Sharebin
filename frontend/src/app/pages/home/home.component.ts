@@ -45,6 +45,8 @@ export class HomeComponent implements OnInit {
   hoverIndex: number;
   lastDocumentSelected: any;
 
+  clientName: string;
+
   // Variables paginación
   anterior: any;
   siguiente: any;
@@ -93,23 +95,8 @@ export class HomeComponent implements OnInit {
     this.getUserItemList();
   }
 
-  detectChange() {
+  detectChange(event: any) {
     this.saveChanges();
-    // console.log(event)
-
-    // const isSaveTextArea = (event.target as HTMLElement).id === "dataEditionPanelDescriptionTextarea"
-    // // const isText = (event.target as HTMLElement).textContent == "Guardar cambios"
-    // let text = event.explicitOriginalTarget.textContent;
-    // console.log(text == "Guardar cambios")
-
-    // if(isSaveTextArea) {
-    //   console.log("No hace falta mostrar el cartel porque es el boton/texto de guardar")
-    // } else if (text == "Guardar cambios") {
-    //   console.log("No hace falta mostrar el cartel porque es el texto de guardar")
-    // } else {
-    //   const msg = 'No has guardado cambios, ¿quiéres hacerlo?\nEn caso contrario, se perderán.';
-    //   this.openConfirmationDialog(msg);
-    // }
   }
 
   editionPanelVisibility(event) {
@@ -450,7 +437,7 @@ export class HomeComponent implements OnInit {
 
     this.auditapi.find(filter).subscribe(docAudit => {
       this.auditInfo = docAudit;
-      for(let i = 0; i < this.auditInfo.length; i++) {
+      for (let i = 0; i < this.auditInfo.length; i++) {
         const modifiedElement = this.auditInfo[i];
         const modificationDate = modifiedElement.date;
         const modificationFormattedDate = this.changeDateFormat(modificationDate);
@@ -726,8 +713,16 @@ export class HomeComponent implements OnInit {
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
+        const metaId = this.metadataList[id].id;
+        const docId = this.metadataList[id].documentId;
+
         this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+          (res) => { console.log('Deleted correctly'); },
+          (err) => { console.log('Error while deleting: ', err); }
+          );
         this.saveChanges();
+        // this.showsaveChangeMessage();
       }
     });
   }
