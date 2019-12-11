@@ -658,17 +658,18 @@ export class HomeComponent implements OnInit {
     } else {
       this.multipleMetadataIDList.splice(index, 1);
       // Quitamos item de la lista
-      let count = this.multipleMetadataIDList.length;
+      let count = this.multipleMetadataIDList.length - 1;
+      this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), true);
 
       while (count-- > 0) {
-
-        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]),
-          count === this.multipleMetadataIDList.length + 1);
+        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), false);
       }
     }
   }
 
   private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
+    console.log("Item to interest (metadatas) is: ", itemToIntersect.metadatas);
+
     if (this.multipleMetadataIDList.length === 1 || cond) {
       this.multipleMetadataList = itemToIntersect.metadatas;
     } else {
