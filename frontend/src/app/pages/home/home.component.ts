@@ -657,6 +657,7 @@ export class HomeComponent implements OnInit {
       this.fillMultipleMetadataList(this.itemSelected, false);
     } else {
       this.multipleMetadataIDList.splice(index, 1);
+      
       // Quitamos item de la lista
       let count = this.multipleMetadataIDList.length - 1;
       this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), true);
@@ -668,7 +669,8 @@ export class HomeComponent implements OnInit {
   }
 
   private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
-    console.log("Item to interest (metadatas) is: ", itemToIntersect.metadatas);
+    if (itemToIntersect === undefined) { return; }
+    console.log('Item to interest (metadatas) is: ', itemToIntersect.metadatas);
 
     if (this.multipleMetadataIDList.length === 1 || cond) {
       this.multipleMetadataList = itemToIntersect.metadatas;

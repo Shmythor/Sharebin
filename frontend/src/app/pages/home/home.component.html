@@ -101,7 +101,7 @@
                     </cdk-virtual-scroll-viewport>                    
                 </ul>
             </mat-tab>
-            <mat-tab label="Metadatos Múltiples">
+            <mat-tab label="Metadatos Múltiples" *ngIf="multipleMetadataIDList.length > 1">
                     <ul class="list">                            
                         <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
                             <div *cdkVirtualFor="let item of multipleMetadataList; let id = index" class="badge badge-pill badge-light">
