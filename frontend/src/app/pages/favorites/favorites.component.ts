@@ -650,7 +650,7 @@ export class FavoritesComponent implements OnInit {
     }, 2000);
   }
 
-  Favorites(doc: any) {
+  Favourite(doc: any) {
     if (doc.isFavourite) {
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
         (no) => {
