@@ -13,11 +13,13 @@ export class ThemesService {
             (document.getElementById('navbar-icon-home') as HTMLImageElement).src = '../../../assets/icons/home.svg';
             (document.getElementById('navbar-icon-bin') as HTMLImageElement).src = '../../../assets/icons/bin.svg';
             (document.getElementById('navbar-icon-themes') as HTMLImageElement).src = '../../../assets/icons/themes.svg';
+            (document.getElementById('navbar-icon-favourite') as HTMLImageElement).src = '../../../assets/icons/icon-star.svg';
             (document.getElementById('navbar-logo') as HTMLImageElement).src = '../../../assets/logo-light.png';
         } else {
             (document.getElementById('navbar-icon-home') as HTMLImageElement).src = '../../../assets/icons/home-black.svg';
             (document.getElementById('navbar-icon-bin') as HTMLImageElement).src = '../../../assets/icons/bin-black.svg';
             (document.getElementById('navbar-icon-themes') as HTMLImageElement).src = '../../../assets/icons/themes-black.svg';
+            (document.getElementById('navbar-icon-favourite') as HTMLImageElement).src = '../../../assets/icons/icon-star-black.svg';
             (document.getElementById('navbar-logo') as HTMLImageElement).src = '../../../assets/logo.png';
         }
 
