@@ -69,7 +69,7 @@
                             <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container"  rows='5' disabled="disabled">{{itemSelected.description}}</textarea>
                         </div>
             </mat-tab>
-            <mat-tab label="Metadatos">
+            <mat-tab label="Metadatos Archivo">
                 <ul class="list">                            
                     <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
                         <div *cdkVirtualFor="let item of tempMetadata; let id = index" class="badge badge-pill badge-light">
