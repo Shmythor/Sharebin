@@ -3,6 +3,8 @@ import {NgModule} from '@angular/core';
 import {MaterialModule} from './material/material.module';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { LayoutModule } from '@angular/cdk/layout';
+import {MatMenuModule} from '@angular/material/menu';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -82,7 +84,9 @@ import { MatTabsModule, MatChipsModule, MatIconModule, MatToolbarModule, MatCard
     MatChipsModule,
     MatIconModule,
     MatCardModule,
-    MatToolbarModule
+    MatToolbarModule,
+    LayoutModule,
+    MatMenuModule
   ],
   providers: [
     DatePipe,

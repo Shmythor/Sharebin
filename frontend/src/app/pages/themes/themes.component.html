@@ -1,3 +1,30 @@
+
+<button class="botonMenu" mat-button [matMenuTriggerFor]="menu">
+        <img src="http://localhost:4200/assets/icons/menu-icon.svg" width="20">
+    
+</button>
+<mat-menu class="itemsMenu" #menu="matMenu">
+  
+    <button mat-menu-item>
+            <a href="http://localhost:4200/home">
+      <img src="http://localhost:4200/assets/icons/home.svg" width="20"><span>Inicio</span></a>
+    </button>
+    
+    <button mat-menu-item>
+            <a href="http://localhost:4200/bin">
+        <img src="http://localhost:4200/assets/icons/bin.svg" width="20"> <span>Papelera</span></a>
+    </button>
+    <button mat-menu-item>
+            <a href="http://localhost:4200/themes">
+        <img src="http://localhost:4200/assets/icons/themes.svg" width="20"> <span>Temas</span></a>
+    </button>
+    <button mat-menu-item>
+            <a href="http://localhost:4200/favorites">
+        <img src="http://localhost:4200/assets/icons/estrella.png" width="20"> <span>Favoritos</span></a>
+    </button>
+</mat-menu>
+
+
 <div class="ma4">
     <h2>Temas</h2>
 
