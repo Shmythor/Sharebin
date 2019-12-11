@@ -92,7 +92,7 @@
             <mat-tab label="Metadatos Archivo">
                 <ul class="list">                            
                     <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
-                        <div *cdkVirtualFor="let item of tempMetadata; let id = index" class="badge badge-pill badge-light">
+                        <div *cdkVirtualFor="let item of metadataList; let id = index" class="badge badge-pill badge-light">
                             <input id="dataEditionPanelMetadata-{{item.key}}" title="{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" (change)="detectChange($event)" class="metadataInput">: 
                             <input id="dataEditionPanelMetadata-{{item.value}}" title="{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" (change)="detectChange($event)" class="metadataInput">
                             <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id)" title="Borrar"></i>
