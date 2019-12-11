@@ -7,6 +7,7 @@ import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpRespon
 import { Observable, Subscription } from 'rxjs';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
+import { DialogService } from 'src/app/shared/dialog.service';
 
 
 @Component({
@@ -50,7 +51,8 @@ export class FavoritesComponent implements OnInit {
 
   constructor(private clientapi: ClientApi, private docapi: DocumentApi,
     public dialog: MatDialog, private http: HttpClient, private metapi: MetadataApi,
-    private modalService: ModalService, public hideAndSeekService: HideAndSeekService) {
+    private modalService: ModalService, public hideAndSeekService: HideAndSeekService,
+    private dialogService: DialogService) {
       this.data = [];
       this.dataFiltered = [];
       this.metadata = [];
@@ -500,10 +502,24 @@ export class FavoritesComponent implements OnInit {
     }
   }
 
-  /* Bugs encontrados */
-  // 1. Cierra la ventana de información inesperadamente
-  // 2. Borra los metadatos sin esperar confirmación del usuario
-  deleteMetadata(id: any) {
-    this.tempMetadata.splice(id, 1);
+  deleteMetadata(id: number) {
+    const msg = '¿Estás seguro de querer eliminar este metadato?';
+
+    this.dialogService.openConfirmDialog(msg)
+    .afterClosed().subscribe(res => {
+      if (res) {
+        // Accepted. Save changes
+        let metaId = this.tempMetadata[id].id;
+        let docId = this.tempMetadata[id].documentId;
+
+        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];        
+        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+          (res) => { console.log("Deleted correctly"); },
+          (err) => { console.log("Error while deleting: ", err); }
+          )
+        this.saveChanges();
+        // this.showsaveChangeMessage();
+      }
+    });
   }
 }
