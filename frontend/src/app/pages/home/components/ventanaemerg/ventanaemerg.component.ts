@@ -30,9 +30,10 @@ export class VentanaemergComponent implements OnInit {
 
   closeModal(id: string) {
 
-    this.bodyText = this.fileData.name;
+    //this.bodyText = this.fileData.name;
 
-    this.onUpload(this.bodyText);
+    //this.onUpload(this.bodyText);
+    this.newOnUpload();
     this.modalService.close(id);
   }
 
@@ -83,7 +84,33 @@ export class VentanaemergComponent implements OnInit {
     return this.http.request(req);
   }
 
+  newOnUpload() {
+
+    
+
+    this.files.forEach((file) => {
+      console.log("Subiendo archivo ", file.name);
+      this.postFile(file, localStorage.getItem('currentUser'), file.name)
+      .subscribe((document) => {
+        /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
+        //console.log("Subida hecha");
+        //location.reload();
+        
+
+        if(file.size > 0 && file.size <= this.MAX_FILE){
+          this.showSuccessUploadMessage();
+          
+        }      
+      }, (err) => {      
+        this.showErrorUploadMessage();
+        console.log('Error al subir documento: ' + err);
+      });
+    })
+  }
+
+  /*
   onUpload(fileDescription: string) {
+    
     fileDescription = this.fileData.name;
     
     if(this.fileData.size > this.MAX_FILE){
@@ -93,7 +120,7 @@ export class VentanaemergComponent implements OnInit {
    
     this.postFile(this.fileData, localStorage.getItem('currentUser'), fileDescription)
     .subscribe((document) => {
-      /* AQUI YA SE HA SUBIDO EL FICHERO. RECARGAR LISTA Y DEMASES. */
+      
       //console.log("Subida hecha");
       //location.reload();
       if(this.fileData.size > 0 && this.fileData.size <= this.MAX_FILE){
@@ -104,7 +131,10 @@ export class VentanaemergComponent implements OnInit {
       this.showErrorUploadMessage();
       console.log('Error al subir documento: ' + err);
     });
+
   }
+  */
+
   addDataTable(data: File) {
     document.getElementById('fileNameTable').innerHTML = '<strong>' + data.name + '</strong>';
     document.getElementById('fileSizeTable').innerHTML = '' + data.size + ' Bytes';
@@ -134,14 +164,19 @@ export class VentanaemergComponent implements OnInit {
   //para el drop_zone
   files: File[] = [];
  
-  onSelect(event) {
-  console.log(event);
-  this.files.push(...event.addedFiles);
+  onSelect(files) {
+    console.log(files);
+    this.files.push(...files.addedFiles);
+    console.log(this.files);
+    files.addedFiles.forEach((f) => {
+      this.addDataTable(f);
+    })
+
   }
  
   onRemove(event) {
-  console.log(event);
-  this.files.splice(this.files.indexOf(event), 1);
+    console.log(event);
+    this.files.splice(this.files.indexOf(event), 1);
   }
 
   onFilesAdded(event) {

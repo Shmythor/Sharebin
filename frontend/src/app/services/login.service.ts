@@ -17,6 +17,10 @@ export class LoginService implements CanActivate {
     return localStorage.getItem('currentUser');
   }
 
+  getCurrentUser() {
+    return this.clientapi.getCurrentId;
+  }
+
   checkUserLogged() {
     return localStorage.getItem('currentUser') != null;
   }

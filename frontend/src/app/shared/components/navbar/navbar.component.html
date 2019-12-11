@@ -1,5 +1,7 @@
 <div class="flex flex-column pa4 h-100 navbar-bg">
     <img src="../../../assets/logo.png" title="ShareBin" class="navbar-logo" id="navbar-logo" style="cursor: pointer;">
+    <p style="color: white; font-size: larger; font-style: italic;">Hola, {{this.username}}</p>
+    
     <button class="row navbar-element flex items-center" (click)="select('home')">
         <img src="../../../assets/icons/home.svg" width="32" alt="home icon" id="navbar-icon-home">
         <div class="ml2">Inicio</div>
@@ -20,5 +22,5 @@
         <div class="ml2">Favoritos</div>
     </button>
 
-    <button class="btn btn-danger btn-sm" (click)="logOut()" style="margin-top: 1em;" id="navbar-logout">Cerrar Sesión</button>
+    <button class="btn btn-danger btn-sm" title="Salir" (click)="logOut()" style="margin-top: 1em;width: 20%;padding: 5px;" id="navbar-logout"><img src="../../../assets/icons/logout.svg" width="32" alt="logout icon" id="navbar-icon-logout"></button>
 </div>
