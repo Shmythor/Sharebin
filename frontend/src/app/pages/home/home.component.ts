@@ -519,27 +519,30 @@ export class HomeComponent implements OnInit {
 
   updateMetadataKey(event: any, id: any, isMultiple: boolean) {
     if (isMultiple) {
-      const metadataToUpdate = this.multipleMetadataList[id];
+      // Obtenemos el valor que se va a cambiar mostrado por pantalla
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
-      this.multipleMetadataIDList.forEach(docID => {
-        this.dataFiltered.find(doc => doc.id === docID)
-            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
-            .key = event.target.value;
+      // Buscamos todas las copias de ese valor en la lista y cambiamos la key
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          metadata.key = event.target.value;
+        }
       });
 
-      this.multipleMetadataList[id].key = event.target.value;
+      // Cambiamos la key en el metadato mostrado por pantalla
+      this.multipleMetadataListIntersected[id].key = event.target.value;
     } else {
       this.metadataList[id].key = event.target.value;
     }
   }
   updateMetadataValue(event: any, id: any, isMultiple: boolean) {
     if (isMultiple) {
-      const metadataToUpdate = this.multipleMetadataList[id];
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
-      this.multipleMetadataIDList.forEach(docID => {
-        this.dataFiltered.find(doc => doc.id === docID)
-            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
-            .value = event.target.value;
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          metadata.value = event.target.value;
+        }
       });
 
       this.multipleMetadataList[id].value = event.target.value;
