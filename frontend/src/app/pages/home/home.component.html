@@ -1,14 +1,54 @@
 <div class="ma4" style="position: relative">
-    <!-- Barra de búsqueda y subida de archivos -->
-    <div class="flex justify-between">
-        <div class="flex w-70">
-            <h2>Inicio</h2>
-            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+
+        <button class="botonMenu" mat-button [matMenuTriggerFor]="menu">
+                <img src="http://localhost:4200/assets/icons/menu-icon.svg" width="20">
+            
+        </button>
+        <mat-menu class="itemsMenu" #menu="matMenu">
+          
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/home">
+              <img src="http://localhost:4200/assets/icons/home.svg" width="20"><span>Inicio</span></a>
+            </button>
+            
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/bin">
+                <img src="http://localhost:4200/assets/icons/bin.svg" width="20"> <span>Papelera</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/themes">
+                <img src="http://localhost:4200/assets/icons/themes.svg" width="20"> <span>Temas</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/favorites">
+                <img src="http://localhost:4200/assets/icons/estrella.png" width="20"> <span>Favoritos</span></a>
+            </button>
+        </mat-menu>
+       
+
+        
+    <div style="text-align: left;">
+        <div class="w-100">
+                <h2 class="iniName">Inicio</h2>
+                
         </div>
 
-        <button class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()">Subir archivo</button>
-    </div>    
+        <!-- Barra de búsqueda y subida de archivos -->
+        <div class="flex justify-between">
 
+                <div style="text-align: left;" class="flex w-70">
+                
+                <app-searchbar class="w-100" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+                </div>
+    
+                <button id="btScreen" class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()"><span>Subir archivo</span></button>
+               
+        </div>        
+                
+    </div>
+   
+             
+    
     <!-- Alerta de fichero de inicio a papelera -->
     <div id="fileMove2Bin" class="alert alert-danger w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3;" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
         Fichero enviado a la papelera. 
@@ -128,7 +168,7 @@
         </mat-tab-group>
 
         <div class="tc">
-            <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+            <!--<button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>-->
         </div>
     </div> 
             

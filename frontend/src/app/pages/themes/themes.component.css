@@ -1,0 +1,38 @@
+@import '../../../../node_modules/@syncfusion/ej2-base/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-calendars/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/bootstrap.css';
+
+
+.botonMenu {
+    margin: 5%;
+    color: #fff;
+    background: #64a3f9;
+    float: right;
+    text-decoration: none;
+    font-weight: bold;
+}
+.itemsMenu {                
+    background: #64a3f9;        
+    color: #fff;
+    text-decoration: none;
+    
+}
+.itemsMenu span {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+@media screen and (min-width: 1057px) {
+   
+    .botonMenu {
+        display: none;
+    }
+}
