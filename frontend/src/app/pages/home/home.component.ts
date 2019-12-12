@@ -384,9 +384,6 @@ export class HomeComponent implements OnInit {
         document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       }
 
-      /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
-      document.getElementById("fileShare").setAttribute("style", iconsCSS);
-      document.getElementById("fileDelete").setAttribute("style", iconsCSS);*/
       if (document.getElementById('dataEditionPanel') != null) {
         document.getElementById('dataEditionPanel').style.display = 'block';
       }
@@ -394,7 +391,6 @@ export class HomeComponent implements OnInit {
       this.itemSelected = data;
       this.metadataList = this.itemSelected.metadatas;
       this.getAuditInfo();
-      // console.log(this.auditInfo);
 
       this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
     }
@@ -412,24 +408,42 @@ export class HomeComponent implements OnInit {
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.metadataList;
+      // Actualizamos con los valores de la lista de metadatos múltiples
+      this.data[index].metadatas.forEach(metadata => {
+        const metaId = metadata.id;
+        const metaInMultipleList = this.multipleMetadataList.find(met => met.id === metaId);
+        if (metaInMultipleList !== undefined) {
+          metadata = metaInMultipleList;
+        }
+      });
 
       /* update database */
       this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          () => { console.log('Nothing'); },
+          () => { console.log('docApi actualizada'); },
           (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
       this.metadataList.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          () => {console.log('Nothing'); },
-          (err) => {console.log('An error ocurred while patching atributes: ', err); }
+          (res) => { console.log('metadatos actualizados: ', res); },
+          (err) => { console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
 
+    /* Update metadata multiple values */
+    this.multipleMetadataList.forEach((elem) => {
+      console.log("Vamos a guardar: ", elem);
+
+      this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
+        (res) => { console.log('Metadatos multiples actualizados'); },
+        (err) => { console.log('An error ocurred while patching atributes: ', err); }
+      );
+    });
+
+
     this.showsaveChangeMessage();
-    return;
   }
 
   getAuditInfo() {
@@ -487,7 +501,17 @@ export class HomeComponent implements OnInit {
             break;
 
           case 'name':
-            modification += 'El nombre fue cambiada el día '
+            modification += 'El nombre fue cambiado el día '
+                            + modificationFormattedDate
+                            + ' a las ' + modificationFormattedTime
+                            + ' de \''
+                            + modifiedElement.old_value + '\''
+                            + ' a \''
+                            + modifiedElement.new_value + '\'';
+            break;
+
+          case 'metadatas':
+            modification += 'Los metadatos fueron cambiados el día '
                             + modificationFormattedDate
                             + ' a las ' + modificationFormattedTime
                             + ' de \''
@@ -509,9 +533,17 @@ export class HomeComponent implements OnInit {
 
   newMetadata(isMultiple: boolean) {
     if (isMultiple) {
-      /* this.multipleMetadataIDList.forEach(docID => {
+      let doItOnce = true;
+
+      this.multipleMetadataIDList.forEach(docID => {
+        if (doItOnce) {
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected, {key: '', value: '', documentId: docID}];
+          doItOnce = false;
+        }
+
         this.multipleMetadataList = [...this.multipleMetadataList, {key: '', value: '', documentId: docID}];
-      }); */
+        this.dataFiltered.find(i => i.id === docID).metadatas = [...this.dataFiltered.find(i => i.id === docID).metadatas, {key: '', value: '', documentId: docID}];
+      });
     } else {
       this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
     }
@@ -519,30 +551,38 @@ export class HomeComponent implements OnInit {
 
   updateMetadataKey(event: any, id: any, isMultiple: boolean) {
     if (isMultiple) {
-      const metadataToUpdate = this.multipleMetadataList[id];
+      // Obtenemos el valor que se va a cambiar mostrado por pantalla
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
-      this.multipleMetadataIDList.forEach(docID => {
-        this.dataFiltered.find(doc => doc.id === docID)
-            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
-            .key = event.target.value;
+      // Buscamos todas las copias de ese valor en la lista y cambiamos la key
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          //console.log('Metadata va a ser cambiada', metadata);
+          metadata.key = event.target.value;
+         // console.log('Metadata cambiada ', metadata);
+        }
       });
 
-      this.multipleMetadataList[id].key = event.target.value;
+      // Cambiamos la key en el metadato mostrado por pantalla
+      this.multipleMetadataListIntersected[id].key = event.target.value;
     } else {
       this.metadataList[id].key = event.target.value;
     }
   }
+
   updateMetadataValue(event: any, id: any, isMultiple: boolean) {
     if (isMultiple) {
-      const metadataToUpdate = this.multipleMetadataList[id];
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
-      this.multipleMetadataIDList.forEach(docID => {
-        this.dataFiltered.find(doc => doc.id === docID)
-            .metadatas.find(metadata => metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value)
-            .value = event.target.value;
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
+          metadata.value = event.target.value;
+          console.log('Metadata cambiada ', metadata);
+        }
       });
 
-      this.multipleMetadataList[id].value = event.target.value;
+      this.multipleMetadataListIntersected[id].value = event.target.value;
     } else {
       this.metadataList[id].value = event.target.value;
     }
@@ -730,8 +770,6 @@ export class HomeComponent implements OnInit {
           }
         }
       );
-
-      console.log("Lista sin filtrado: ", this.multipleMetadataList);
     }
   }
 
@@ -762,21 +800,54 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteMetadata(id: number) {
+  deleteMetadata(id: number, isMultiple: boolean) {
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        const metaId = this.metadataList[id].id;
-        const docId = this.metadataList[id].documentId;
+        if (isMultiple) {
+          const metaToDelete = this.multipleMetadataListIntersected[id];
 
-        this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
-        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
-          (res) => { console.log('Deleted correctly'); },
-          (err) => { console.log('Error while deleting: ', err); }
+          this.dataFiltered.forEach(item => {
+            // Si ese archivo está en la lista de seleccionados, cambiaremos sus metadatos para borrar el correspondiente
+            if (this.multipleMetadataIDList.find(docID => item.id === docID) !== undefined) {
+              let index = item.metadatas.findIndex(met => met.key === metaToDelete.key && met.value === metaToDelete.value);
+              const metaId = item.metadatas[index].id;
+              const docId = item.metadatas[index].documentId;
+
+              // 1. Borramos de this.dataFiltered
+              item.metadatas = [...item.metadatas.slice(0, index), ...item.metadatas.slice(index + 1)];
+
+              // 2. Borramos de this.multipleMetadataList
+              index = this.multipleMetadataList.findIndex(met => met.id === metaId); // Puede ser undefined si no se ha guardado en BBDD
+              if (index === -1) { index = this.multipleMetadataList.findIndex(met => met.documentId === docId); } // Posibilidad de bugs!
+              this.multipleMetadataList = [...this.multipleMetadataList.slice(0, index), ...this.multipleMetadataList.slice(index + 1)];
+
+              // 3. Borramos de la base de datos
+              this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+                (res) => { console.log('Deleted correctly'); },
+                (err) => { console.log('Error while deleting: ', err); }
+              );
+            }
+          });
+
+          // 4. Borramos de this.multipleMetadataListIntersected
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected.slice(0, id),
+                                                  ...this.multipleMetadataListIntersected.slice(id + 1)];
+
+        } else {
+          const metaId = this.metadataList[id].id;
+          const docId = this.metadataList[id].documentId;
+
+          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+            (res) => { console.log('Deleted correctly'); },
+            (err) => { console.log('Error while deleting: ', err); }
           );
+        }
+
         this.saveChanges();
         // this.showsaveChangeMessage();
       }

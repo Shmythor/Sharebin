@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi, AuditorApi } from '../../services/lb-api/services/index';
 import { ModalService } from '../../shared/_modal';
@@ -12,7 +12,8 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-bin',
   templateUrl: './bin.component.html',
-  styleUrls: ['./bin.component.css']
+  styleUrls: ['./bin.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class BinComponent implements OnInit {

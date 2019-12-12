@@ -113,7 +113,50 @@
     margin-right: 10px;
 }
 
+
+
+.botonMenu {
+    color: #fff;
+    background: #64a3f9;
+    float: right;
+    text-decoration: none;
+    font-weight: bold;
+}
+.itemsMenu {                
+    background: #64a3f9;        
+    color: #fff;
+    text-decoration: none;
+    
+}
+.itemsMenu span {
+    color: #fff;
+    text-decoration: none;
+}
+
 .mat-tab-label {
     min-width: 0px !important;
     padding: 0 10px !important;
+}
+
+@media screen and (max-width: 610px ){
+    #btScreenBin span{
+        font-size: 0.8em;
+
+    }
+}
+
+
+
+@media screen and (min-width: 960px) {
+   
+    .botonMenu {
+        display: none;
+    }
+
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+
+}
+
 }

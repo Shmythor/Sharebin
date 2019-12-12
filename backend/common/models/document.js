@@ -4,7 +4,7 @@ let App = require('../../server/server');
 const crypto = require('crypto');
 const request = require("request");
 
-let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted" ]
+let ModifCheckParams = ["name", "description", "path", "url", "size", "type", "isDeleted", "isFavourite", "metadatas"]
 module.exports = function (Document) {
   // clientId mantatory
   Document.validatesPresenceOf('clientId');

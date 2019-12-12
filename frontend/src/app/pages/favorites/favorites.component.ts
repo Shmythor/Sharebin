@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { DocumentApi, ClientApi, MetadataApi, AuditorApi} from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
@@ -18,7 +18,8 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-favorites',
   templateUrl: './favorites.component.html',
-  styleUrls: ['./favorites.component.css']
+  styleUrls: ['./favorites.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 export class FavoritesComponent implements OnInit {
  visible = true;
@@ -41,7 +42,10 @@ export class FavoritesComponent implements OnInit {
   dataFiltered: any;
   itemSelected: any;
   textAreaText: string;
-  tempMetadata: any;
+  metadataList: any;
+  multipleMetadataList: any;
+  multipleMetadataListIntersected: any;
+  multipleMetadataIDList: any;
   auditInfo: any;
   searchValue: string;
   hoverIndex: number;
@@ -66,7 +70,11 @@ export class FavoritesComponent implements OnInit {
              public hideAndSeekService: HideAndSeekService, private dialogService: DialogService, public datepipe: DatePipe) {
     this.data = [];
     this.dataFiltered = [];
-    this.tempMetadata = [];
+    this.metadataList = [];
+    this.metadataList = [];
+    this.multipleMetadataList = [];
+    this.multipleMetadataListIntersected = [];
+    this.multipleMetadataIDList = [];
     this.auditInfo = [];
     this.hoverIndex = -1;
     this.dataOrder = '';
@@ -391,7 +399,7 @@ export class FavoritesComponent implements OnInit {
       }
 
       this.itemSelected = data;
-      this.tempMetadata = this.itemSelected.metadatas;
+      this.metadataList = this.itemSelected.metadatas;
       this.getAuditInfo();
       // console.log(this.auditInfo);
 
@@ -410,25 +418,41 @@ export class FavoritesComponent implements OnInit {
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadatas = this.tempMetadata;
+      this.data[index].metadatas = this.metadataList;
+      // Actualizamos con los valores de la lista de metadatos múltiples
+      this.data[index].metadatas.forEach(metadata => {
+        const metaId = metadata.id;
+        const metaInMultipleList = this.multipleMetadataList.find(met => met.id === metaId);
+        if (metaInMultipleList !== undefined) {
+          metadata = metaInMultipleList;
+        }
+      });
 
       /* update database */
       this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('Nothing'); },
+          () => { console.log('docApi actualizada'); },
           (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
-      this.tempMetadata.forEach((elem) => {
+      this.metadataList.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('Nothing'); },
-          (err) => {console.log('An error ocurred while patching atributes: ', err); }
+          (res) => { console.log('metadatos actualizados: ', res); },
+          (err) => { console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
 
+    /* Update metadata multiple values */
+    this.multipleMetadataList.forEach((elem) => {
+      this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
+        (res) => { console.log('Metadatos multiples actualizados'); },
+        (err) => { console.log('An error ocurred while patching atributes: ', err); }
+      );
+    });
+
+
     this.showsaveChangeMessage();
-    return;
   }
 
   getAuditInfo() {
@@ -502,16 +526,61 @@ export class FavoritesComponent implements OnInit {
     }, err => { console.log('docCount ERROR: ', err); });
   }
 
-  newMetadata() {
-    this.tempMetadata = [...this.tempMetadata, {key: '', value: '', documentId: this.itemSelected.id}];
+  newMetadata(isMultiple: boolean) {
+    if (isMultiple) {
+      let doItOnce = true;
+
+      this.multipleMetadataIDList.forEach(docID => {
+        if (doItOnce) {
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected, {key: '', value: '', documentId: docID}];
+          doItOnce = false;
+        }
+
+        this.multipleMetadataList = [...this.multipleMetadataList, {key: '', value: '', documentId: docID}];
+        this.dataFiltered.find(i => i.id === docID).metadatas = [...this.dataFiltered.find(i => i.id === docID).metadatas, {key: '', value: '', documentId: docID}];
+      });
+    } else {
+      this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
+    }
   }
 
-  updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id].key = event.target.value;
+  updateMetadataKey(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      // Obtenemos el valor que se va a cambiar mostrado por pantalla
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
+      // Buscamos todas las copias de ese valor en la lista y cambiamos la key
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
+          metadata.key = event.target.value;
+          console.log('Metadata cambiada ', metadata);
+        }
+      });
+
+      // Cambiamos la key en el metadato mostrado por pantalla
+      this.multipleMetadataListIntersected[id].key = event.target.value;
+    } else {
+      this.metadataList[id].key = event.target.value;
+    }
   }
-  updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id].value = event.target.value;
+
+  updateMetadataValue(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
+
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
+          metadata.value = event.target.value;
+          console.log('Metadata cambiada ', metadata);
+        }
+      });
+
+      this.multipleMetadataListIntersected[id].value = event.target.value;
+    } else {
+      this.metadataList[id].value = event.target.value;
+    }
   }
 
   // Opens confirmation dialog when you have not saved changes
@@ -670,21 +739,54 @@ export class FavoritesComponent implements OnInit {
     }
   }
 
-  deleteMetadata(id: number) {
+  deleteMetadata(id: number, isMultiple: boolean) {
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        let metaId = this.tempMetadata[id].id;
-        let docId = this.tempMetadata[id].documentId;
+        if (isMultiple) {
+          const metaToDelete = this.multipleMetadataListIntersected[id];
 
-        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];        
-        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
-          (res) => { console.log("Deleted correctly"); },
-          (err) => { console.log("Error while deleting: ", err); }
-          )
+          this.dataFiltered.forEach(item => {
+            // Si ese archivo está en la lista de seleccionados, cambiaremos sus metadatos para borrar el correspondiente
+            if (this.multipleMetadataIDList.find(docID => item.id === docID) !== undefined) {
+              let index = item.metadatas.findIndex(met => met.key === metaToDelete.key && met.value === metaToDelete.value);
+              const metaId = item.metadatas[index].id;
+              const docId = item.metadatas[index].documentId;
+
+              // 1. Borramos de this.dataFiltered
+              item.metadatas = [...item.metadatas.slice(0, index), ...item.metadatas.slice(index + 1)];
+
+              // 2. Borramos de this.multipleMetadataList
+              index = this.multipleMetadataList.findIndex(met => met.id === metaId); // Puede ser undefined si no se ha guardado en BBDD
+              if (index === -1) { index = this.multipleMetadataList.findIndex(met => met.documentId === docId); } // Posibilidad de bugs!
+              this.multipleMetadataList = [...this.multipleMetadataList.slice(0, index), ...this.multipleMetadataList.slice(index + 1)];
+
+              // 3. Borramos de la base de datos
+              this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+                (res) => { console.log('Deleted correctly'); },
+                (err) => { console.log('Error while deleting: ', err); }
+              );
+            }
+          });
+
+          // 4. Borramos de this.multipleMetadataListIntersected
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected.slice(0, id),
+                                                  ...this.multipleMetadataListIntersected.slice(id + 1)];
+
+        } else {
+          const metaId = this.metadataList[id].id;
+          const docId = this.metadataList[id].documentId;
+
+          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+            (res) => { console.log('Deleted correctly'); },
+            (err) => { console.log('Error while deleting: ', err); }
+          );
+        }
+
         this.saveChanges();
         // this.showsaveChangeMessage();
       }
@@ -699,5 +801,61 @@ export class FavoritesComponent implements OnInit {
   //Formatea la hora a h:mm:ss a
   changeTimeFormat(date:Date):string{
     return this.datepipe.transform(date, 'h:mm:ss a');
+  }
+
+  itemChecked(itemID: any) {
+    const index = this.multipleMetadataIDList.findIndex(id => id === itemID);
+    // const fichero = this.data.find(item => item.id === itemID);
+
+    if (index === -1) {
+      // Nuevo item pulsado
+      this.multipleMetadataIDList.push(itemID);
+
+      this.fillMultipleMetadataList(this.itemSelected, false);
+    } else {
+      this.multipleMetadataIDList.splice(index, 1);
+
+      // Quitamos item de la lista
+      let count = this.multipleMetadataIDList.length - 1;
+      this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), true);
+
+      while (count-- > 0) {
+        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), false);
+      }
+    }
+  }
+
+  private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
+    if (itemToIntersect === undefined) { return; }
+
+    if (this.multipleMetadataIDList.length === 1 || cond) {
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas;
+      this.multipleMetadataList = itemToIntersect.metadatas;
+    } else {
+      // Sacamos la intersección entre los dos conjuntos
+      this.multipleMetadataList = [];
+
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas.filter(a => {
+          const itemToAdd = this.multipleMetadataListIntersected.find(b => b.value === a.value && b.key === a.key);
+
+          if (itemToAdd !== null && itemToAdd !== undefined) {
+            this.multipleMetadataIDList.forEach(docID => {
+              const fileInMultipleList = this.dataFiltered.find(doc => doc.id === docID);
+
+              const metadataToAdd = fileInMultipleList.metadatas.find(metadata =>
+                metadata.key === itemToAdd.key && metadata.value === itemToAdd.value
+              );
+
+              this.multipleMetadataList = [...this.multipleMetadataList, metadataToAdd];
+            });
+
+
+            return itemToAdd !== null || itemToAdd !== undefined;
+          } else {
+            return false;
+          }
+        }
+      );
+    }
   }
 }

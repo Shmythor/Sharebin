@@ -1,13 +1,50 @@
 <div class="ma4" style="position: relative">
-    <!-- Barra de búsqueda y subida de archivos -->
-    <div class="flex justify-between">
-        <div class="flex w-70">
-            <h2>Favoritos</h2>
-            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
-        </div>
 
-        <button class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()">Subir archivo</button>
-    </div>    
+        <button class="botonMenu btn-primary" mat-button [matMenuTriggerFor]="menu">
+                <img src="http://localhost:4200/assets/icons/menu-icon.svg" width="20">
+            
+        </button>
+        <mat-menu class="itemsMenu" #menu="matMenu">
+          
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/home">
+              <img src="http://localhost:4200/assets/icons/home.svg" width="20"><span>Inicio</span></a>
+            </button>
+            
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/bin">
+                <img src="http://localhost:4200/assets/icons/bin.svg" width="20"> <span>Papelera</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/themes">
+                <img src="http://localhost:4200/assets/icons/themes.svg" width="20"> <span>Temas</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/favorites">
+                <img src="http://localhost:4200/assets/icons/estrella.png" width="20"> <span>Favoritos</span></a>
+            </button>
+        </mat-menu>
+
+        <div style="text-align: left;">
+                <div class="w-100">
+                        <h2 class="favName">Favoritos</h2>
+                        
+                </div>
+        
+                <!-- Barra de búsqueda y subida de archivos -->
+                <div class="flex justify-between">
+        
+                        <div style="text-align: left;" class="flex w-70">
+                        
+                            <app-searchbar class="w-100" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+                        </div>
+            
+                        <button id="btScreen" class="w-25 btn btn-primary navbar-bg" (click)="loadUploadModal()"><span>Subir archivo</span></button>
+                </div>        
+                        
+        </div>
+    
+    
 
     <!-- Alerta de fichero de inicio a papelera -->
     <div id="fileMove2Bin" class="alert alert-danger w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3;" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
@@ -32,13 +69,14 @@
     <table class="table table-hover" id="itemsTable">
             <thead>
               <tr>
-                <th style="width: 70px;"></th>
+                <th style="width: 72px;"></th>
+                <th style="width: 72px;"></th>
                 <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
                 <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
                 <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
-                <th style="width: 70px;"></th>
-                <th style="width: 70px;"></th>
-                <th style="width: 70px;"></th>
+                <th style="width: 72px;"></th>
+                <th style="width: 72px;"></th>
+                <th style="width: 72px;"></th>
               </tr>
             </thead>
             <tbody>
@@ -46,6 +84,9 @@
                 (click)="itemPressed($event, dat); fileSelected('file' + dat.id)"
                 (mouseover)="hideAndSeekService.showDownloadButton(dat.id); hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showShareIcon(dat.id);"
                 (mouseout)="hideAndSeekService.hideDownloadButton(dat.id); hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideShareIcon(dat.id);">
+                    <td id="selectedItem" title="selected" class="file-button-favourite ml2 mr2">
+                        <input (change)="itemChecked(dat.id)" type="checkbox">
+                    </td>    
                     <td id="favourite" ng-switch="dat.isFavourite" title="favourite">
                         <button  id="favouriteButton-{{dat.id}}" class="file-button-favourite ml2 mr2" >
                             <img  id="favouriteButtonIcon" [src]="dat.isFavourite== false ? '../../../assets/icons/star.svg' : '../../../assets/icons/star-yellow.png' " width="24" title="Favorito" alt="fav" (click)="Favourite(dat)">
@@ -85,15 +126,27 @@
                             <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" (change)="detectChange($event)" rows='5'>{{itemSelected.description}}</textarea>
                         </div>
             </mat-tab>
-            <mat-tab label="Metadatos">
+            <mat-tab label="Metadatos Archivo">
                 <ul class="list">                            
                     <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
-                        <div *cdkVirtualFor="let item of tempMetadata; let id = index" class="badge badge-pill badge-light">
-                            <input id="dataEditionPanelMetadata-{{item.key}}" title="{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" (change)="detectChange($event)" class="metadataInput"> : 
-                            <input id="dataEditionPanelMetadata-{{item.value}}" title="{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" (change)="detectChange($event)" class="metadataInput">
-                            <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id)" title="Borrar"></i>
+                        <div *cdkVirtualFor="let item of metadataList; let id = index" class="badge badge-pill badge-light">
+                            <input id="dataEditionPanelMetadata-{{item.key}}" title="{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id, false)" (change)="detectChange($event)" class="metadataInput"> : 
+                            <input id="dataEditionPanelMetadata-{{item.value}}" title="{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id, false)" (change)="detectChange($event)" class="metadataInput">
+                            <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id, false)" title="Borrar"></i>
                         </div>
-                        <div title="Añadir metadato" id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer badge badge-pill badge-light ma1 pl1 pr1" (click)="newMetadata();">Añadir... </div>
+                        <div title="Añadir metadato" id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer badge badge-pill badge-light ma1 pl1 pr1" (click)="newMetadata(false);">Añadir... </div>
+                    </cdk-virtual-scroll-viewport>                    
+                </ul>
+            </mat-tab>
+            <mat-tab label="Metadatos Múltiples" *ngIf="multipleMetadataIDList.length > 1">
+                <ul class="list">                            
+                    <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
+                        <div *cdkVirtualFor="let item of multipleMetadataListIntersected; let id = index" class="badge badge-pill badge-light">
+                            <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id, true)" (change)="detectChange($event)" class="metadataInput"> : 
+                            <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id, true)" (change)="detectChange($event)" class="metadataInput">
+                            <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(id, true)"></i>
+                        </div>
+                        <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer badge badge-pill badge-light ma1 pl1 pr1" (click)="newMetadata(true);">Añadir... </div>
                     </cdk-virtual-scroll-viewport>                    
                 </ul>
             </mat-tab>
@@ -111,7 +164,7 @@
             </mat-tab>
         </mat-tab-group> 
         <div class="tc">
-            <button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>
+            <!--<button id="dataEditionPanelSaveChanges" class="btn btn-success" (click)="saveChanges()">Guardar cambios</button>-->
         </div>
     </div>    
         <div id="paginationContainer" style="display: none;">
