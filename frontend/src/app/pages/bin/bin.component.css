@@ -146,16 +146,13 @@
 }
 
 
+
 @media screen and (min-width: 960px) {
    
     .botonMenu {
         display: none;
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 20d9c4f52249e00cf2c33852d6bb675dc94f4eb1
 .mat-tab-label {
     min-width: 0px !important;
     padding: 0 10px !important;
