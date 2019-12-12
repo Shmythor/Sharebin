@@ -133,15 +133,16 @@
     text-decoration: none;
 }
 
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+}
 
-@media screen and (min-width: 1057px) {
+
+@media screen and (min-width: 960px) {
    
     .botonMenu {
         display: none;
     }
-
-.mat-tab-label {
-    min-width: 0px !important;
-    padding: 0 10px !important;
 
 }
