@@ -1,6 +1,6 @@
 <div class="ma4" style="position: relative">
 
-        <button class="botonMenu" mat-button [matMenuTriggerFor]="menu">
+        <button class="botonMenu btn-primary" mat-button [matMenuTriggerFor]="menu">
                 <img src="http://localhost:4200/assets/icons/menu-icon.svg" width="20">
             
         </button>
@@ -140,15 +140,15 @@
                     </cdk-virtual-scroll-viewport>                    
                 </ul>
             </mat-tab>
-            <mat-tab label="Metadatos Múltiples" *ngIf="multipleMetadataIDList.length > 1">
+            <mat-tab label="Metadatos Comunes" *ngIf="multipleMetadataIDList.length > 1">
                     <ul class="list">                            
                         <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
                             <div *cdkVirtualFor="let item of multipleMetadataListIntersected; let id = index" class="badge badge-pill badge-light">
                                 <input id="dataEditionPanelMetadata-{{item.key}}" [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id, true)" (change)="detectChange($event)" class="metadataInput"> : 
                                 <input id="dataEditionPanelMetadata-{{item.value}}" [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id, true)" (change)="detectChange($event)" class="metadataInput">
-                                <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(dat.id)"></i>
+                                <!-- <i class="icon ion-md-close mr2 pointer" (click)="deleteMetadata(dat.id)"></i> -->
                             </div>
-                            <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer badge badge-pill badge-light ma1 pl1 pr1" (click)="newMetadata(true);">Añadir... </div>
+                            <!-- <div id="dataEditionPanelMetadataAdd" *ngIf="itemSelected.id !== ''" class="pointer badge badge-pill badge-light ma1 pl1 pr1" (click)="newMetadata(true);">Añadir... </div> -->
                         </cdk-virtual-scroll-viewport>                    
                     </ul>
                 </mat-tab>
