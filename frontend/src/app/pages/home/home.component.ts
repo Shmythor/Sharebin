@@ -412,27 +412,38 @@ export class HomeComponent implements OnInit {
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.metadataList;
-
-      /* this.data[index].metadatas = this.metadataList.map((item) => {
-        const metadataInMultiple = this.multipleMetadataList.find(met => met.id === item.id);
-
-        if (metadataInMultiple !== null || metadataInMultiple !== undefined) { return metadataInMultiple; } else { return item; }
-      }); */
+      // Actualizamos con los valores de la lista de metadatos múltiples
+      this.data[index].metadatas.forEach(metadata => {
+        const metaId = metadata.id;
+        const metaInMultipleList = this.multipleMetadataList.find(met => met.id === metaId);
+        if (metaInMultipleList !== undefined) {
+          metadata = metaInMultipleList;
+        }
+      });
 
       /* update database */
       this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          () => { console.log('Nothing'); },
+          () => { console.log('docApi actualizada'); },
           (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
       this.metadataList.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          () => { console.log('Nothing'); },
+          (res) => { console.log('metadatos actualizados: ', res); },
           (err) => { console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
+
+    /* Update metadata multiple values */
+    this.multipleMetadataList.forEach((elem) => {
+      this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
+        (res) => { console.log('Metadatos multiples actualizados'); },
+        (err) => { console.log('An error ocurred while patching atributes: ', err); }
+      );
+    });
+
 
     this.showsaveChangeMessage();
   }
@@ -548,7 +559,9 @@ export class HomeComponent implements OnInit {
       // Buscamos todas las copias de ese valor en la lista y cambiamos la key
       this.multipleMetadataList.forEach(metadata => {
         if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
           metadata.key = event.target.value;
+          console.log('Metadata cambiada ', metadata);
         }
       });
 
@@ -565,11 +578,13 @@ export class HomeComponent implements OnInit {
 
       this.multipleMetadataList.forEach(metadata => {
         if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
           metadata.value = event.target.value;
+          console.log('Metadata cambiada ', metadata);
         }
       });
 
-      this.multipleMetadataList[id].value = event.target.value;
+      this.multipleMetadataListIntersected[id].value = event.target.value;
     } else {
       this.metadataList[id].value = event.target.value;
     }
@@ -797,9 +812,6 @@ export class HomeComponent implements OnInit {
         if (isMultiple) {
           const metaToDelete = this.multipleMetadataListIntersected[id];
 
-          console.log(this.multipleMetadataListIntersected);
-          console.log(this.multipleMetadataList);
-
           this.dataFiltered.forEach(item => {
             // Si ese archivo está en la lista de seleccionados, cambiaremos sus metadatos para borrar el correspondiente
             if (this.multipleMetadataIDList.find(docID => item.id === docID) !== undefined) {
@@ -814,8 +826,6 @@ export class HomeComponent implements OnInit {
               index = this.multipleMetadataList.findIndex(met => met.id === metaId); // Puede ser undefined si no se ha guardado en BBDD
               if (index === -1) { index = this.multipleMetadataList.findIndex(met => met.documentId === docId); } // Posibilidad de bugs!
               this.multipleMetadataList = [...this.multipleMetadataList.slice(0, index), ...this.multipleMetadataList.slice(index + 1)];
-
-              console.log('Vamos a borrar el metadato: ', {metaId, docId});
 
               // 3. Borramos de la base de datos
               this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
