@@ -412,6 +412,7 @@ export class HomeComponent implements OnInit {
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.metadataList;
+
       /* this.data[index].metadatas = this.metadataList.map((item) => {
         const metadataInMultiple = this.multipleMetadataList.find(met => met.id === item.id);
 
@@ -756,8 +757,6 @@ export class HomeComponent implements OnInit {
           }
         }
       );
-
-      console.log('Lista sin filtrado: ', this.multipleMetadataList);
     }
   }
 
@@ -789,29 +788,47 @@ export class HomeComponent implements OnInit {
   }
 
   deleteMetadata(id: number, isMultiple: boolean) {
-    // Si es un metadato vacio, lo borramos directamente
-    if (this.metadataList[id].key === '' && this.metadataList.value === '') {
-      this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
-      return;
-    }
-
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        if (isMultiple) { 
-          const meta = this.multipleMetadataListIntersected[id];
-          this.multipleMetadataIDList.forEach(docID => {
-            this.dataFiltered.find(i => i.id === meta.)
+        if (isMultiple) {
+          const metaToDelete = this.multipleMetadataListIntersected[id];
+
+          console.log(this.multipleMetadataListIntersected);
+          console.log(this.multipleMetadataList);
+
+          this.dataFiltered.forEach(item => {
+            // Si ese archivo está en la lista de seleccionados, cambiaremos sus metadatos para borrar el correspondiente
+            if (this.multipleMetadataIDList.find(docID => item.id === docID) !== undefined) {
+              let index = item.metadatas.findIndex(met => met.key === metaToDelete.key && met.value === metaToDelete.value);
+              const metaId = item.metadatas[index].id;
+              const docId = item.metadatas[index].documentId;
+
+              // 1. Borramos de this.dataFiltered
+              item.metadatas = [...item.metadatas.slice(0, index), ...item.metadatas.slice(index + 1)];
+
+              // 2. Borramos de this.multipleMetadataList
+              index = this.multipleMetadataList.findIndex(met => met.id === metaId); // Puede ser undefined si no se ha guardado en BBDD
+              if (index === -1) { index = this.multipleMetadataList.findIndex(met => met.documentId === docId); } // Posibilidad de bugs!
+              this.multipleMetadataList = [...this.multipleMetadataList.slice(0, index), ...this.multipleMetadataList.slice(index + 1)];
+
+              console.log('Vamos a borrar el metadato: ', {metaId, docId});
+
+              // 3. Borramos de la base de datos
+              this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+                (res) => { console.log('Deleted correctly'); },
+                (err) => { console.log('Error while deleting: ', err); }
+              );
+            }
           });
 
-          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
-          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
-            (res) => { console.log('Deleted correctly'); },
-            (err) => { console.log('Error while deleting: ', err); }
-          );
+          // 4. Borramos de this.multipleMetadataListIntersected
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected.slice(0, id),
+                                                  ...this.multipleMetadataListIntersected.slice(id + 1)];
+
         } else {
           const metaId = this.metadataList[id].id;
           const docId = this.metadataList[id].documentId;
