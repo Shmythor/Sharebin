@@ -8,9 +8,9 @@
     <form class="col-4" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
             <input type="text" placeholder="Email" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.email.errors }" />
-            {{"john1@doe.com"}}
+            <!--{{"john1@doe.com"}}
             {{"bob1@projects.com"}}
-            {{"jane1@doe.com"}}
+            {{"jane1@doe.com"}}-->
             <div *ngIf="submitted && f.email.errors" class="invalid-feedback">
                 <div *ngIf="f.email.errors.required">Se necesita introducir un email</div>
                 <div *ngIf="f.email.errors.email">Email debe ser una dirección email</div>
@@ -18,7 +18,7 @@
         </div>
         <div class="form-row">
             <div class="form-group col">
-                <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" />{{"password"}}
+                <input type="password" placeholder="Password" formControlName="password" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.password.errors }" /><!--{{"password"}}-->
                 <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                     <div *ngIf="f.password.errors.required">Se require introducir una contraseña</div>
                     <div *ngIf="f.password.errors.minlength">La contraseña debe tener mínimo 6 caracteres</div>
