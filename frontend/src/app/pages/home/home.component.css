@@ -147,6 +147,13 @@
     text-decoration: none;
 }
 
+@media screen and (max-width: 600px ){
+    #btScreen span{
+        font-size: 0.8em;
+
+    }
+}
+
 
 @media screen and (min-width: 960px) {
    
