@@ -1,24 +1,29 @@
 import {async, ComponentFixture, getTestBed, TestBed} from '@angular/core/testing';
 
+
+
 import {FavoritesComponent} from './favorites.component';
-import {CUSTOM_ELEMENTS_SCHEMA, InjectionToken, NO_ERRORS_SCHEMA} from "@angular/core";
-import {AuditorApi, ClientApi, DocumentApi, MetadataApi, SDKModels} from "../../services/lb-api/services/custom";
-import {HttpClient, HttpHandler} from "@angular/common/http";
-import {SocketConnection} from "../../services/lb-api/sockets/socket.connections";
-import {SocketDriver} from "../../services/lb-api/sockets/socket.driver";
-import {LoopBackAuth} from "../../services/lb-api/services/core";
-import {InternalStorage} from "../../services/lb-api";
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {Overlay} from "@angular/cdk/overlay";
-import {CommonModule, DatePipe} from "@angular/common";
-import {ScrollDispatchModule} from "@angular/cdk/scrolling";
-import {BrowserModule, By} from "@angular/platform-browser";
-import {timeout} from "rxjs/operators";
-import {MatMenuModule} from "@angular/material/menu";
+import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
+import {AuditorApi, ClientApi, DocumentApi, MetadataApi, SDKModels} from '../../services/lb-api/services/custom';
+import {HttpClient, HttpHandler} from '@angular/common/http';
+import {SocketConnection} from '../../services/lb-api/sockets/socket.connections';
+import {SocketDriver} from '../../services/lb-api/sockets/socket.driver';
+import {LoopBackAuth} from '../../services/lb-api/services/core';
+import {InternalStorage} from '../../services/lb-api';
+import {MatDialog, MatDialogModule} from '@angular/material/dialog';
+import {Overlay} from '@angular/cdk/overlay';
+import {CommonModule, DatePipe} from '@angular/common';
+import {ScrollDispatchModule} from '@angular/cdk/scrolling';
+import {BrowserModule, By} from '@angular/platform-browser';
+import {MatMenuModule} from '@angular/material/menu';
+import { ErrorHandler } from '../../services/lb-api/services/core/error.service';
 
 describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
   let fixture: ComponentFixture<FavoritesComponent>;
+  let docApi: DocumentApi;
+  let clientApi: ClientApi;
+  let errorHandler: ErrorHandler;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -50,7 +55,8 @@ describe('FavoritesComponent', () => {
         Overlay,
         MetadataApi,
         AuditorApi,
-        DatePipe
+        DatePipe,
+        ErrorHandler
       ]
     }).compileComponents();
   }));
@@ -65,15 +71,24 @@ describe('FavoritesComponent', () => {
   });
 
   it('should only show favorites documents', () => {
-    /*const docApi = fixture.debugElement.injector.get(DocumentApi);
-    let data, dataFiltered;
+    docApi = TestBed.get(DocumentApi);
+    clientApi = TestBed.get(ClientApi);
+    errorHandler = TestBed.get(ErrorHandler);
+
     const filter = {
-      where: {clientId: '5da5ecd69b976d2bcac8298c', isDeleted: false},
+      where: { clientId: '5da5ecd69b976d2bcac8298c', isDeleted: false, isFavourite: true},
       include: 'metadatas',
-    };*/
-    console.log('QUIERO LLORAR');
-    console.log(component.dataFiltered);
+    };
 
+    console.log({docApi});
+
+    docApi.find(filter).subscribe((docList) =>
+      (nect) => {
+        docList.forEach((item) => {
+          expect(item['isFavourite']).toEqual(true);
+        });
+      },
+      (error) => { console.log('Error al buscar archivos: ', error); }
+    );
   });
-
 });
