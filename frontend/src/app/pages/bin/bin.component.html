@@ -1,13 +1,49 @@
 <div class="ma4" style="position: relative">
-    <!-- Barra de búsqueda y subida de archivos -->
-    <div class="flex justify-between">
-        <div class="w-70 flex">
-            <h2>Papelera</h2>
-            <app-searchbar class="w-100 ml4" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
-        </div>
 
-        <button class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()">Vaciar Papelera</button>
+        <button class="botonMenu btn-primary" mat-button [matMenuTriggerFor]="menu">
+                <img src="http://localhost:4200/assets/icons/menu-icon.svg" width="20">
+            
+        </button>
+        <mat-menu class="itemsMenu" #menu="matMenu">
+          
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/home">
+              <img src="http://localhost:4200/assets/icons/home.svg" width="20"><span>Inicio</span></a>
+            </button>
+            
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/bin">
+                <img src="http://localhost:4200/assets/icons/bin.svg" width="20"> <span>Papelera</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/themes">
+                <img src="http://localhost:4200/assets/icons/themes.svg" width="20"> <span>Temas</span></a>
+            </button>
+            <button mat-menu-item>
+                    <a href="http://localhost:4200/favorites">
+                <img src="http://localhost:4200/assets/icons/estrella.png" width="20"> <span>Favoritos</span></a>
+            </button>
+        </mat-menu>
+    <!-- Barra de búsqueda y subida de archivos -->
+    <div style="text-align: left;">
+            <div class="w-100">
+                    <h2 class="binName">Papelera</h2>
+                    
+            </div>
+    
+            <!-- Barra de búsqueda y subida de archivos -->
+            <div class="flex justify-between">
+    
+                    <div style="text-align: left;" class="flex w-70">
+                    
+                            <app-searchbar class="w-100" (filterToEmit)="getFilter($event)" (searchToEmit)="getSearch($event)"></app-searchbar>
+                    </div>
+        
+                    <button id="btScreenBin" class="w-25 btn btn-primary navbar-bg" (click)="deletedAllFile()"><span>Vaciar Papelera</span> </button>
+            </div>        
+                    
     </div>
+    
 
     <!-- mensajes alertas sobre fichero recuperado y fichero borrado.-->
     <div id="fileMove2Home" class="alert alert-success w-70" role="alert" style="display: none; text-align: center; position: absolute; bottom: 0.3; opacity: 0.85;" (click)="hideAndSeekService.closeMessagefileMove2Bin()">
@@ -17,68 +53,83 @@
         El fichero ha sido borrado permanentemente.
     </div>
 
-    <table class="table table-hover" id="itemsTable">
-            <thead>
-              <tr>
+
+     <table class="table table-hover" id="itemsTable" style="font-size: 14px;">
+        <thead>
+            <tr>
                 <th scope="col" class="align-middle" id="nameColumn" (click)="changeOrder($event)">Nombre</th>
                 <th scope="col" class="align-middle" id="createDateColumn" (click)="changeOrder($event)">Fecha de creación</th>
                 <th scope="col" class="align-middle" id="updateDateColumn" (click)="changeOrder($event)">Fecha de modificación</th>
                 <th style="width: 70px;"></th>
                 <th style="width: 70px;"></th>
                 <th style="width: 70px;"></th>
-              </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2 pointer"
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let dat of dataFiltered; let i = index" id="file{{dat.id}}" class="pl2 pointer"
+              
                 (click)="itemPressed(dat); fileSelected('file' + dat.id)"
                 (mouseover)="hideAndSeekService.showPapperBinButton(dat.id); hideAndSeekService.showRecoverButton(dat.id); hideAndSeekService.showDownloadButton(dat.id)"
                 (mouseout)="hideAndSeekService.hidePapperBinButton(dat.id); hideAndSeekService.hideRecoverButton(dat.id); hideAndSeekService.hideDownloadButton(dat.id)">
-                    <td id="fileName"> {{ dat.name }}</td>
-                    <td id="fileCreateDate"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
-                    <td id="fileUpdateDate"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
-                    <td id="fileDownload">
-                        <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
-                            <img src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="Descargar">
-                        </button>
-                    </td>
-                    <td id="fileRecover">
-                        <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
-                            <img src="../../../assets/icons/reciclaje.svg" width="24" title="Recuperar" alt="Recuperar">
-                        </button>
-                    </td>
-                    <td id="fileDelete">
-                        <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
-                            <img src="../../../assets/icons/bin-black.svg" width="24" title="Borrar" alt="Borrar">
-                        </button>
-                    </td>                    
-                <tr>
-            </tbody>
-          </table>
+                <td id="fileName" title="Nombre" style="font-size: 12px;"> {{ dat.name }}</td>
+                <td id="fileCreateDate" title="Fecha de creación" style="font-size: 12px;"> {{ dat.createDate | date: 'dd/MM/yyyy' }}</td>
+                <td id="fileUpdateDate" title="Fecha de modificación" style="font-size: 12px;"> {{ dat.updateDate | date: 'dd/MM/yyyy' }}</td>
+                <td id="fileDownload">
+                    <button id="downloadButton-{{dat.id}}" class="file-button ml2 mr2" (click)="downloadFile(dat)">
+                        <img src="../../../assets/icons/download.svg" width="24" title="Descargar" alt="Descargar">
+                    </button>
+                </td>
+                <td id="fileRecover">
+                    <button id="recoverButton-{{dat.id}}" class="file-button ml2 mr2" (click)="move2Home(dat)">
+                        <img src="../../../assets/icons/reciclaje.svg" width="24" title="Recuperar" alt="Recuperar">
+                    </button>
+                </td>
+                <td id="fileDelete">
+                    <button id="papperBinButton-{{dat.id}}" class="file-button ml2 mr2" (click)="deletedFile(dat.id)">
+                        <img src="../../../assets/icons/bin-black.svg" width="24" title="Borrar" alt="Borrar">
+                    </button>
+                </td>          
+            <tr>
+        </tbody>
+    </table>
 
-         <div id="dataEditionPanel" class="w-25 flex flex-column justify-between" style="margin-top: 2em; float: left; display: none;">
-            <div id="dataEditionPanelContent">
-                <div id="dataEditionPanelTitle"><strong id="dataEditionPanelTitleStrong">Archivo seleccionado</strong></div>
-                <div id="dataEditionPanelLineBreaker" class="line-breaker mb3"></div>
-
-                <div class="w-100 mb3">
-                    <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
-                    <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container" [value]="itemSelected.name" />
-                </div>
-                <div class="w-100 mb2">
-                    <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
-                    <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container" rows='5'>{{itemSelected.description}}</textarea>
-                </div>
-                <div class="w-100 mb2">
-                    <div id="dataEditionPanelMetadataTag">Metadatos</div>
-                    <div class="flex flex-wrap">
-                        <div *ngFor="let item of tempMetadata; let id = index" class="custom-input-container ma1">
-                            <input [value]="item.key" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataKey($event, id)" class="metadataInput"> :
-                            <input [value]="item.value" type="text" onkeypress="this.style.width = ((this.value.length + 1) * 8) + 'px';" (keyup)="updateMetadataValue($event, id)" class="metadataInput">
+    <div style="width: 25%; margin-top: 2em; float: left; display: none; right: 0;" id="dataEditionPanel">
+        <mat-tab-group>
+            <mat-tab label="Datos">
+                    <div class="w-100 mb3">
+                            <label id="dataEditionPanelNameTag" for="itemName" class="w-100">Nombre</label>
+                            <input id="dataEditionPanelNameInput" #nameInput name="itemName" class="w-100 form-control custom-input-container"  [value]="itemSelected.name" disabled="disabled"/>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>    
+                        <div class="w-100 mb2">
+                            <label id="dataEditionPanelDescriptionTag" for="itemDescription" class="w-100">Descripción</label>
+                            <textarea id="dataEditionPanelDescriptionTextarea" #textarea name="itemDescription" class="w-100 form-control custom-input-container"  rows='5' disabled="disabled">{{itemSelected.description}}</textarea>
+                        </div>
+            </mat-tab>
+            <mat-tab label="Metadatos Archivo">
+                <ul class="list">                            
+                    <cdk-virtual-scroll-viewport class="metadataList" style="height: 200px" itemSize="5" >
+                        <div *cdkVirtualFor="let item of tempMetadata; let id = index" class="badge badge-pill badge-light">
+                            <input id="dataEditionPanelMetadata-{{item.key}}" title="{{item.key}}" [value]="item.key" type="text" class="metadataInput" disabled="disabled"> : 
+                            <input id="dataEditionPanelMetadata-{{item.value}}" title="{{item.value}}" [value]="item.value" type="text" class="metadataInput"  disabled="disabled">
+                        </div>
+                    </cdk-virtual-scroll-viewport>                    
+                </ul>
+            </mat-tab>
+            <mat-tab label="Histórico">
+                <ul class="list">
+                    <cdk-virtual-scroll-viewport  style="height: 200px" itemSize="5" >
+                        <ul>
+                        <ng-container *cdkVirtualFor="let audit of auditInfo; let id = index">
+                            <li><p style="margin:0;font-size: 12px;">{{audit.modified_elem}}</p></li>
+                        </ng-container>
+                        </ul>
+                    </cdk-virtual-scroll-viewport>                        
+                    <!--<div id="dataEditionPanelAudit" *ngIf="itemSelected.id !== ''" class="pointer metadataNew ma1 tc" (click)="getAuditInfo()">Abrir información histórico</div>-->
+                </ul>
+            </mat-tab>
+        </mat-tab-group> 
+        
+    </div>       
         <div id="paginationContainer" style="display: none;">
             <nav aria-label="Page navigation example" style="float: left;width: 100%;">
                 <ul class="pagination pg-blue">
@@ -90,4 +141,3 @@
                 <p id="paginationInfo">Página <span id="currentPage"></span> de <span id="totalPages"></span></p>
             </nav>
         </div>
-</div>

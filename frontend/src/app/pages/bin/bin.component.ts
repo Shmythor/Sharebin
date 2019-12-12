@@ -1,17 +1,19 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DocumentApi, ClientApi, MetadataApi } from '../../services/lb-api/services/index';
+import { DocumentApi, ClientApi, MetadataApi, AuditorApi } from '../../services/lb-api/services/index';
 import { ModalService } from '../../shared/_modal';
 import { VentanaalertComponent } from 'src/app/pages/bin/ventanaalert/ventanaalert.component';
 import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
 import { DialogService } from 'src/app/shared/dialog.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-bin',
   templateUrl: './bin.component.html',
-  styleUrls: ['./bin.component.css']
+  styleUrls: ['./bin.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class BinComponent implements OnInit {
@@ -32,6 +34,7 @@ export class BinComponent implements OnInit {
   itemSelected: any;
   textAreaText: string;
   metadata: any;
+  auditInfo: any;
   tempMetadata: any;
   searchValue: string;
   hoverIndex: number;
@@ -49,12 +52,13 @@ export class BinComponent implements OnInit {
   visibleDocs: number = this.perPage;
 
 
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi,
-             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
+ constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
+             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService, public datepipe: DatePipe,
              public hideAndSeekService: HideAndSeekService, private dialogService: DialogService) {
     this.data = [];
     this.dataFiltered = [];
     this.metadata = [];
+    this.auditInfo = [];
     this.tempMetadata = [];
     this.hoverIndex = -1;
     this.dataOrder = '';
@@ -185,6 +189,87 @@ export class BinComponent implements OnInit {
       this.dataOrder = '';
       document.getElementById('sortDownIcon').remove();
     }
+  }
+
+  getAuditInfo() {
+    const filter = {
+      where: { documentId: this.itemSelected.id}
+    };
+    this.auditapi.find(filter).subscribe(docAudit => {
+      this.auditInfo = docAudit;
+
+      for(let i=0; i<this.auditInfo.length; i++){
+        let modifiedElement = this.auditInfo[i];
+        let modificationDate = modifiedElement.date;
+        let modificationFormattedDate = this.changeDateFormat(modificationDate);
+        let modificationFormattedTime = this.changeTimeFormat(modificationDate);
+        let modification = "";
+
+        switch(modifiedElement.modified_elem){
+          case "CREATED":
+            modification += "Fue subido el día "
+                            + modificationFormattedDate 
+                            + " a las " + modificationFormattedTime;
+            break;
+          case "isDeleted":
+            if(modifiedElement.old_value=="false"){
+              modification += "Fue borrado el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }else{
+              modification += "Fue recuperado de la papelera el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }
+            break;
+          case "isFavourite":
+            if(modifiedElement.old_value=="false"){
+              modification += "Fue añadido a favoritos el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }else{
+              modification += "Fue quitado de favoritos el día "
+                              + modificationFormattedDate
+                              + " a las " + modificationFormattedTime;
+            }
+            break;
+          case "description":
+            modification += "La descripción fue cambiada el día "
+                            + modificationFormattedDate
+                            + " a las " + modificationFormattedTime
+                            + " de '"
+                            + modifiedElement.old_value + "'"
+                            +" a '"
+                            + modifiedElement.new_value + "'";
+            break;
+          case "name":
+            modification += "El nombre fue cambiada el día "
+                            + modificationFormattedDate
+                            + " a las " + modificationFormattedTime
+                            + " de '"
+                            + modifiedElement.old_value + "'"
+                            +" a '"
+                            + modifiedElement.new_value + "'";
+            break;
+          default:
+            modification += "Sin modificación";
+            break;
+        }
+
+        this.auditInfo[i].modified_elem = modification;
+      }
+      //console.log(this.auditInfo);
+    }, err => { console.log('docCount ERROR: ', err); });
+  }
+
+   //Formatea la fecha a dd/MM/yyyy
+   changeDateFormat(date:Date):string{
+    return this.datepipe.transform(date, 'dd/MM/yyyy');
+  }
+
+  //Formatea la hora a h:mm:ss a
+  changeTimeFormat(date:Date):string{
+    return this.datepipe.transform(date, 'h:mm:ss a');
   }
 
   changeOrder(event: any) {
@@ -355,6 +440,7 @@ export class BinComponent implements OnInit {
     this.itemSelected = data;
     this.metadata = this.itemSelected.metadatas;
     this.tempMetadata = this.itemSelected.metadatas;
+    this.getAuditInfo();
 
     this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
   }

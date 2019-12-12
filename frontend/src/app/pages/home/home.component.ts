@@ -1,18 +1,12 @@
 import { Component, OnInit, ViewChild, ElementRef, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
-import { DocumentApi, ClientApi, MetadataApi, AuditorApi } from '../../services/lb-api/services/index';
+import { DocumentApi, MetadataApi, AuditorApi } from '../../services/lb-api/services/index';
 import { VentanaemergComponent} from 'src/app/pages/home/components/ventanaemerg/ventanaemerg.component';
 import { ModalService } from '../../shared/_modal';
-import { HttpClient, HttpEvent, HttpParams, HttpHeaders, HttpRequest, HttpResponse } from '@angular/common/http';
-import { Observable, Subscription } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { saveAs } from '../../../../node_modules/file-saver/src/FileSaver.js';
 import { HideAndSeekService } from 'src/app/services/hide-and-seek.service';
-
-// import { testData } from './datasource';
 import { DialogService } from 'src/app/shared/dialog.service';
-import {ComponentCanDeactivate} from 'src/app/shared/component-can-deactivate';
-import { AnonymousSubject } from 'rxjs/internal/Subject';
-
 import { DatePipe } from '@angular/common';
 
 @Component({
@@ -43,7 +37,10 @@ export class HomeComponent implements OnInit {
   dataFiltered: any;
   itemSelected: any;
   textAreaText: string;
-  tempMetadata: any;
+  metadataList: any;
+  multipleMetadataList: any;
+  multipleMetadataListIntersected: any;
+  multipleMetadataIDList: any;
   auditInfo: any;
   searchValue: string;
   hoverIndex: number;
@@ -63,13 +60,15 @@ export class HomeComponent implements OnInit {
   perPage = 5;
   visibleDocs: number = this.perPage;
 
-
- constructor(private clientapi: ClientApi, private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi,
-             public dialog: MatDialog, private http: HttpClient, private modalService: ModalService,
-             public hideAndSeekService: HideAndSeekService, private dialogService: DialogService, public datepipe: DatePipe) {
+ constructor(private docapi: DocumentApi, private metapi: MetadataApi, private auditapi: AuditorApi, public dialog: MatDialog,
+             private http: HttpClient, private modalService: ModalService, public hideAndSeekService: HideAndSeekService,
+             private dialogService: DialogService, public datepipe: DatePipe) {
     this.data = [];
     this.dataFiltered = [];
-    this.tempMetadata = [];
+    this.metadataList = [];
+    this.multipleMetadataList = [];
+    this.multipleMetadataListIntersected = [];
+    this.multipleMetadataIDList = [];
     this.auditInfo = [];
     this.hoverIndex = -1;
     this.dataOrder = '';
@@ -81,11 +80,11 @@ export class HomeComponent implements OnInit {
     document.addEventListener('click', (event) => {
       // Oculta el panel de edición de datos al pulsar fuera del mismo panel,
       // listado de fichero o buscador
-      //console.log(document.getElementById('dataEditionPanel').contains((event.target as HTMLElement)));
-      //if(!document.getElementById('themes-section').contains((event.target as HTMLElement))){
-        //console.log("Distinto temas");
+      // console.log(document.getElementById('dataEditionPanel').contains((event.target as HTMLElement)));
+      // if(!document.getElementById('themes-section').contains((event.target as HTMLElement))){
+        // console.log("Distinto temas");
         this.editionPanelVisibility(event);
-      //}
+      // }
     });
   }
 
@@ -99,7 +98,7 @@ export class HomeComponent implements OnInit {
   }
 
   detectChange(event: any) {
-    this.saveChanges()
+    this.saveChanges();
   }
 
   editionPanelVisibility(event) {
@@ -120,12 +119,12 @@ export class HomeComponent implements OnInit {
       editionPanelVisible = document.getElementById('dataEditionPanel').style.display === 'block';
       editionPanelClicked = document.getElementById('dataEditionPanel').contains((event.target as HTMLElement));
     }
-    
+
     if (!searchbarClicked && !filesClicked && !editionPanelClicked && editionPanelVisible) {
-      
-      if(document.getElementsByClassName('table').length > 0){
+
+      if (document.getElementsByClassName('table').length > 0) {
         document.getElementsByClassName('table')[0].setAttribute('style', 'width: 100%; float: left;');
-        if(document.getElementById('dataEditionPanel') != null){
+        if (document.getElementById('dataEditionPanel') != null) {
           document.getElementById('dataEditionPanel').style.display = 'none';
         }
       }
@@ -380,23 +379,18 @@ export class HomeComponent implements OnInit {
 
     // Reducir el ancho de la tabla de ficheros si no se ha pulsado ningún icono
     if (!isDownload && !isShare && !isDelete && !isFavourite) {
-      const iconsCSS = 'padding: 0;vertical-align: middle;';
 
-      if(document.getElementsByClassName('table').length > 0){
+      if (document.getElementsByClassName('table').length > 0) {
         document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       }
-      
-      /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
-      document.getElementById("fileShare").setAttribute("style", iconsCSS);
-      document.getElementById("fileDelete").setAttribute("style", iconsCSS);*/
-      if(document.getElementById('dataEditionPanel') != null){
+
+      if (document.getElementById('dataEditionPanel') != null) {
         document.getElementById('dataEditionPanel').style.display = 'block';
       }
 
       this.itemSelected = data;
-      this.tempMetadata = this.itemSelected.metadatas;
+      this.metadataList = this.itemSelected.metadatas;
       this.getAuditInfo();
-      // console.log(this.auditInfo);
 
       this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
     }
@@ -413,108 +407,185 @@ export class HomeComponent implements OnInit {
       /* update local data */
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
-      this.data[index].metadatas = this.tempMetadata;
+      this.data[index].metadatas = this.metadataList;
+      // Actualizamos con los valores de la lista de metadatos múltiples
+      this.data[index].metadatas.forEach(metadata => {
+        const metaId = metadata.id;
+        const metaInMultipleList = this.multipleMetadataList.find(met => met.id === metaId);
+        if (metaInMultipleList !== undefined) {
+          metadata = metaInMultipleList;
+        }
+      });
 
       /* update database */
       this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
         clientId: dataIdx.clientId, type: dataIdx.type, size: dataIdx.size }).subscribe(
-          (no) => { console.log('Nothing'); },
+          () => { console.log('docApi actualizada'); },
           (err) => {console.log('An error ocurred while patching atributes: ', err); }
       );
 
-      this.tempMetadata.forEach((elem) => {
+      this.metadataList.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          (no) => {console.log('Nothing'); },
-          (err) => {console.log('An error ocurred while patching atributes: ', err); }
+          (res) => { console.log('metadatos actualizados: ', res); },
+          (err) => { console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
 
+    /* Update metadata multiple values */
+    this.multipleMetadataList.forEach((elem) => {
+      console.log("Vamos a guardar: ", elem);
+
+      this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
+        (res) => { console.log('Metadatos multiples actualizados'); },
+        (err) => { console.log('An error ocurred while patching atributes: ', err); }
+      );
+    });
+
+
     this.showsaveChangeMessage();
-    return;
   }
 
   getAuditInfo() {
     const filter = {
       where: { documentId: this.itemSelected.id}
     };
+
     this.auditapi.find(filter).subscribe(docAudit => {
       this.auditInfo = docAudit;
+      for (let i = 0; i < this.auditInfo.length; i++) {
+        const modifiedElement = this.auditInfo[i];
+        const modificationDate = modifiedElement.date;
+        const modificationFormattedDate = this.changeDateFormat(modificationDate);
+        const modificationFormattedTime = this.changeTimeFormat(modificationDate);
+        let modification = '';
 
-      for(let i=0; i<this.auditInfo.length; i++){
-        let modifiedElement = this.auditInfo[i];
-        let modificationDate = modifiedElement.date;
-        let modificationFormattedDate = this.changeDateFormat(modificationDate);
-        let modificationFormattedTime = this.changeTimeFormat(modificationDate);
-        let modification = "";
+        switch (modifiedElement.modified_elem) {
+          case 'CREATED':
+            modification += 'Fue subido el día '
+                            + modificationFormattedDate
+                            + ' a las ' + modificationFormattedTime;
+            break;
+          case 'isDeleted':
+            if (modifiedElement.old_value == 'false') {
+              modification += 'Fue borrado el día '
+                              + modificationFormattedDate
+                              + ' a las ' + modificationFormattedTime;
+            } else {
+              modification += 'Fue recuperado de la papelera el día '
+                              + modificationFormattedDate
+                              + ' a las ' + modificationFormattedTime;
+            }
 
-        switch(modifiedElement.modified_elem){
-          case "CREATED":
-            modification += "Fue subido el día "
-                            + modificationFormattedDate 
-                            + " a las " + modificationFormattedTime;
             break;
-          case "isDeleted":
-            if(modifiedElement.old_value=="false"){
-              modification += "Fue borrado el día "
+          case 'isFavourite':
+            if (modifiedElement.old_value == 'false') {
+              modification += 'Fue añadido a favoritos el día '
                               + modificationFormattedDate
-                              + " a las " + modificationFormattedTime;
-            }else{
-              modification += "Fue recuperado de la papelera el día "
+                              + ' a las ' + modificationFormattedTime;
+            } else {
+              modification += 'Fue quitado de favoritos el día '
                               + modificationFormattedDate
-                              + " a las " + modificationFormattedTime;
+                              + ' a las ' + modificationFormattedTime;
             }
+
             break;
-          case "isFavourite":
-            if(modifiedElement.old_value=="false"){
-              modification += "Fue añadido a favoritos el día "
-                              + modificationFormattedDate
-                              + " a las " + modificationFormattedTime;
-            }else{
-              modification += "Fue quitado de favoritos el día "
-                              + modificationFormattedDate
-                              + " a las " + modificationFormattedTime;
-            }
-            break;
-          case "description":
-            modification += "La descripción fue cambiada el día "
+          case 'description':
+            modification += 'La descripción fue cambiada el día '
                             + modificationFormattedDate
-                            + " a las " + modificationFormattedTime
-                            + " de '"
-                            + modifiedElement.old_value + "'"
-                            +" a '"
-                            + modifiedElement.new_value + "'";
+                            + ' a las ' + modificationFormattedTime
+                            + ' de \''
+                            + modifiedElement.old_value + '\''
+                            + ' a \''
+                            + modifiedElement.new_value + '\'';
             break;
-          case "name":
-            modification += "El nombre fue cambiada el día "
+
+          case 'name':
+            modification += 'El nombre fue cambiado el día '
                             + modificationFormattedDate
-                            + " a las " + modificationFormattedTime
-                            + " de '"
-                            + modifiedElement.old_value + "'"
-                            +" a '"
-                            + modifiedElement.new_value + "'";
+                            + ' a las ' + modificationFormattedTime
+                            + ' de \''
+                            + modifiedElement.old_value + '\''
+                            + ' a \''
+                            + modifiedElement.new_value + '\'';
             break;
+
+          case 'metadatas':
+            modification += 'Los metadatos fueron cambiados el día '
+                            + modificationFormattedDate
+                            + ' a las ' + modificationFormattedTime
+                            + ' de \''
+                            + modifiedElement.old_value + '\''
+                            + ' a \''
+                            + modifiedElement.new_value + '\'';
+            break;
+
           default:
-            modification += "Sin modificación";
+            modification += 'Sin modificación';
             break;
         }
 
         this.auditInfo[i].modified_elem = modification;
       }
-      //console.log(this.auditInfo);
+      // console.log(this.auditInfo);
     }, err => { console.log('docCount ERROR: ', err); });
   }
 
-  newMetadata() {
-    this.tempMetadata = [...this.tempMetadata, {key: '', value: '', documentId: this.itemSelected.id}];
+  newMetadata(isMultiple: boolean) {
+    if (isMultiple) {
+      let doItOnce = true;
+
+      this.multipleMetadataIDList.forEach(docID => {
+        if (doItOnce) {
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected, {key: '', value: '', documentId: docID}];
+          doItOnce = false;
+        }
+
+        this.multipleMetadataList = [...this.multipleMetadataList, {key: '', value: '', documentId: docID}];
+        this.dataFiltered.find(i => i.id === docID).metadatas = [...this.dataFiltered.find(i => i.id === docID).metadatas, {key: '', value: '', documentId: docID}];
+      });
+    } else {
+      this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
+    }
   }
 
-  updateMetadataKey(event: any, id: any) {
-    this.tempMetadata[id].key = event.target.value;
+  updateMetadataKey(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      // Obtenemos el valor que se va a cambiar mostrado por pantalla
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
 
+      // Buscamos todas las copias de ese valor en la lista y cambiamos la key
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          //console.log('Metadata va a ser cambiada', metadata);
+          metadata.key = event.target.value;
+         // console.log('Metadata cambiada ', metadata);
+        }
+      });
+
+      // Cambiamos la key en el metadato mostrado por pantalla
+      this.multipleMetadataListIntersected[id].key = event.target.value;
+    } else {
+      this.metadataList[id].key = event.target.value;
+    }
   }
-  updateMetadataValue(event: any, id: any) {
-    this.tempMetadata[id].value = event.target.value;
+
+  updateMetadataValue(event: any, id: any, isMultiple: boolean) {
+    if (isMultiple) {
+      const metadataToUpdate = this.multipleMetadataListIntersected[id];
+
+      this.multipleMetadataList.forEach(metadata => {
+        if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
+          console.log('Metadata va a ser cambiada', metadata);
+          metadata.value = event.target.value;
+          console.log('Metadata cambiada ', metadata);
+        }
+      });
+
+      this.multipleMetadataListIntersected[id].value = event.target.value;
+    } else {
+      this.metadataList[id].value = event.target.value;
+    }
   }
 
   // Opens confirmation dialog when you have not saved changes
@@ -588,7 +659,7 @@ export class HomeComponent implements OnInit {
   move2PapperBin(doc: any) {
     /* update database */
     this.docapi.patchAttributes(doc.id, {isDeleted: true}).subscribe(
-        (no) => {
+        () => {
           this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.hideAndSeekService.showFileMove2BinMessage();
           this.getUserItemList();
@@ -646,6 +717,62 @@ export class HomeComponent implements OnInit {
     document.getElementById(file).classList.add('selectedFile');
   }
 
+  itemChecked(itemID: any) {
+    const index = this.multipleMetadataIDList.findIndex(id => id === itemID);
+    // const fichero = this.data.find(item => item.id === itemID);
+
+    if (index === -1) {
+      // Nuevo item pulsado
+      this.multipleMetadataIDList.push(itemID);
+
+      this.fillMultipleMetadataList(this.itemSelected, false);
+    } else {
+      this.multipleMetadataIDList.splice(index, 1);
+
+      // Quitamos item de la lista
+      let count = this.multipleMetadataIDList.length - 1;
+      this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), true);
+
+      while (count-- > 0) {
+        this.fillMultipleMetadataList(this.dataFiltered.find(item => item.id === this.multipleMetadataIDList[count]), false);
+      }
+    }
+  }
+
+  private fillMultipleMetadataList(itemToIntersect: any, cond: boolean) {
+    if (itemToIntersect === undefined) { return; }
+
+    if (this.multipleMetadataIDList.length === 1 || cond) {
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas;
+      this.multipleMetadataList = itemToIntersect.metadatas;
+    } else {
+      // Sacamos la intersección entre los dos conjuntos
+      this.multipleMetadataList = [];
+
+      this.multipleMetadataListIntersected = itemToIntersect.metadatas.filter(a => {
+          const itemToAdd = this.multipleMetadataListIntersected.find(b => b.value === a.value && b.key === a.key);
+
+          if (itemToAdd !== null && itemToAdd !== undefined) {
+            this.multipleMetadataIDList.forEach(docID => {
+              const fileInMultipleList = this.dataFiltered.find(doc => doc.id === docID);
+
+              const metadataToAdd = fileInMultipleList.metadatas.find(metadata =>
+                metadata.key === itemToAdd.key && metadata.value === itemToAdd.value
+              );
+
+              this.multipleMetadataList = [...this.multipleMetadataList, metadataToAdd];
+            });
+
+
+            return itemToAdd !== null || itemToAdd !== undefined;
+          } else {
+            return false;
+          }
+        }
+      );
+    }
+  }
+
   showsaveChangeMessage() {
     document.getElementById('confirmChange').style.display = 'block';
     setTimeout(() => {
@@ -656,7 +783,7 @@ export class HomeComponent implements OnInit {
   addToFavorites(doc: any) {
     if (doc.isFavourite) {
       this.docapi.patchAttributes(doc.id, {isFavourite: false}).subscribe(
-        (no) => {
+        () => {
           // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
@@ -664,7 +791,7 @@ export class HomeComponent implements OnInit {
     );
     } else {
       this.docapi.patchAttributes(doc.id, {isFavourite: true}).subscribe(
-        (no) => {
+        () => {
           // this.itemSelected = {id: '', name: '', description: '', metadatas: []};
           this.getUserItemList();
         },
@@ -673,34 +800,67 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteMetadata(id: number) {
+  deleteMetadata(id: number, isMultiple: boolean) {
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        let metaId = this.tempMetadata[id].id;
-        let docId = this.tempMetadata[id].documentId;
+        if (isMultiple) {
+          const metaToDelete = this.multipleMetadataListIntersected[id];
 
-        this.tempMetadata = [...this.tempMetadata.slice(0, id), ...this.tempMetadata.slice(id + 1)];        
-        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
-          (res) => { console.log("Deleted correctly"); },
-          (err) => { console.log("Error while deleting: ", err); }
-          )
+          this.dataFiltered.forEach(item => {
+            // Si ese archivo está en la lista de seleccionados, cambiaremos sus metadatos para borrar el correspondiente
+            if (this.multipleMetadataIDList.find(docID => item.id === docID) !== undefined) {
+              let index = item.metadatas.findIndex(met => met.key === metaToDelete.key && met.value === metaToDelete.value);
+              const metaId = item.metadatas[index].id;
+              const docId = item.metadatas[index].documentId;
+
+              // 1. Borramos de this.dataFiltered
+              item.metadatas = [...item.metadatas.slice(0, index), ...item.metadatas.slice(index + 1)];
+
+              // 2. Borramos de this.multipleMetadataList
+              index = this.multipleMetadataList.findIndex(met => met.id === metaId); // Puede ser undefined si no se ha guardado en BBDD
+              if (index === -1) { index = this.multipleMetadataList.findIndex(met => met.documentId === docId); } // Posibilidad de bugs!
+              this.multipleMetadataList = [...this.multipleMetadataList.slice(0, index), ...this.multipleMetadataList.slice(index + 1)];
+
+              // 3. Borramos de la base de datos
+              this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+                (res) => { console.log('Deleted correctly'); },
+                (err) => { console.log('Error while deleting: ', err); }
+              );
+            }
+          });
+
+          // 4. Borramos de this.multipleMetadataListIntersected
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected.slice(0, id),
+                                                  ...this.multipleMetadataListIntersected.slice(id + 1)];
+
+        } else {
+          const metaId = this.metadataList[id].id;
+          const docId = this.metadataList[id].documentId;
+
+          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+            (res) => { console.log('Deleted correctly'); },
+            (err) => { console.log('Error while deleting: ', err); }
+          );
+        }
+
         this.saveChanges();
         // this.showsaveChangeMessage();
       }
     });
   }
 
-  //Formatea la fecha a dd/MM/yyyy
-  changeDateFormat(date:Date):string{
+  // Formatea la fecha a dd/MM/yyyy
+  changeDateFormat(date: Date): string {
     return this.datepipe.transform(date, 'dd/MM/yyyy');
   }
 
-  //Formatea la hora a h:mm:ss a
-  changeTimeFormat(date:Date):string{
+  // Formatea la hora a h:mm:ss a
+  changeTimeFormat(date: Date): string {
     return this.datepipe.transform(date, 'h:mm:ss a');
   }
 }

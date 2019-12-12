@@ -7,6 +7,7 @@
 @import '../../../../node_modules/@syncfusion/ej2-popups/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css';
 @import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/material.css';
+@import '../../../../node_modules/@syncfusion/ej2-angular-grids/styles/bootstrap.css';
 .list-container {
     height: 100%;
 }
@@ -19,6 +20,12 @@
     background-color: #E0EAFC;
 }
 
+.metadataList {
+    height: 150px;
+    overflow-x: hidden;
+    margin-top: 5px;
+}
+
 .metadataInput {
     outline: none;
     background: transparent;
@@ -27,7 +34,8 @@
     color: #767373;
     width: 64px;
     min-width: 64px;
-    max-width: 256x;
+    max-width: 256px;
+    font-size: 16px;
 }
 
 .metadataNew {
@@ -35,6 +43,7 @@
     box-sizing: border-box;
     border-radius: 2px;
     color: rgba(118, 115, 115);
+    font-size: 16px;
 }
 
 .custom-input-container {
@@ -70,6 +79,12 @@
     border: none;
 }
 
+.file-button-favourite {
+    float: right;
+    background-color: transparent;
+    border: none;
+}
+
 .table {
     background-color: #ffffff;
     margin-top: 2em;
@@ -96,4 +111,52 @@
 
 .pagination li {
     margin-right: 10px;
+}
+
+
+
+.botonMenu {
+    color: #fff;
+    background: #64a3f9;
+    float: right;
+    text-decoration: none;
+    font-weight: bold;
+}
+.itemsMenu {                
+    background: #64a3f9;        
+    color: #fff;
+    text-decoration: none;
+    
+}
+.itemsMenu span {
+    color: #fff;
+    text-decoration: none;
+}
+
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+}
+
+@media screen and (max-width: 610px ){
+    #btScreenBin span{
+        font-size: 0.8em;
+
+    }
+}
+
+
+
+@media screen and (min-width: 960px) {
+   
+    .botonMenu {
+        display: none;
+    }
+
+.mat-tab-label {
+    min-width: 0px !important;
+    padding: 0 10px !important;
+
+}
+
 }

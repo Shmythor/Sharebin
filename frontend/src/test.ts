@@ -17,6 +17,6 @@ getTestBed().initTestEnvironment(
 // Then we find all the tests.
 // const context = require.context('./', true, /\.spec\.ts$/);
 // -> En nuestro caso, cargar solo los tests que queremos (en app.component.spec.ts)
-const context = require.context('./', true, /app.component.spec\.ts$/); 
+const context = require.context('./', true, /favorites.component.spec\.ts$/);
 // And load the modules.
 context.keys().map(context);
