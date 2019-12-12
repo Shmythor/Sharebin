@@ -412,6 +412,11 @@ export class HomeComponent implements OnInit {
       this.data[index].name = this.nameInput.nativeElement.value;
       this.data[index].description = this.textarea.nativeElement.value;
       this.data[index].metadatas = this.metadataList;
+      /* this.data[index].metadatas = this.metadataList.map((item) => {
+        const metadataInMultiple = this.multipleMetadataList.find(met => met.id === item.id);
+
+        if (metadataInMultiple !== null || metadataInMultiple !== undefined) { return metadataInMultiple; } else { return item; }
+      }); */
 
       /* update database */
       this.docapi.patchAttributes(this.data[index].id, { name: dataIdx.name, description: dataIdx.description, path: dataIdx.path,
@@ -422,14 +427,13 @@ export class HomeComponent implements OnInit {
 
       this.metadataList.forEach((elem) => {
         this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
-          () => {console.log('Nothing'); },
-          (err) => {console.log('An error ocurred while patching atributes: ', err); }
+          () => { console.log('Nothing'); },
+          (err) => { console.log('An error ocurred while patching atributes: ', err); }
         );
       });
     }
 
     this.showsaveChangeMessage();
-    return;
   }
 
   getAuditInfo() {
@@ -509,9 +513,17 @@ export class HomeComponent implements OnInit {
 
   newMetadata(isMultiple: boolean) {
     if (isMultiple) {
-      /* this.multipleMetadataIDList.forEach(docID => {
+      let doItOnce = true;
+
+      this.multipleMetadataIDList.forEach(docID => {
+        if (doItOnce) {
+          this.multipleMetadataListIntersected = [...this.multipleMetadataListIntersected, {key: '', value: '', documentId: docID}];
+          doItOnce = false;
+        }
+
         this.multipleMetadataList = [...this.multipleMetadataList, {key: '', value: '', documentId: docID}];
-      }); */
+        this.dataFiltered.find(i => i.id === docID).metadatas = [...this.dataFiltered.find(i => i.id === docID).metadatas, {key: '', value: '', documentId: docID}];
+      });
     } else {
       this.metadataList = [...this.metadataList, {key: '', value: '', documentId: this.itemSelected.id}];
     }
@@ -535,6 +547,7 @@ export class HomeComponent implements OnInit {
       this.metadataList[id].key = event.target.value;
     }
   }
+
   updateMetadataValue(event: any, id: any, isMultiple: boolean) {
     if (isMultiple) {
       const metadataToUpdate = this.multipleMetadataListIntersected[id];
@@ -734,7 +747,7 @@ export class HomeComponent implements OnInit {
         }
       );
 
-      console.log("Lista sin filtrado: ", this.multipleMetadataList);
+      console.log('Lista sin filtrado: ', this.multipleMetadataList);
     }
   }
 
@@ -765,21 +778,41 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteMetadata(id: number) {
+  deleteMetadata(id: number, isMultiple: boolean) {
+    // Si es un metadato vacio, lo borramos directamente
+    if (this.metadataList[id].key === '' && this.metadataList.value === '') {
+      this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+      return;
+    }
+
     const msg = '¿Estás seguro de querer eliminar este metadato?';
 
     this.dialogService.openConfirmDialog(msg)
     .afterClosed().subscribe(res => {
       if (res) {
         // Accepted. Save changes
-        const metaId = this.metadataList[id].id;
-        const docId = this.metadataList[id].documentId;
+        if (isMultiple) { 
+          const meta = this.multipleMetadataListIntersected[id];
+          this.multipleMetadataIDList.forEach(docID => {
+            this.dataFiltered.find(i => i.id === meta.)
+          });
 
-        this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
-        this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
-          (res) => { console.log('Deleted correctly'); },
-          (err) => { console.log('Error while deleting: ', err); }
+          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+            (res) => { console.log('Deleted correctly'); },
+            (err) => { console.log('Error while deleting: ', err); }
           );
+        } else {
+          const metaId = this.metadataList[id].id;
+          const docId = this.metadataList[id].documentId;
+
+          this.metadataList = [...this.metadataList.slice(0, id), ...this.metadataList.slice(id + 1)];
+          this.docapi.destroyByIdMetadatas(docId, metaId).subscribe(
+            (res) => { console.log('Deleted correctly'); },
+            (err) => { console.log('Error while deleting: ', err); }
+          );
+        }
+
         this.saveChanges();
         // this.showsaveChangeMessage();
       }
