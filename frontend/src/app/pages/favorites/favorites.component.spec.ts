@@ -1,4 +1,4 @@
-import {async, ComponentFixture, getTestBed, TestBed} from '@angular/core/testing';
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 
 
@@ -32,7 +32,8 @@ describe('FavoritesComponent', () => {
         ScrollDispatchModule,
         MatDialogModule,
         BrowserModule,
-        MatMenuModule
+        MatMenuModule,
+        HttpClientModule
       ],
       declarations: [
         FavoritesComponent
