@@ -12,20 +12,22 @@ import {MatDialog, MatDialogModule} from "@angular/material/dialog";
 import {Overlay} from "@angular/cdk/overlay";
 import {CommonModule, DatePipe} from "@angular/common";
 import {ScrollDispatchModule} from "@angular/cdk/scrolling";
-import {By} from "@angular/platform-browser";
+import {BrowserModule, By} from "@angular/platform-browser";
 import {timeout} from "rxjs/operators";
+import {MatMenuModule} from "@angular/material/menu";
 
 describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
   let fixture: ComponentFixture<FavoritesComponent>;
-  let docApi : DocumentApi;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [
         CommonModule,
         ScrollDispatchModule,
-        MatDialogModule
+        MatDialogModule,
+        BrowserModule,
+        MatMenuModule
       ],
       declarations: [
         FavoritesComponent
@@ -70,7 +72,6 @@ describe('FavoritesComponent', () => {
       include: 'metadatas',
     };*/
     console.log('QUIERO LLORAR');
-    component.getUserItemList();
     console.log(component.dataFiltered);
 
   });
