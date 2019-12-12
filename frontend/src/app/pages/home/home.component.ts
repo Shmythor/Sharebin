@@ -434,6 +434,8 @@ export class HomeComponent implements OnInit {
 
     /* Update metadata multiple values */
     this.multipleMetadataList.forEach((elem) => {
+      console.log("Vamos a guardar: ", elem);
+
       this.metapi.patchOrCreate({key: elem.key, value: elem.value, documentId: elem.documentId, id: elem.id}).subscribe(
         (res) => { console.log('Metadatos multiples actualizados'); },
         (err) => { console.log('An error ocurred while patching atributes: ', err); }
@@ -555,9 +557,9 @@ export class HomeComponent implements OnInit {
       // Buscamos todas las copias de ese valor en la lista y cambiamos la key
       this.multipleMetadataList.forEach(metadata => {
         if (metadata.key === metadataToUpdate.key && metadata.value === metadataToUpdate.value) {
-          console.log('Metadata va a ser cambiada', metadata);
+          //console.log('Metadata va a ser cambiada', metadata);
           metadata.key = event.target.value;
-          console.log('Metadata cambiada ', metadata);
+         // console.log('Metadata cambiada ', metadata);
         }
       });
 
