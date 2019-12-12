@@ -138,6 +138,13 @@
     padding: 0 10px !important;
 }
 
+@media screen and (max-width: 610px ){
+    #btScreenBin span{
+        font-size: 0.8em;
+
+    }
+}
+
 
 @media screen and (min-width: 960px) {
    
