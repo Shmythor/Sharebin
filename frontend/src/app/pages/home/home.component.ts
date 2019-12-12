@@ -384,9 +384,6 @@ export class HomeComponent implements OnInit {
         document.getElementsByClassName('table')[0].setAttribute('style', 'width: 70%; float: left;');
       }
 
-      /*document.getElementById("fileDownload").setAttribute("style", iconsCSS);
-      document.getElementById("fileShare").setAttribute("style", iconsCSS);
-      document.getElementById("fileDelete").setAttribute("style", iconsCSS);*/
       if (document.getElementById('dataEditionPanel') != null) {
         document.getElementById('dataEditionPanel').style.display = 'block';
       }
@@ -394,7 +391,6 @@ export class HomeComponent implements OnInit {
       this.itemSelected = data;
       this.metadataList = this.itemSelected.metadatas;
       this.getAuditInfo();
-      // console.log(this.auditInfo);
 
       this.textarea.nativeElement.value = this.itemSelected.description; // Necesario (porque es un textarea ?)
     }
