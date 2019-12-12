@@ -487,7 +487,17 @@ export class HomeComponent implements OnInit {
             break;
 
           case 'name':
-            modification += 'El nombre fue cambiada el día '
+            modification += 'El nombre fue cambiado el día '
+                            + modificationFormattedDate
+                            + ' a las ' + modificationFormattedTime
+                            + ' de \''
+                            + modifiedElement.old_value + '\''
+                            + ' a \''
+                            + modifiedElement.new_value + '\'';
+            break;
+
+          case 'metadatas':
+            modification += 'Los metadatos fueron cambiados el día '
                             + modificationFormattedDate
                             + ' a las ' + modificationFormattedTime
                             + ' de \''
