@@ -1,7 +1,6 @@
 import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 
 
-
 import {FavoritesComponent} from './favorites.component';
 import {CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA} from '@angular/core';
 import {AuditorApi, ClientApi, DocumentApi, MetadataApi, SDKModels} from '../../services/lb-api/services/custom';
@@ -16,7 +15,7 @@ import {CommonModule, DatePipe} from '@angular/common';
 import {ScrollDispatchModule} from '@angular/cdk/scrolling';
 import {BrowserModule, By} from '@angular/platform-browser';
 import {MatMenuModule} from '@angular/material/menu';
-import { ErrorHandler } from '../../services/lb-api/services/core/error.service';
+import {ErrorHandler} from '../../services/lb-api/services/core/error.service';
 
 describe('FavoritesComponent', () => {
   let component: FavoritesComponent;
@@ -32,8 +31,7 @@ describe('FavoritesComponent', () => {
         ScrollDispatchModule,
         MatDialogModule,
         BrowserModule,
-        MatMenuModule,
-        HttpClientModule
+        MatMenuModule
       ],
       declarations: [
         FavoritesComponent
@@ -71,25 +69,28 @@ describe('FavoritesComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should only show favorites documents', () => {
+  it('should only show favorites documents', (done) => {
     docApi = TestBed.get(DocumentApi);
     clientApi = TestBed.get(ClientApi);
     errorHandler = TestBed.get(ErrorHandler);
 
     const filter = {
-      where: { clientId: '5da5ecd69b976d2bcac8298c', isDeleted: false, isFavourite: true},
+      where: {clientId: '5da5ecd69b976d2bcac8298c', isDeleted: false, isFavourite: true},
       include: 'metadatas',
     };
 
     console.log({docApi});
 
-    docApi.find(filter).subscribe((docList) =>
-      (nect) => {
-        docList.forEach((item) => {
-          expect(item['isFavourite']).toEqual(true);
-        });
-      },
-      (error) => { console.log('Error al buscar archivos: ', error); }
+    docApi.find().toPromise().then((docs) =>{
+      console.log(docs);
+      done();
+    });
+
+
+    docApi.find(filter).subscribe((docList) => {
+        console.log(docList);
+        done();
+      },error => {console.log('dam' + error)}
     );
   });
 });
